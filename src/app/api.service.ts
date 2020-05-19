@@ -13,4 +13,8 @@ export class ApiService{
         return this.httpClient.get(`${this.SERVER_URL}/count`);
     }
 
+    public fetchLast2Weeks(){
+        return this.httpClient.get(`${this.SERVER_URL}/last2Weeks`);
+    }
+
 }

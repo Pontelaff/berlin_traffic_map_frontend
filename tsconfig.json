@@ -14,7 +14,9 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    //"resolveJsonModule": true,            //used for importing json file
+    //"allowSyntheticDefaultImports": true  //used for importing json file
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
