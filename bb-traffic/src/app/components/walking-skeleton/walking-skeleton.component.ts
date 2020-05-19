@@ -8,9 +8,10 @@ import { ApiService } from '../../api.service';
 })
 export class WalkingSkeletonComponent implements OnInit {
   
-  output:number;
+  output:number = 0;
 
   constructor(private apiService: ApiService) { }
+  //constructor() { }
 
   ngOnInit(): void {
     let btnTmp = document.getElementById("btn0");
@@ -22,10 +23,10 @@ export class WalkingSkeletonComponent implements OnInit {
 
   count()
   {
-    this.apiService.fetchDataCount().subscribe((data: any[])=>{
-      //console.log(data);
-      this.output = data[0];
-    })
+     this.apiService.fetchDataCount().subscribe((data: number)=>{
+      console.log(data);
+      this.output = data;
+     })
   }
 
   reset()

@@ -6,11 +6,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ApiService{
 
-    private SERVER_URL = "http://localhost:2193"
+    private SERVER_URL = "http://localhost:2193";
     constructor(private httpClient: HttpClient) { }
 
     public fetchDataCount(){
-        return this.httpClient.get('${this.SERVER_URL}/count');
+        return this.httpClient.get(`${this.SERVER_URL}/count`);
     }
 
 }
