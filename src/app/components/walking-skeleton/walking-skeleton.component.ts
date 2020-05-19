@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../api.service';
-//import last2WeeksFile from '../../files/last2weeks.json';
+import { empty } from 'rxjs';
 
 @Component({
   selector: 'app-walking-skeleton',
@@ -10,7 +10,6 @@ import { ApiService } from '../../api.service';
 export class WalkingSkeletonComponent implements OnInit {
   
   output:number;
-  //arrLast2Weeks:string[];
 
   public last2Weeks:{_id:string,
                     consequence: {summary:string, description:string},
@@ -21,52 +20,47 @@ export class WalkingSkeletonComponent implements OnInit {
                     location: {type:string, coordinates:number []},
                     property:string [],
                     geometry: {type:string, coordinates: number[][]}
-                    }[]; //= last2WeeksFile;
+                    }[];
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
     let btnTmp = document.getElementById("btn0");
-    btnTmp.addEventListener("click", (e:Event) => this.count());
+    btnTmp.addEventListener("click", (e:Event) => this.display());
 
     btnTmp = document.getElementById("btn1");
     btnTmp.addEventListener("click", (e:Event) => this.reset());
 
     //console.log(last2WeeksFile);
-    this.showLast2Weeks();
 
+    this.reset();
   }
 
-  count()
+  display()
   {
-    this.apiService.fetchLast2Weeks().subscribe((data: number)=>{
+    this.apiService.fetchDataCount().subscribe((data: number)=>{
     //console.log(data);
     this.output = data;
     })
-  }
 
-  showLast2Weeks()
-  {  
-    this.apiService.fetchDataCount().subscribe((data: 
-    {_id:string,
-    consequence: {summary:string, description:string},
-    section:string,
-    name:string,
-    streets:string [],
-    validities: {timeFrom:string, timeTo:string, visible:boolean}[],
-    location: {type:string, coordinates:number []},
-    property:string [],
-    geometry: {type:string, coordinates: number[][]}
-    }[])=>{
-    this.last2Weeks = data;
-    })
+    this.apiService.fetchLast2Weeks().subscribe((data: 
+      {_id:string,
+      consequence: {summary:string, description:string},
+      section:string,
+      name:string,
+      streets:string [],
+      validities: {timeFrom:string, timeTo:string, visible:boolean}[],
+      location: {type:string, coordinates:number []},
+      property:string [],
+      geometry: {type:string, coordinates: number[][]}
+      }[])=>{
+      this.last2Weeks = data;
+      })
   }
 
   reset()
   {
     this.output = 0; 
+    this.last2Weeks = null;
   }
-
-
-
 }
