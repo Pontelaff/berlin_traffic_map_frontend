@@ -9,6 +9,8 @@ const routes: Routes = [
   {path: 'home', component: HomePageComponent},
   {path: 'statistics', component: StatisticsPageComponent},
   {path: 'info', component: InfoPageComponent},
+  {path: '', redirectTo: '/home', pathMatch: 'full'},         //redirect to landing page
+  {path: '**', component: HomePageComponent},                 //wildcard route, later to be replaced by 404, PLACE LAST IN ARRAY!
 ];
 
 @NgModule({
