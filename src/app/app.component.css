@@ -1,10 +1,17 @@
-
 #background {
     background-color: #bbc;
     background-image: url("/assets/Stau.jpg");
     background-repeat: no-repeat;
     background-attachment: scroll;
-    background-position: 50% 50%;
+    /*background-position: 50% 50%;*/
     background-blend-mode: soft-light;
     background-size: cover;
-    }
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    display: inline;
+}
+
+.p-15 {
+    padding: 15px;
+}
