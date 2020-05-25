@@ -9,6 +9,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { StatisticsPageComponent } from './components/statistics-page/statistics-page.component';
 import { InfoPageComponent } from './components/info-page/info-page.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { MapComponent } from './components/home-page/map/map.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     HomePageComponent,
     StatisticsPageComponent,
     InfoPageComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,
