@@ -1,0 +1,9 @@
+#background {
+    background-color: #bbc;
+    background-image: url("/assets/Stau.jpg");
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: 50% 50%;
+    background-blend-mode: soft-light;
+    background-size: cover;
+    }
