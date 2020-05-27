@@ -2,7 +2,7 @@
     background-color: #bbc;
     background-image: url("/assets/Stau.jpg");
     background-repeat: no-repeat;
-    background-attachment: scroll;
+    background-attachment: fixed;
     /*background-position: 50% 50%;*/
     background-blend-mode: soft-light;
     background-size: cover;
@@ -14,4 +14,28 @@ h1, h2, h3, h4, h5, h6, p {
 
 .p-15 {
     padding: 15px;
+}
+
+#main-header{
+    padding-top: 25px;
+    padding-bottom: 5px;
+    overflow:auto;
+	font-size: 20px;
+}
+
+#header-left{
+    margin: 0;
+    padding-left: 5px;
+    width: 50%;
+    float: left;
+	box-sizing: border-box;
+}
+
+#header-right{
+    margin: 0;
+    padding: 5px;
+    width: 50%;
+    float: right;
+    text-align: right;
+	box-sizing: border-box;
 }
