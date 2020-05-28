@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+	"sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "private": true,
   "dependencies": {
@@ -44,9 +45,5 @@
     "tslint": "~6.1.0",
     "typescript": "~3.8.3",
 	"sonar-scanner": "^3.1.0"
-
-  },  
- "scripts": {
-    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   }
 }
