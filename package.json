@@ -43,7 +43,7 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3",
-	"sonarqube-scanner": "^3.1.0"
+	"sonar-scanner": "^3.1.0"
 
   },  
  "scripts": {
