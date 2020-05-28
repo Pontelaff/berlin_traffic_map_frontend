@@ -15,12 +15,12 @@ export class MapComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapElement = document.getElementById("map");
-    this.mapHeight = window.innerHeight - this.mapElement.offsetTop;
+    this.mapHeight = window.innerHeight - this.mapElement.offsetTop -24;
     console.log(this.mapHeight);
   }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.mapHeight = window.innerHeight - this.mapElement.offsetTop;
+    this.mapHeight = window.innerHeight - this.mapElement.offsetTop -24;
   }
   
 }
