@@ -2,12 +2,10 @@ h1, h2, h3, h4, h5, h6, p {
     display: inline;
 }
 
-.p-15 {
-    padding: 15px;
-}
 
-#main-container{
-    margin-top: 65px;
+#main-toolbar{
+    display: flex;
+    width: 100%;
 }
 
 #main-header{
@@ -34,4 +32,20 @@ h1, h2, h3, h4, h5, h6, p {
     float: right;
     text-align: right;
 	box-sizing: border-box;
+}
+
+.main-container {
+    height: 100%;
+}
+
+mat-sidenav-container{
+    height: calc(100% - 64px);
+}
+
+mat-sidenav{
+    padding: 16px;
+}
+
+mat-sidenav {
+    width: 200px;
 }

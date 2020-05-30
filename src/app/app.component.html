@@ -1,20 +1,31 @@
-<div>
-  <header id="main-header" class="htw-theme">
-    <h1 id="header-left">traffic map berlin</h1>
-    <h4 id="header-right">Bluescreen Bandits</h4>
-  </header>
-  <div id="main-container" class="p-15">
-    <!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->
-    <nav>
-      <ul>
-        <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
-        <li><a routerLink="/statistics" routerLinkActive="active">Statistics</a></li>
-        <li><a routerLink="/info" routerLinkActive="active">Info</a></li>
-      </ul>
-    </nav>
+<div class="main-container">
+
+  <!--header id="main-header" class="htw-theme">
+    <h1>traffic map berlin</h1>
+  </header-->
+  <mat-toolbar id="main-toolbar" class="htw-theme">
+    <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>    
+    <div class="pl-15">
+      <h1>traffic map berlin</h1>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav [(opened)]="opened" mode="over" >
+      <!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->
+      <nav>
+        <ul>
+          <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
+          <li><a routerLink="/statistics" routerLinkActive="active">Statistics</a></li>
+          <li><a routerLink="/info" routerLinkActive="active">Info</a></li>
+        </ul>
+      </nav>
+    </mat-sidenav>
+      
+    <mat-sidenav-content id="main-container">
+      <!-- The routed views render in the <router-outlet>-->
+      <router-outlet></router-outlet>
     
-    <!-- The routed views render in the <router-outlet>-->
-    <router-outlet></router-outlet>
-  <!--app-walking-skeleton></app-walking-skeleton-->
-  </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

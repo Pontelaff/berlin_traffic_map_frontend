@@ -12,6 +12,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
 import { MapComponent } from './components/home-page/map/map.component';
 import { MaterialModule } from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     MaterialModule,
     BrowserAnimationsModule,
+    FormsModule,
     //HttpClientModule
   ],
   providers: [],
