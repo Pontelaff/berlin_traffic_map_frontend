@@ -10,6 +10,8 @@ import { StatisticsPageComponent } from './components/statistics-page/statistics
 import { InfoPageComponent } from './components/info-page/info-page.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { MapComponent } from './components/home-page/map/map.component';
+import { MaterialModule } from './material/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { MapComponent } from './components/home-page/map/map.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MaterialModule,
+    BrowserAnimationsModule,
     //HttpClientModule
   ],
   providers: [],

@@ -8,18 +8,22 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-	"sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
+    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~9.1.1",
+    "@angular/animations": "^9.1.9",
+    "@angular/cdk": "^9.2.4",
     "@angular/common": "~9.1.1",
     "@angular/compiler": "~9.1.1",
     "@angular/core": "~9.1.1",
     "@angular/forms": "~9.1.1",
+    "@angular/material": "^9.2.4",
     "@angular/platform-browser": "~9.1.1",
     "@angular/platform-browser-dynamic": "~9.1.1",
     "@angular/router": "~9.1.1",
+    "@types/leaflet": "^1.5.12",
+    "leaflet": "^1.6.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
@@ -44,6 +48,6 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3",
-	"sonar-scanner": "^3.1.0"
+    "sonar-scanner": "^3.1.0"
   }
 }

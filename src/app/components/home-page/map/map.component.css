@@ -1,0 +1,17 @@
+.map-container {
+  position: fixed;
+  top: 165px; /*change to 0 once sidenav is implemented*/
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+.map-frame {
+  border: 2px solid black;
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+}
