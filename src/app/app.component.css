@@ -42,8 +42,15 @@ mat-sidenav-container{
     height: calc(100% - 64px);
 }
 
-mat-sidenav{
-    padding: 16px;
+mat-sidenav-content{
+	background-color: #bbc;
+	background-image: url("/assets/Stau.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	/*background-position: 50% 50%;*/
+	background-blend-mode: soft-light;
+	background-size: cover;
+	background-position: center;
 }
 
 mat-sidenav {
