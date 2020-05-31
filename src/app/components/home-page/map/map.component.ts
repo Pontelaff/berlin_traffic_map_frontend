@@ -10,26 +10,12 @@ import * as L from 'leaflet';
 export class MapComponent implements AfterViewInit {
   private map:any;
 
-  // public mapHeight:number;
-  // mapElement:any;
-
-
   constructor() { 
     console.log("map constructor running");}
 
   ngAfterViewInit(): void {
     this.initMap();
   }
-
-  // ngOnInit(): void {
-  //   this.mapElement = document.getElementById("map");
-  //   this.mapHeight = window.innerHeight - this.mapElement.offsetTop -24;
-  //   console.log(this.mapHeight);
-  // }
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event) {
-  //   this.mapHeight = window.innerHeight - this.mapElement.offsetTop -24;
-  // }
   
   private initMap(): void {
     this.map = L.map('map', {
@@ -43,5 +29,10 @@ export class MapComponent implements AfterViewInit {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
     tiles.addTo(this.map);
+    this.addMarker(52.456817, 13.526210);
+  }
+
+  public addMarker(x:number, y:number): void {
+    var marker = L.marker([x, y]).addTo(this.map);
   }
 }
