@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfoPageComponent implements OnInit {
 
+  public teamName: string;
   constructor() { }
 
   ngOnInit(): void {
+    this.teamName = this.getTeamName();
+  }
+
+  public getTeamName() {
+    return "Bluescreen Bandits";
   }
 
 }

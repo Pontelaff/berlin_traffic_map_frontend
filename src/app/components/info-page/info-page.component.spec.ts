@@ -22,4 +22,9 @@ describe('InfoPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should return team name', () => {
+    expect(component.getTeamName()).toBe('Bluescreen Bandits');
+  })
+
 });
