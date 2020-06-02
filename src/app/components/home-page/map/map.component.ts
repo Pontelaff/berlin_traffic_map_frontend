@@ -2,6 +2,8 @@ import { AfterViewInit, Component } from '@angular/core';
 //import { Directive, HostListener } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 import * as L from 'leaflet';
+import { element } from 'protractor';
+import { ElementSchemaRegistry } from '@angular/compiler';
 
 
 @Component({
@@ -14,8 +16,24 @@ export class MapComponent implements AfterViewInit {
 
   lastTwoWeeks = [];
 
+  constructionSiteIcon = L.icon({
+    iconUrl: 'assets/200px-Construction.png',
+
+    iconSize:     [30, 30], // size of the icon
+    iconAnchor:   [15, 15], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -15] // point from which the popup should open relative to the iconAnchor
+  });
+
+  roadClosureIcon = L.icon({
+    iconUrl: 'assets/200px-Closure.png',
+
+    iconSize:     [30, 30], // size of the icon
+    iconAnchor:   [15, 15], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -15] // point from which the popup should open relative to the iconAnchor
+  });
+
   constructor(private apiService: ApiService) { 
-    console.log("map constructor running");
+
   }
 
   ngAfterViewInit(): void {
@@ -41,9 +59,9 @@ export class MapComponent implements AfterViewInit {
   makeData()
   {
     this.fetchData(this.apiService.fetchLast2Weeks().subscribe((data:any[])=>{ 
-      console.log("Data Length " + data.length);
+      // console.log("Data Length " + data.length);
       this.lastTwoWeeks = data;})).then(value => {
-      console.log("LastTwoWeeks Length " + this.lastTwoWeeks.length);
+      //console.log("LastTwoWeeks Length " + this.lastTwoWeeks.length);
 
       this.addMarkers();
     })
@@ -54,18 +72,34 @@ export class MapComponent implements AfterViewInit {
     return new Promise(resolve => {
       setTimeout(() => {
       resolve(x);
-      }, 1000);
+      }, 2000);
       });
   }
 
   addMarkers()
   {
     this.lastTwoWeeks.forEach(element => {
-      this.addMarker(element.location.coordinates[1], element.location.coordinates[0]);
+      let streetName = "";
+      if(element.streets != null)
+        streetName = element.streets[0];
+
+      let popUpContent = "<p> <b>" + element.name + "</b>" + "<br> " + streetName + "</p>";
+
+      let icon = null;
+      if(element.name == "Sperrung")
+        icon = this.roadClosureIcon;
+      else if(element.name == "Baustelle")
+        icon = this.constructionSiteIcon;
+
+      let marker = this.addMarker(element.location.coordinates[1], element.location.coordinates[0], icon);
+      marker.bindPopup(popUpContent);
     });
   }
 
-  public addMarker(x:number, y:number): void {
-    L.marker([x, y]).addTo(this.map);
+  addMarker(x:number, y:number, icon:any) {
+    if(icon == null)
+      return L.marker([x, y]).addTo(this.map);
+    else
+      return L.marker([x, y], {icon: icon}).addTo(this.map);
   }
 }
