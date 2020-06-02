@@ -1,6 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 //import { Directive, HostListener } from '@angular/core';
+import { ApiService } from 'src/app/api.service';
 import * as L from 'leaflet';
+
 
 @Component({
   selector: 'app-map',
@@ -10,8 +12,22 @@ import * as L from 'leaflet';
 export class MapComponent implements AfterViewInit {
   private map:any;
 
-  constructor() { 
-    console.log("map constructor running");}
+  // public lastTwoWeeks:{_id:string,
+  //   consequence: {summary:string, description:string},
+  //   section:string,
+  //   name:string,
+  //   streets:string [],
+  //   validities: {timeFrom:string, timeTo:string, visible:boolean}[],
+  //   location: {type:string, coordinates:number []},
+  //   property:string [],
+  //   geometry: {type:string, coordinates: number[][]}
+  //   }[];
+
+  lastTwoWeeks = [];
+
+  constructor(private apiService: ApiService) { 
+    console.log("map constructor running");
+  }
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -29,7 +45,35 @@ export class MapComponent implements AfterViewInit {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
     tiles.addTo(this.map);
-    this.addMarker(52.456817, 13.526210);
+
+    this.makeData();
+  }
+
+  makeData()
+  {
+    this.fetchData(this.apiService.fetchLast2Weeks().subscribe((data:any[])=>{ 
+      console.log("Data Length " + data.length);
+      this.lastTwoWeeks = data;})).then(value => {
+      console.log("LastTwoWeeks Length " + this.lastTwoWeeks.length);
+
+      this.addMarkers();
+    })
+  }
+  
+  fetchData(x)      //resumes after 1 sec
+  {
+    return new Promise(resolve => {
+      setTimeout(() => {
+      resolve(x);
+      }, 1000);
+      });
+  }
+
+  addMarkers()
+  {
+    this.lastTwoWeeks.forEach(element => {
+      this.addMarker(element.location.coordinates[1], element.location.coordinates[0]);
+    });
   }
 
   public addMarker(x:number, y:number): void {

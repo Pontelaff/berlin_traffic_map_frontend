@@ -6,9 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ApiService{
 
-    constructor() {}
-    /*
-    private SERVER_URL = "http://localhost:2193";
+    private SERVER_URL = "http://localhost:3021";
     constructor(private httpClient: HttpClient) { }
 
     public fetchDataCount(){
@@ -18,5 +16,4 @@ export class ApiService{
     public fetchLast2Weeks(){
         return this.httpClient.get(`${this.SERVER_URL}/last2Weeks`);
     }
-    */
 }
