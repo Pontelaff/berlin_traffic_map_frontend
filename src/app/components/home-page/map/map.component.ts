@@ -12,17 +12,6 @@ import * as L from 'leaflet';
 export class MapComponent implements AfterViewInit {
   private map:any;
 
-  // public lastTwoWeeks:{_id:string,
-  //   consequence: {summary:string, description:string},
-  //   section:string,
-  //   name:string,
-  //   streets:string [],
-  //   validities: {timeFrom:string, timeTo:string, visible:boolean}[],
-  //   location: {type:string, coordinates:number []},
-  //   property:string [],
-  //   geometry: {type:string, coordinates: number[][]}
-  //   }[];
-
   lastTwoWeeks = [];
 
   constructor(private apiService: ApiService) { 

@@ -1,0 +1,10 @@
+#flexbox {
+    flex-direction: column; 
+    display: flex; 
+    height: 100%;
+    clear: both;
+}
+
+#mapContainer {
+    flex: 1;
+}
