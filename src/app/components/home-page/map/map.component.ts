@@ -33,6 +33,6 @@ export class MapComponent implements AfterViewInit {
   }
 
   public addMarker(x:number, y:number): void {
-    var marker = L.marker([x, y]).addTo(this.map);
+    L.marker([x, y]).addTo(this.map);
   }
 }
