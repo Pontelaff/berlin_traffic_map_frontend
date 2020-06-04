@@ -16,4 +16,8 @@ export class ApiService{
     public fetchLast2Weeks(){
         return this.httpClient.get(`${this.SERVER_URL}/last2Weeks`);
     }
+
+    public fetchFromTo(from:string, to:string){
+        return this.httpClient.get(`${this.SERVER_URL}/timeframe/${from}/${to}`);
+    }
 }

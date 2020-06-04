@@ -15,6 +15,9 @@ export class MapComponent implements AfterViewInit {
   private map:any;
 
   lastTwoWeeks = [];
+  trafficData = [];
+  dataFrom = "2020-06-01"
+  dataTo = "2020-06-04"
 
   constructionSiteIcon = L.icon({
     iconUrl: 'assets/200px-Construction.png',
@@ -58,9 +61,9 @@ export class MapComponent implements AfterViewInit {
 
   makeData()
   {
-    this.fetchData(this.apiService.fetchLast2Weeks().subscribe((data:any[])=>{ 
-      // console.log("Data Length " + data.length);
-      this.lastTwoWeeks = data;})).then(value => {
+    this.fetchData(this.apiService.fetchFromTo(this.dataFrom, this.dataTo).subscribe((data:any[])=>{ 
+       console.log("Data Length " + data.length);
+      this.trafficData = data;})).then(value => {
       //console.log("LastTwoWeeks Length " + this.lastTwoWeeks.length);
 
       this.addMarkers();
@@ -78,21 +81,24 @@ export class MapComponent implements AfterViewInit {
 
   addMarkers()
   {
-    this.lastTwoWeeks.forEach(element => {
-      let streetName = "";
-      if(element.streets != null)
-        streetName = element.streets[0];
+    this.trafficData.forEach(element => {
+      if (element != null){
+        let streetName = "";
+        if(element.streets != null)
+          streetName = element.streets[0];
 
-      let popUpContent = "<p> <b>" + element.name + "</b>" + "<br> " + streetName + "</p>";
+        let popUpContent = "<p> <b>" + element.name + "</b>" + "<br> " + streetName + "</p>";
 
-      let icon = null;
-      if(element.name == "Sperrung")
-        icon = this.roadClosureIcon;
-      else if(element.name == "Baustelle")
-        icon = this.constructionSiteIcon;
-
-      let marker = this.addMarker(element.location.coordinates[1], element.location.coordinates[0], icon);
-      marker.bindPopup(popUpContent);
+        let icon = null;
+        if(element.name == "Sperrung")
+          icon = this.roadClosureIcon;
+        else if(element.name == "Baustelle")
+          icon = this.constructionSiteIcon;
+        if(element.location != null){
+          let marker = this.addMarker(element.location.coordinates[1], element.location.coordinates[0], icon);
+          marker.bindPopup(popUpContent);
+        }
+      }
     });
   }
 
