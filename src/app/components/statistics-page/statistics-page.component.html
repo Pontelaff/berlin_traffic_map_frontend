@@ -1,4 +1,22 @@
 <div>
-    <p>statistics-page works!</p>
-    <!--app-walking-skeleton></app-walking-skeleton-->
+    
+    <mat-form-field id="StartPicker">
+        <mat-label>Start Date</mat-label>
+        <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
+        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+        <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field id="EndPicker">
+        <mat-label>End Date</mat-label>
+        <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
+    
+    <button (click)="logDates()">Log Current Dates</button>
+
 </div>
+    
