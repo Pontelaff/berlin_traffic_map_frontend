@@ -1,7 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
-//import { Directive, HostListener } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 import * as L from 'leaflet';
+import 'leaflet.markercluster';
 import { element } from 'protractor';
 import { ElementSchemaRegistry } from '@angular/compiler';
 
@@ -16,8 +16,29 @@ export class MapComponent implements AfterViewInit {
 
   lastTwoWeeks = [];
   trafficData = [];
-  dataFrom = "2020-06-01"
+  dataFrom = "2010-06-01"
   dataTo = "2020-06-04"
+
+  markers = L.markerClusterGroup({
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: false,
+    // iconCreateFunction: function(cluster) {
+    //   let childCount = cluster.getChildCount()
+    //   let c = ' marker-cluster-';
+    //   if (childCount <= 10) {
+    //     c += 'small';
+    //   } else if (childCount <= 100) {
+    //     c += 'medium';
+    //   } else {
+    //     c += 'large';
+    //   }
+
+    //   return L.divIcon({ html: '<div><span>' + cluster.getChildCount() + '<span></div>',
+    //   className: 'marker-cluster ' + c,
+    //   iconSize: new L.Point(40, 40)});
+    // }
+  });
 
   constructionSiteIcon = L.icon({
     iconUrl: 'assets/200px-Construction.png',
@@ -97,15 +118,17 @@ export class MapComponent implements AfterViewInit {
         if(element.location != null){
           let marker = this.addMarker(element.location.coordinates[1], element.location.coordinates[0], icon);
           marker.bindPopup(popUpContent);
+          this.markers.addLayer(marker);
         }
       }
     });
+    this.map.addLayer(this.markers)
   }
 
   addMarker(x:number, y:number, icon:any) {
     if(icon == null)
-      return L.marker([x, y]).addTo(this.map);
+      return L.marker([x, y]);
     else
-      return L.marker([x, y], {icon: icon}).addTo(this.map);
+      return L.marker([x, y], {icon: icon});
   }
 }

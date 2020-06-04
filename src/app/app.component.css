@@ -33,7 +33,7 @@ mat-sidenav-container{
 
 mat-sidenav-content{
 	background-color: #bbc;
-	background-image: url("/assets/Stau.jpg");
+	background-image: url('/assets/Stau.jpg');
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	/*background-position: 50% 50%;*/
