@@ -98,25 +98,18 @@ export class MapComponent implements AfterViewInit {
 
   makeData()
   {
-
     let dataFromFormatted = this.dataFrom.toISOString().slice(0, 10);
     let dataToFormatted = this.dataTo.toISOString().slice(0, 10);
-    this.fetchData(this.apiService.fetchFromTo(dataFromFormatted, dataToFormatted).subscribe((data:any[])=>{ 
-       console.log("Data Length " + data.length);
-      this.trafficData = data;})).then(value => {
-      //console.log("LastTwoWeeks Length " + this.lastTwoWeeks.length);
 
-      this.addMarkers();
-    })
+    this.apiService.fetchFromTo(dataFromFormatted, dataToFormatted).subscribe((data:any[])=>{ 
+      this.trafficData = data;
+      this.markerUpdateRoutine();
+       });
   }
-  
-  fetchData(x)      //resumes after 1 sec
-  {
-    return new Promise(resolve => {
-      setTimeout(() => {
-      resolve(x);
-      }, 3000);
-      });
+
+  markerUpdateRoutine() {
+    console.log("Data Length " + this.trafficData.length);
+    this.addMarkers();
   }
 
   addMarkers()
