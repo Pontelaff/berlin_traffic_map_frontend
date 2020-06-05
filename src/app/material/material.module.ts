@@ -5,6 +5,9 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 const material = [  
   MatSidenavModule,
@@ -13,6 +16,8 @@ const material = [
   MatDatepickerModule,
   MatMomentDateModule,
   MatFormFieldModule,
+  MatInputModule,
+  MatMenuModule,
 ];
 
 @NgModule({

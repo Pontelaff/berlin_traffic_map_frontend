@@ -1,6 +1,6 @@
 <div>
     
-    <mat-form-field id="StartPicker">
+    <mat-form-field matInput id="StartPicker">
         <mat-label>Start Date</mat-label>
         <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
         <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
@@ -9,7 +9,7 @@
 
     <br>
 
-    <mat-form-field id="EndPicker">
+    <mat-form-field matInput  id="EndPicker">
         <mat-label>End Date</mat-label>
         <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
