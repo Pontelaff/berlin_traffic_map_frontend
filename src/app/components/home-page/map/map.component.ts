@@ -1,5 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { element } from 'protractor';
@@ -12,12 +13,15 @@ import { ElementSchemaRegistry } from '@angular/compiler';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements AfterViewInit {
+
+  constructor(private apiService: ApiService) {  }
+
   private map:any;
 
   lastTwoWeeks = [];
   trafficData = [];
-  dataFrom = "2019-12-01"
-  dataTo = "2020-06-04"
+  dataTo:Date = new Date();
+  dataFrom:Date = new Date();
 
   markers = L.markerClusterGroup({
     spiderfyOnMaxZoom: true,
@@ -67,12 +71,13 @@ export class MapComponent implements AfterViewInit {
     popupAnchor:  [0, -27] // point from which the popup should open relative to the iconAnchor
   });
 
-  constructor(private apiService: ApiService) { 
-
+  ngAfterViewInit(): void {
+    this.dataFrom.setDate(this.dataFrom.getDate()-14);
+    this.initMap();
   }
 
-  ngAfterViewInit(): void {
-    this.initMap();
+  addEvent(event: MatDatepickerInputEvent<Date>) {
+    this.makeData();
   }
   
   private initMap(): void {
@@ -93,7 +98,10 @@ export class MapComponent implements AfterViewInit {
 
   makeData()
   {
-    this.fetchData(this.apiService.fetchFromTo(this.dataFrom, this.dataTo).subscribe((data:any[])=>{ 
+
+    let dataFromFormatted = this.dataFrom.toISOString().slice(0, 10);
+    let dataToFormatted = this.dataTo.toISOString().slice(0, 10);
+    this.fetchData(this.apiService.fetchFromTo(dataFromFormatted, dataToFormatted).subscribe((data:any[])=>{ 
        console.log("Data Length " + data.length);
       this.trafficData = data;})).then(value => {
       //console.log("LastTwoWeeks Length " + this.lastTwoWeeks.length);
@@ -115,9 +123,11 @@ export class MapComponent implements AfterViewInit {
   {
     this.trafficData.forEach(element => {
       if (element != null){
+        let cause = "";
         let popUpContent = "<p>";
-        if(element.name != null)
+        if(element.consequence.summary != null)
           popUpContent += "<b>" + element.name + "</b>";
+          cause = element.consequence.summary;
         if(element.streets != null)
           popUpContent += "<b> - " + element.streets[0] + "</b>";
         if(element.section != null)
@@ -130,11 +140,11 @@ export class MapComponent implements AfterViewInit {
         popUpContent += "</p>";
 
         let icon = null;
-        if(element.name == "Sperrung")
+        if(cause == "Sperrung")
           icon = this.roadClosureIcon;
-        else if(element.name == "Baustelle" || element.name == "Bauarbeiten")
+        else if(cause == "Baustelle" || cause == "Bauarbeiten")
           icon = this.constructionSiteIcon;        
-        else if(element.name == "Stau")
+        else if(cause == "Stau")
           icon = this.trafficJamIcon;
         else //if(element.name == "Gefahr" || element.name == "Unfall")
           icon = this.dangerIcon;

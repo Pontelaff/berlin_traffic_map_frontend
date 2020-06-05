@@ -1,11 +1,25 @@
 <div class="map-container">
     <div class="map-frame">
-        <div id="map"></div>
-        <mat-form-field matInput>
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+        <mat-menu #mapMenu="matMenu" class="mat-menu" overlapTrigger="true">
+            <mat-form-field matInput>
+                <mat-label>Von</mat-label>
+                <input [(ngModel)]="dataFrom" matInput [matDatepicker]="pickerStart" [max]="dataTo" (dateChange)="addEvent($event)" (click) = "$event.stopPropagation()">
+                <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                <mat-datepicker #pickerStart></mat-datepicker>
+            </mat-form-field>
+                
+            <mat-form-field matInput>
+                <mat-label>Bis</mat-label>
+                <input [(ngModel)]="dataTo" matInput [matDatepicker]="pickerEnd" [min]="dataFrom" (dateChange)="addEvent($event)" (click) = "$event.stopPropagation()">
+                <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+            </mat-form-field>
+        </mat-menu>
+            
+        <button class="mat-menu-button" mat-icon-button [matMenuTriggerFor]="mapMenu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <div id="map"></div>    
     </div>
 </div>
