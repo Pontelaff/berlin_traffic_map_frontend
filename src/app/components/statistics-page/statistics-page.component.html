@@ -16,7 +16,31 @@
         <mat-datepicker #pickerEnd></mat-datepicker>
     </mat-form-field>
     
-    <button (click)="logDates()">Log Current Dates</button>
+    <br>
+
+    <button (click)="userClick()">Plot</button>
+
+    <br>
+
+    <!-- <mat-selection-list #districtSelector>
+        <mat-list-option *ngFor="let district of allDistricts">
+          {{district}}
+        </mat-list-option>
+    </mat-selection-list>
+
+    <mat-selection-list #eventSelector>
+        <mat-list-option *ngFor="let event of allEvents">
+          {{event}}
+        </mat-list-option>
+    </mat-selection-list> -->
+      
+    <!-- <p>
+        Options selected: {{districtSelector.selectedOptions.selected.length}}
+    </p> -->
+
+    <div id="chart">
+        <canvas id="canvas" width="200" height="500"></canvas>
+    </div>
 
 </div>
     
