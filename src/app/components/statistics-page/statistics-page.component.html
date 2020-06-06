@@ -18,10 +18,6 @@
     
     <br>
 
-    <button (click)="userClick()">Plot</button>
-
-    <br>
-
     <!-- <mat-selection-list #districtSelector>
         <mat-list-option *ngFor="let district of allDistricts">
           {{district}}
@@ -37,6 +33,21 @@
     <!-- <p>
         Options selected: {{districtSelector.selectedOptions.selected.length}}
     </p> -->
+
+    <mat-form-field>
+        <mat-label>Chart to display</mat-label>
+        <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
+            <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
+            {{chartSelection.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <br>
+
+    <button (click)="userClick()">Plot</button>
+
+    <br>
 
     <div id="chart">
         <canvas id="canvas" width="200" height="500"></canvas>
