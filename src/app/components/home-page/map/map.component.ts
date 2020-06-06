@@ -27,10 +27,11 @@ export class MapComponent implements AfterViewInit {
   showConstructionSites: true,  
   showLineClosures: true,
   showTrafficJams: true,
+  showAccidents: true,
   showDangers: true,
   };
 
-  constructionSites = L.markerClusterGroup({
+  roadClosures = L.markerClusterGroup({
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
     zoomToBoundsOnClick: false,
@@ -52,23 +53,7 @@ export class MapComponent implements AfterViewInit {
 	// }
   });
 
-  dangers = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  });
-
-  trafficJams = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  });
-
-  roadClosures = L.markerClusterGroup({
+  constructionSites = L.markerClusterGroup({
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
     zoomToBoundsOnClick: false,
@@ -84,6 +69,37 @@ export class MapComponent implements AfterViewInit {
     maxClusterRadius: 20,
   });
 
+  trafficJams = L.markerClusterGroup({
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: false,
+    //disableClusteringAtZoom: 16,
+    maxClusterRadius: 20,
+  });
+
+  accidents = L.markerClusterGroup({
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: false,
+    //disableClusteringAtZoom: 16,
+    maxClusterRadius: 20,
+  });
+
+  dangers = L.markerClusterGroup({
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: false,
+    //disableClusteringAtZoom: 16,
+    maxClusterRadius: 20,
+  });
+
+  roadClosureIcon = L.icon({
+    iconUrl: 'assets/200px-Closure.png',
+    iconSize:     [50, 50], // size of the icon
+    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -27] // point from which the popup should open relative to the iconAnchor
+  });
+
   constructionSiteIcon = L.icon({
     iconUrl: 'assets/200px-Construction.png',
     iconSize:     [50, 44], // size of the icon
@@ -91,8 +107,8 @@ export class MapComponent implements AfterViewInit {
     popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
   });
 
-  dangerIcon = L.icon({
-    iconUrl: 'assets/200px-Danger.png',
+  lineClosureIcon = L.icon({
+    iconUrl: 'assets/200px-Lane-Closure.png',
     iconSize:     [50, 44], // size of the icon
     iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
@@ -105,15 +121,15 @@ export class MapComponent implements AfterViewInit {
     popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
   });
 
-  roadClosureIcon = L.icon({
-    iconUrl: 'assets/200px-Closure.png',
-    iconSize:     [50, 50], // size of the icon
-    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -27] // point from which the popup should open relative to the iconAnchor
+  accidentIcon = L.icon({
+    iconUrl: 'assets/200px-Accident.png',
+    iconSize:     [50, 44], // size of the icon
+    iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
   });
 
-  lineClosureIcon = L.icon({
-    iconUrl: 'assets/200px-Lane-Closure.png',
+  dangerIcon = L.icon({
+    iconUrl: 'assets/200px-Danger.png',
     iconSize:     [50, 44], // size of the icon
     iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
@@ -140,14 +156,15 @@ export class MapComponent implements AfterViewInit {
     event.checked ? this.map.addLayer(this.trafficJams) : this.map.removeLayer(this.trafficJams);
   }
 
+  toogleAccidents(event){
+    event.checked ? this.map.addLayer(this.accidents) : this.map.removeLayer(this.accidents);
+  }
+
   toogleDangers(event){
     event.checked ? this.map.addLayer(this.dangers) : this.map.removeLayer(this.dangers);
   }
 
   applyClick() {
-    // this.map.eachLayer(function (layer){
-    //   this.map.removeLayer(layer);
-    // });
     this.makeData();
   }
   
@@ -202,9 +219,12 @@ export class MapComponent implements AfterViewInit {
         } else if(cause == "Fahrstreifensperrung") {
           marker.setIcon(this.lineClosureIcon);
           this.laneClosures.addLayer(marker);
-        } else {//if(element.name == "Gefahr" || element.name == "Unfall")
-        marker.setIcon(this.dangerIcon);
-        this.dangers.addLayer(marker);
+        } else if(cause == "Unfall") {
+          marker.setIcon(this.accidentIcon);
+          this.accidents.addLayer(marker);
+        } else if(cause == "Gefahr" || cause == "Störung") {
+          marker.setIcon(this.dangerIcon);
+          this.dangers.addLayer(marker);
         }
       }
     });
@@ -217,8 +237,10 @@ export class MapComponent implements AfterViewInit {
       this.map.addLayer(this.laneClosures);
     if(this.options.showTrafficJams == true)
       this.map.addLayer(this.trafficJams);
+    if(this.options.showAccidents == true)
+      this.map.addLayer(this.accidents);
     if(this.options.showDangers == true)
-    this.map.addLayer(this.dangers);
+      this.map.addLayer(this.dangers);
   }
 
   createPopupContent(element) : string {

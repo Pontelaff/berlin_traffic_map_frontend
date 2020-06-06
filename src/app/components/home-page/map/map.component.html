@@ -7,7 +7,8 @@
                     <mat-checkbox class="options-checkbox" [(ngModel)]="options.showConstructionSites" (change)="toogleConstructionSites($event)">Baustellen</mat-checkbox>
                     <mat-checkbox class="options-checkbox" [(ngModel)]="options.showLineClosures" (change)="toogleLaneClosures($event)">Fahrstreifensperrungen</mat-checkbox>
                     <mat-checkbox class="options-checkbox" [(ngModel)]="options.showTrafficJams" (change)="toogleTrafficJams($event)">Staus</mat-checkbox>
-                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showDangers" (change)="toogleDangers($event)">Gefahren</mat-checkbox>
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showAccidents" (change)="toogleAccidents($event)">Unfälle</mat-checkbox>
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showDangers" (change)="toogleDangers($event)">Gefahren und Störungen</mat-checkbox>
                 </div>
 
                 <mat-form-field matInput>
