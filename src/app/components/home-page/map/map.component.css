@@ -17,14 +17,21 @@
   z-index: 500;
 }
 
+.menu-container{
+  padding: 25px;
+}
+
+.checkbox-container{
+  padding-bottom: 15px;
+}
+
+.options-checkbox{
+  display: block;
+}
+
 #map {
   height: 100%;
 }
-
-mat-form-field{
-  padding: 5px 35px;
-}
-
 
 /*useless sh*t!!!*/
 .marker-cluster {

@@ -1,19 +1,32 @@
 <div class="map-container">
     <div class="map-frame">
         <mat-menu #mapMenu="matMenu" class="mat-menu" overlapTrigger="true">
-            <mat-form-field matInput>
-                <mat-label>Von</mat-label>
-                <input [(ngModel)]="dataFrom" matInput [matDatepicker]="pickerStart" [max]="dataTo" (dateChange)="addEvent($event)" (click) = "$event.stopPropagation()">
-                <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-                <mat-datepicker #pickerStart></mat-datepicker>
-            </mat-form-field>
+            <div class="menu-container" (click) = "$event.stopPropagation()">
+                <div class="checkbox-container">
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showRoadClosures" (change)="toogleRoadClosures($event)">Sperrungen</mat-checkbox>
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showConstructionSites" (change)="toogleConstructionSites($event)">Baustellen</mat-checkbox>
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showLineClosures" (change)="toogleLaneClosures($event)">Fahrstreifensperrungen</mat-checkbox>
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showTrafficJams" (change)="toogleTrafficJams($event)">Staus</mat-checkbox>
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showAccidents" (change)="toogleAccidents($event)">Unfälle</mat-checkbox>
+                    <mat-checkbox class="options-checkbox" [(ngModel)]="options.showDangers" (change)="toogleDangers($event)">Gefahren und Störungen</mat-checkbox>
+                </div>
+
+                <mat-form-field matInput>
+                    <mat-label>Von</mat-label>
+                    <input [(ngModel)]="options.dateFrom" matInput [matDatepicker]="pickerStart" [max]="options.dateTo">
+                    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerStart></mat-datepicker>
+                </mat-form-field>
+                    
+                <mat-form-field matInput>
+                    <mat-label>Bis</mat-label>
+                    <input [(ngModel)]="options.dateTo" matInput [matDatepicker]="pickerEnd" [min]="options.dateFrom">
+                    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
                 
-            <mat-form-field matInput>
-                <mat-label>Bis</mat-label>
-                <input [(ngModel)]="dataTo" matInput [matDatepicker]="pickerEnd" [min]="dataFrom" (dateChange)="addEvent($event)" (click) = "$event.stopPropagation()">
-                <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-                <mat-datepicker #pickerEnd></mat-datepicker>
-            </mat-form-field>
+                <button (click)="applyClick()">Zeitraum anwenden</button>
+            </div>
         </mat-menu>
             
         <button class="mat-menu-button" mat-icon-button [matMenuTriggerFor]="mapMenu">
