@@ -7,7 +7,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatListModule} from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 const material = [  
@@ -20,6 +21,7 @@ const material = [
   MatInputModule,
   MatMenuModule,
   MatListModule,
+  MatCheckboxModule,
 ];
 
 @NgModule({
