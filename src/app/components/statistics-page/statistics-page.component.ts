@@ -6,6 +6,7 @@ import { element } from 'protractor';
 interface chartSelect {
   selector: number;
   viewValue: string;
+  data: any[];
 }
 
 @Component({
@@ -27,16 +28,14 @@ export class StatisticsPageComponent implements OnInit {
                           "Tempelhof-Schöneberg", "Neukölln", "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf"];
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Stau", "Störung", "Unfall"];
 
-  totalOccurences: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
-
   chart: any;
   chartCreated: boolean;
 
   chartList: chartSelect[] = [
-    {selector: 0, viewValue: 'Chart 1'},
-    {selector: 1, viewValue: 'Chart 2'},
-    {selector: 2, viewValue: 'Chart 3'},
-    {selector: 3, viewValue: 'Chart 4'}
+    {selector: 0, viewValue: 'Dummy Chart', data: [0, 0, 0, 0, 0, 0, 0, 0]},
+    {selector: 1, viewValue: 'Chart 2', data: [[], [], [], [], [], [], [], []]},
+    {selector: 2, viewValue: 'Chart 3', data: []},
+    {selector: 3, viewValue: 'Chart 4', data: []}
   ];
 
   selectedChartIndex: number;
@@ -116,18 +115,51 @@ export class StatisticsPageComponent implements OnInit {
 
   updateStackedEventsChart()
   {
+    /*TODO fill saturation values with data from database*/
+    this.chartList[this.selectedChartIndex].data.forEach(element => {       //iterate through district-level
+
+      element.length = this.allDistricts.length;
+      for(let iter = 0; iter < element.length; iter++)          //iterate through event-level
+      {
+        element[iter] += new Date().getMilliseconds() / 1000;
+        if(element[iter] > 1)
+          element[iter] -= 1;
+      } 
+    });
+
+    /*create rgb value strings*/
+    let colorList:string[][] = [[], [], [], [], [], [], [], []];
+    let vList: any = this.chartList[this.selectedChartIndex].data;    //list of values, used as an alias to avoid lengthy lines
+
+    for(let topIdx = 0; topIdx < colorList.length; topIdx++)      //iterate through district-level
+    {
+      let element = colorList[topIdx];
+      element.length = this.allDistricts.length;
+      element.fill('rgba(256, 256, 256, 1)');
+      for(let subIdx = 0; subIdx < element.length; subIdx++)    //iterate through event-level
+        element[subIdx] = 'rgba( ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', 1)';
+    }
+
+    /*update Chart*/   
+    for(let iter = 0; iter < colorList.length; iter++)
+    {
+      let element = colorList[iter];
+      this.chart.data.datasets[iter].backgroundColor = element;
+    }
+
+    this.chart.update();
     this.logChartUpdate(this.selectedChartIndex);
   }
 
   updatePreliminaryChart()
   {
-    this.totalOccurences.fill(0);     //reset occurences
+    this.chartList[this.selectedChartIndex].data.fill(0);      //reset occurences
     
     let index = 0;
     this.trafficData.forEach(entry => {   //get occurences per event type
       this.allEvents.forEach(event => {
         if(event == entry.consequence.summary){
-          this.totalOccurences[index]++;
+          this.chartList[this.selectedChartIndex].data[index]++;
         }
         else {
           index++;
@@ -137,7 +169,6 @@ export class StatisticsPageComponent implements OnInit {
     });
 
     this.chart.update();
-
     this.logChartUpdate(this.selectedChartIndex);
   }
 
@@ -145,57 +176,40 @@ export class StatisticsPageComponent implements OnInit {
   {
     this.logChartCreation(this.selectedChartIndex);
 
-    /*array of saturation values*/
-    let svList:number[][] = [[], [], [], [], [], [], [], []];
-    /*array of color values as string*/
-    let colorList:string[][] = [[], [], [], [], [], [], [], []];
-    /*array for uniform values*/
-    let uniformData:number[] = [];
-
-
-    /*create saturation values*/
+    /*create default saturation values*/
     let avalue = 0.5;
     let offset = 0.05;
     let index = 0;
-    svList.forEach(element => {
+    this.chartList[this.selectedChartIndex].data.forEach(element => {     //iterate through district-level
+      
       element.length = this.allDistricts.length;
       element.fill(0);
-      element.forEach(value => {
-        element[index] = avalue;
+      for(let iter = 0; iter < element.length; iter++)      //iterate through event-level
+      {
+        element[iter] = avalue;
         avalue += offset;
         if(avalue > 1 - offset || avalue < -offset)
-          offset *= -1;
-
-        index++;
-      });
-
-      index = 0;
+        offset *= -1;
+      }
     });
 
+    /*create default rgb value strings*/
+    let colorList:string[][] = [[], [], [], [], [], [], [], []];
+    let vList: any = this.chartList[this.selectedChartIndex].data;    //list of values, used as an alias to avoid lengthy lines
 
-    /*create rgb value strings*/
-    let topIndex = 0;
-    let subIndex = 0;
-    colorList.forEach(element => {
-      index = 0;
-      subIndex = 0;
-
+    for(let topIdx = 0; topIdx < colorList.length; topIdx++)    //iterate through district-level
+    {
+      let element = colorList[topIdx];
       element.length = this.allDistricts.length;
       element.fill('rgba(256, 256, 256, 1)');
-      element.forEach(value => {
-        element[index] = 'rgba( ' + 256 * svList[topIndex][subIndex] + ', ' + 256 * svList[topIndex][subIndex] + ', ' + 256 * svList[topIndex][subIndex] + ', 1)';
-        subIndex++;
-        index++;
-      });
-
-      topIndex++;
-    });
-
+      for(let subIdx = 0; subIdx < element.length; subIdx++)     //iterate through event-level
+        element[subIdx] = 'rgba( ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', 1)';    //apply saturation
+    }
 
     /*create uniform data*/
+    let uniformData:number[] = [];
     uniformData.length = this.allDistricts.length;
     uniformData.fill(1);
-
 
     /*create chart*/
     var ctx = document.getElementById('canvas');    //get html context
@@ -206,43 +220,35 @@ export class StatisticsPageComponent implements OnInit {
         datasets: [
           { 
             data: uniformData,
-            backgroundColor: colorList[0],
-            fill: false
+            backgroundColor: colorList[0]
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[1],
-            fill: false
+            backgroundColor: colorList[1]
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[2],
-            fill: false
+            backgroundColor: colorList[2]
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[3],
-            fill: false
+            backgroundColor: colorList[3]
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[4],
-            fill: false
+            backgroundColor: colorList[4]
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[5],
-            fill: false
+            backgroundColor: colorList[5]
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[6],
-            fill: false
+            backgroundColor: colorList[6]
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[7],
-            fill: false
+            backgroundColor: colorList[7]
           }
         ]
       },
@@ -290,7 +296,6 @@ export class StatisticsPageComponent implements OnInit {
         }
       }
     });
-
   }
 
   createPreliminaryChart()
@@ -304,7 +309,7 @@ export class StatisticsPageComponent implements OnInit {
         labels: this.allEvents,
         datasets: [
           { 
-            data: this.totalOccurences,
+            data: this.chartList[this.selectedChartIndex].data,
             backgroundColor: 'rgba(0, 0, 0, 0.5',
             fill: false
           }
