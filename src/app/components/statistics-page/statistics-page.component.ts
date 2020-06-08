@@ -57,12 +57,8 @@ export class StatisticsPageComponent implements OnInit {
       return;
     }
 
-    console.log(this.currDateStart);
-    console.log(this.currDateEnd);
     console.log("Start: " + this.currDateStart.toISOString().slice(0, 10));
     console.log("End: " + this.currDateEnd.toISOString().slice(0, 10));
-
-    console.log(this.selectedChartIndex);
 
     if(this.selectedChartIndex != this.cachedChartIndex){     //only create new chart if type doesn't match currently displayed one
       this.cachedChartIndex = this.selectedChartIndex;        //update currently displayed chart index
@@ -74,29 +70,57 @@ export class StatisticsPageComponent implements OnInit {
     this.makeData();
   }
 
+  createChart(chartIndex: number)
+  {
+    switch(chartIndex)
+    {
+      case 0: {
+        this.createPreliminaryChart(); 
+        break;
+      }
+      case 1: {
+        this.createStackedChartEvents(); 
+        break;
+      }
+      default: {
+        console.log("Chart creation not available");
+        break;
+      }
+    }    
+  }
+
   makeData()
   {
     let startString = this.currDateStart.toISOString().slice(0, 10);
     let endString = this.currDateEnd.toISOString().slice(0, 10);
 
-    this.apiService.fetchFromTo(startString, endString).subscribe((data:any[])=>{ 
-      this.trafficData = data;
-      this.chartUpdateRoutine();    
-    });
-
+    switch(this.selectedChartIndex)
+    {
+      case 0: {
+        this.apiService.fetchFromTo(startString, endString).subscribe((data:any[])=>{ 
+          this.trafficData = data;
+          this.updatePreliminaryChart();    
+        });
+        break;
+      }
+      case 1: {
+        this.updateStackedEventsChart(); 
+        break;
+      }
+      default: {
+        console.log("Chart update not available");
+        break;
+      }
+    }    
   }
 
-  chartUpdateRoutine() {
-    console.log("Data Length " + this.trafficData.length);
-    this.updateChart(); 
+  updateStackedEventsChart()
+  {
+    this.logChartUpdate(this.selectedChartIndex);
   }
 
-  updateChart() {
-    if(this.selectedChartIndex == 1)
-      return;
-
-    /*TODO make routine dependent on selected chart*/
-
+  updatePreliminaryChart()
+  {
     this.totalOccurences.fill(0);     //reset occurences
     
     let index = 0;
@@ -113,31 +137,13 @@ export class StatisticsPageComponent implements OnInit {
     });
 
     this.chart.update();
-  }
 
-  createChart(chartIndex: number)
-  {
-    console.log("Chart creation " + chartIndex);
-    switch(chartIndex)
-    {
-      case 0: {
-        this.createPreliminaryChart(); 
-        break;
-      }
-      case 1: {
-        this.createStackedChartEvents(); 
-        break;
-      }
-      default: {
-        console.log("Chart not available");
-        break;
-      }
-    }    
+    this.logChartUpdate(this.selectedChartIndex);
   }
 
   createStackedChartEvents()
   {
-    console.log("Creating stacked events chart");
+    this.logChartCreation(this.selectedChartIndex);
 
     /*array of saturation values*/
     let svList:number[][] = [[], [], [], [], [], [], [], []];
@@ -289,7 +295,8 @@ export class StatisticsPageComponent implements OnInit {
 
   createPreliminaryChart()
   {
-    console.log("Creating preliminary chart");
+    this.logChartCreation(this.selectedChartIndex);
+
     var ctx = document.getElementById('canvas');    //get html context
     this.chart = new Chart(ctx, {
       type: 'bar',
@@ -319,5 +326,15 @@ export class StatisticsPageComponent implements OnInit {
         }
       }
     });
+  }
+
+  logChartCreation(chartIndex: number)
+  {
+    console.log("Creating " + this.chartList[chartIndex].viewValue);
+  }
+
+  logChartUpdate(chartIndex: number)
+  {
+    console.log(this.chartList[chartIndex].viewValue + " updated");
   }
 }
