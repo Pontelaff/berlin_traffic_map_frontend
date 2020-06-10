@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
 import { ApiService } from 'src/app/api.service';
+import * as Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { element } from 'protractor';
 import { start } from 'repl';
 import { cloneDeep } from 'lodash';
@@ -134,11 +135,21 @@ export class StatisticsPageComponent implements OnInit {
                 this.chartList[this.selectedChartIndex].data[eventIdx][districtIdx]++;
               }
             });
-
             this.queriesCompleted++;
             this.updateStackedEventsChart(); 
           });
         }
+        break;
+      }
+      case 2: {
+        console.log("Chart update not available");
+        this.apiService.fetchLast2Weeks().subscribe((data:any[])=>{
+          console.log(data);
+        });
+        break;
+      }
+      case 3: {
+        console.log("Chart update not available");
         break;
       }
       default: {
@@ -178,7 +189,7 @@ export class StatisticsPageComponent implements OnInit {
       for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
       {
         if(totalPerDistrict[districtIdx] != 0)
-        chartData[eventIdx][districtIdx] /= totalPerDistrict[districtIdx];
+          chartData[eventIdx][districtIdx] /= totalPerDistrict[districtIdx];          
       }
     }
 
@@ -204,6 +215,12 @@ export class StatisticsPageComponent implements OnInit {
     {
       let element = colorList[iter];
       this.chart.data.datasets[iter].backgroundColor = element;
+    }
+
+    for(let idx = 0; idx < chartData.length; idx++)
+    {
+      //this.chart.data.datasets[idx].labels = chartData[idx];
+      this.chart.data.datasets[idx].hoverBackgroundColor = chartData[idx];
     }
 
     this.chart.update();
@@ -271,43 +288,52 @@ export class StatisticsPageComponent implements OnInit {
     uniformData.fill(1);
 
     /*create chart*/
-    var ctx = document.getElementById('canvas');    //get html context
+    var ctx = document.getElementById('canvas') as HTMLCanvasElement;    //get html context
     this.chart = new Chart(ctx, {
+      plugins: [ChartDataLabels],
       type: 'bar',
       data: {
         labels: this.allDistricts,
         datasets: [
           { 
             data: uniformData,
-            backgroundColor: colorList[0]
+            backgroundColor: colorList[0],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']      //using hoverBackgroundColor as label container since labels stopped working 
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[1]
+            backgroundColor: colorList[1],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[2]
+            backgroundColor: colorList[2],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[3]
+            backgroundColor: colorList[3],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[4]
+            backgroundColor: colorList[4],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[5]
+            backgroundColor: colorList[5],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[6]
+            backgroundColor: colorList[6],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
-            backgroundColor: colorList[7]
+            backgroundColor: colorList[7],
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
           }
         ]
       },
@@ -316,6 +342,22 @@ export class StatisticsPageComponent implements OnInit {
         maintainAspectRatio: false,
         legend: {
           display: false
+        },
+        tooltips: {
+          enabled: false
+        },
+        hover: {
+          mode: null
+        },
+        plugins: {
+          datalabels: {
+            color: 'green',
+            formatter: function(value, context) {
+               return Math.round(context.dataset.hoverBackgroundColor[context.dataIndex] * 100 * 10) / 10 + "%";    //convert to percentage, round to first decimal place and append % sign 
+            },
+            align: 'center',
+            anchor: 'center'
+          }
         },
         scales: {
           xAxes: [{
@@ -329,24 +371,15 @@ export class StatisticsPageComponent implements OnInit {
               stepSize: 0.5,
               callback: function(value, index, values) {
                 switch (value) {
-                  case 0.5:
-                      return 'Bauarbeiten';
-                  case 1.5:
-                      return 'Baustelle';
-                  case 2.5:
-                      return 'Fahrstreifensperrung';
-                  case 3.5:
-                      return 'Gefahr';
-                  case 4.5:
-                      return 'Sperrung';
-                  case 5.5:
-                      return 'Stau';
-                  case 6.5:
-                      return 'Störung';
-                  case 7.5:
-                      return 'Unfall';
-                  default:
-                      return null;
+                  case 0.5: return 'Bauarbeiten';
+                  case 1.5: return 'Baustelle';
+                  case 2.5: return 'Fahrstreifensperrung';
+                  case 3.5: return 'Gefahr';
+                  case 4.5: return 'Sperrung';
+                  case 5.5: return 'Stau';
+                  case 6.5: return 'Störung';
+                  case 7.5: return 'Unfall';
+                  default: return null;
                 }
               }
             },
@@ -361,7 +394,7 @@ export class StatisticsPageComponent implements OnInit {
   {
     this.logChartCreation(this.selectedChartIndex);
 
-    var ctx = document.getElementById('canvas');    //get html context
+    var ctx = document.getElementById('canvas') as HTMLCanvasElement;    //get html context
     this.chart = new Chart(ctx, {
       type: 'bar',
       data: {
