@@ -31,6 +31,8 @@ export class MapComponent implements AfterViewInit {
   showDangers: true,
   };
 
+  //mapLayers = L.layerGroup();
+
   roadClosures = L.markerClusterGroup({
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
@@ -196,8 +198,9 @@ export class MapComponent implements AfterViewInit {
   }
 
   markerUpdateRoutine() :void {
-    console.log("Data Length " + this.trafficData.length);
+    console.log("Data Length: " + this.trafficData.length);
     this.addMarkers();
+    this.updateClusterRange();
   }
 
   addMarkers() :void {
@@ -229,34 +232,47 @@ export class MapComponent implements AfterViewInit {
       }
     });
 
-    if(this.options.showRoadClosures == true)
+    if(this.options.showRoadClosures)
       this.map.addLayer(this.roadClosures);
-    if(this.options.showConstructionSites == true)
+    if(this.options.showConstructionSites)
       this.map.addLayer(this.constructionSites);
-    if(this.options.showLineClosures == true)
+    if(this.options.showLineClosures)
       this.map.addLayer(this.laneClosures);
-    if(this.options.showTrafficJams == true)
+    if(this.options.showTrafficJams)
       this.map.addLayer(this.trafficJams);
-    if(this.options.showAccidents == true)
+    if(this.options.showAccidents)
       this.map.addLayer(this.accidents);
-    if(this.options.showDangers == true)
+    if(this.options.showDangers)
       this.map.addLayer(this.dangers);
   }
 
   createPopupContent(element) : string {
     let popUpContent = "<p>";
         if(element.consequence.summary != null)
-          popUpContent += "<b>" + element.consequence.summary + "</b>";
+          popUpContent += `<b>${element.consequence.summary}</b>`;
         if(element.streets != null)
-          popUpContent += "<b> - " + element.streets[0] + "</b>";
+          popUpContent += `<b> - ${element.streets[0]}</b>`;
         if(element.section != null)
-          popUpContent += "<br><br>" + element.section;
+          popUpContent += `<br><br>${element.section}`;
         if(element.description != null)
-          popUpContent += "<br><br>" + element.description;
+          popUpContent += `<br><br>${element.description}`;
         if(element.validities[0] != null)
-          popUpContent += "<br><br>Von: " + element.validities[0].timeFrom
-                        + "<br>Bis: " + element.validities[0].timeTo;
+          popUpContent += `<br><br>Von: ${this.formatDate(element.validities[0].timeFrom)}
+                           <br>Bis: ${this.formatDate(element.validities[0].timeTo)}`;
         popUpContent += "</p>";
         return popUpContent;
+  }
+
+  formatDate(dateStr : string) : string {
+    var date = new Date(dateStr);
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
+    var output = date.toLocaleString('de-DE', options);
+    return output;
+  }
+  
+  updateClusterRange() : void {
+    let totalMarkers:number = 0;
+    //totalMarkers = this.map.getLayers().length;
+    console.log("Activer Markers: " + totalMarkers);
   }
 }
