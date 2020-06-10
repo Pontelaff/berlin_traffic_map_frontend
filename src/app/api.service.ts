@@ -20,4 +20,8 @@ export class ApiService{
     public fetchFromTo(from:string, to:string){
         return this.httpClient.get(`${this.SERVER_URL}/timeframe/${from}/${to}`);
     }
+
+    public fetchTimeframeFromDistrict(from:string, to:string, district:string){
+        return this.httpClient.get(`${this.SERVER_URL}/timeframe/${from}/${to}/${district}`);
+    }
 }
