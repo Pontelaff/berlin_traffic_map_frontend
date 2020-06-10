@@ -31,21 +31,14 @@ export class MapComponent implements AfterViewInit {
   showDangers: true,
   };
 
-  mapLayers = L.layerGroup();  
+  mapLayers:L.MarkerClusterGroup;
 
-  //roadClosures = L.markerClusterGroup(this.clusterGroupOptions);
-  // constructionSites = L.markerClusterGroup(this.clusterGroupOptions);
-  // laneClosures = L.markerClusterGroup(this.clusterGroupOptions);
-  // trafficJams = L.markerClusterGroup(this.clusterGroupOptions);
-  // accidents = L.markerClusterGroup(this.clusterGroupOptions);
-  // dangers = L.markerClusterGroup(this.clusterGroupOptions);
-
-  roadClosures:L.MarkerClusterGroup;
-  constructionSites:L.MarkerClusterGroup;
-  laneClosures:L.MarkerClusterGroup;
-  trafficJams:L.MarkerClusterGroup;
-  accidents:L.MarkerClusterGroup;
-  dangers:L.MarkerClusterGroup;
+  roadClosures = L.layerGroup();
+  constructionSites = L.layerGroup();
+  laneClosures = L.layerGroup();
+  trafficJams = L.layerGroup();
+  accidents = L.layerGroup();
+  dangers = L.layerGroup();
 
   roadClosureIcon = L.icon({
     iconUrl: 'assets/200px-Closure.png',
@@ -119,13 +112,14 @@ export class MapComponent implements AfterViewInit {
   }
 
   applyClick() {
+    this.mapLayers.clearLayers();
     this.makeData();
   }
 
   setTestDates() {
     this.options.dateFrom = new Date(2000, 1, 1);    
     this.options.dateTo = new Date(2040, 1, 1);
-    this.makeData();
+    this.applyClick();
   }
   
   private initMap(): void {
@@ -157,19 +151,18 @@ export class MapComponent implements AfterViewInit {
 
   markerUpdateRoutine() : void
   {
-    var dataLength = this.trafficData.length;    
+    let dataLength = this.trafficData.length;    
     console.log("data lenght: " + dataLength);
-    console.log("cluster range: " + dataLength / 40);
-    var clusterGroupOptions = {
+    console.log("cluster range: " + dataLength / (this.map.zoom * 7));
+    let clusterGroupOptions = {
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
-      zoomToBoundsOnClick: false,
+      zoomToBoundsOnClick: true,
       maxClusterRadius: function(zoom) {
-        return dataLength / 40;
+        return (dataLength + 500) / (zoom * 5);   //calculating tha maxClustering radius on every zoom level indepentently
       },
       //   iconCreateFunction: function(cluster) {
-      // 	var childCount = cluster.getChildCount();
-    
+      // 	var childCount = cluster.getChildCount();    
       // 	var c = ' marker-cluster-';
       // 	if (childCount < 10) {
       // 		c += 'small';
@@ -183,15 +176,8 @@ export class MapComponent implements AfterViewInit {
       // }
     };
 
-    this.mapLayers.clearLayers();
-    this.roadClosures = L.markerClusterGroup(clusterGroupOptions);
-    this.constructionSites = L.markerClusterGroup(clusterGroupOptions);
-    this.laneClosures = L.markerClusterGroup(clusterGroupOptions);
-    this.trafficJams = L.markerClusterGroup(clusterGroupOptions);
-    this.accidents = L.markerClusterGroup(clusterGroupOptions);
-    this.dangers = L.markerClusterGroup(clusterGroupOptions);
+    this.mapLayers = L.markerClusterGroup(clusterGroupOptions);
     this.addMarkers();
-    this.updateClusterRange();
   }
 
   addMarkers() : void
@@ -199,9 +185,9 @@ export class MapComponent implements AfterViewInit {
     this.trafficData.forEach(element => {
       if (element != null && element.location != null){
         let marker = L.marker([element.location.coordinates[1], element.location.coordinates[0]]);
+        let cause = element.consequence.summary;
         marker.bindPopup(this.createPopupContent(element), {className: "popup"});
 
-        let cause = element.consequence.summary;
         if(cause == "Sperrung") {
           marker.setIcon(this.roadClosureIcon);
           this.roadClosures.addLayer(marker);
@@ -259,19 +245,9 @@ export class MapComponent implements AfterViewInit {
 
   formatDate(dateStr : string) : string
   {
-    var date = new Date(dateStr);
+    let date = new Date(dateStr);
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
-    var output = date.toLocaleString('de-DE', options);
+    let output = date.toLocaleString('de-DE', options);
     return output;
-  }
-  
-  updateClusterRange() : void
-  {
-    this.roadClosures.refreshClusters();
-    this.constructionSites.refreshClusters();
-    this.laneClosures.refreshClusters();
-    this.trafficJams.refreshClusters();
-    this.accidents.refreshClusters();
-    this.dangers.refreshClusters();
   }
 }
