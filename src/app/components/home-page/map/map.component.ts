@@ -21,8 +21,8 @@ export class MapComponent implements AfterViewInit {
   lastTwoWeeks = [];
   trafficData = [];
   options = {
-  dateTo: new Date(),
   dateFrom: new Date(),
+  dateTo: new Date(),
   showRoadClosures: true,
   showConstructionSites: true,  
   showLineClosures: true,
@@ -31,69 +31,21 @@ export class MapComponent implements AfterViewInit {
   showDangers: true,
   };
 
-  //mapLayers = L.layerGroup();
+  mapLayers = L.layerGroup();  
 
-  roadClosures = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  //   iconCreateFunction: function(cluster) {
-	// 	var childCount = cluster.getChildCount();
+  //roadClosures = L.markerClusterGroup(this.clusterGroupOptions);
+  // constructionSites = L.markerClusterGroup(this.clusterGroupOptions);
+  // laneClosures = L.markerClusterGroup(this.clusterGroupOptions);
+  // trafficJams = L.markerClusterGroup(this.clusterGroupOptions);
+  // accidents = L.markerClusterGroup(this.clusterGroupOptions);
+  // dangers = L.markerClusterGroup(this.clusterGroupOptions);
 
-	// 	var c = ' marker-cluster-';
-	// 	if (childCount < 10) {
-	// 		c += 'small';
-	// 	} else if (childCount < 100) {
-	// 		c += 'medium';
-	// 	} else {
-	// 		c += 'large';
-	// 	}
-
-	// 	return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster marker-cluster' + c, iconSize: new L.Point(50, 50) });
-	// }
-  });
-
-  constructionSites = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  });
-
-  laneClosures = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  });
-
-  trafficJams = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  });
-
-  accidents = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  });
-
-  dangers = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
-    //disableClusteringAtZoom: 16,
-    maxClusterRadius: 20,
-  });
+  roadClosures:L.MarkerClusterGroup;
+  constructionSites:L.MarkerClusterGroup;
+  laneClosures:L.MarkerClusterGroup;
+  trafficJams:L.MarkerClusterGroup;
+  accidents:L.MarkerClusterGroup;
+  dangers:L.MarkerClusterGroup;
 
   roadClosureIcon = L.icon({
     iconUrl: 'assets/200px-Closure.png',
@@ -143,30 +95,36 @@ export class MapComponent implements AfterViewInit {
   }
 
   toogleRoadClosures(event){
-    event.checked ? this.map.addLayer(this.roadClosures) : this.map.removeLayer(this.roadClosures);
+    event.checked ? this.mapLayers.addLayer(this.roadClosures) : this.mapLayers.removeLayer(this.roadClosures);
   }
 
   toogleConstructionSites(event){
-    event.checked ? this.map.addLayer(this.constructionSites) : this.map.removeLayer(this.constructionSites);
+    event.checked ? this.mapLayers.addLayer(this.constructionSites) : this.mapLayers.removeLayer(this.constructionSites);
   }
 
   toogleLaneClosures(event){
-    event.checked ? this.map.addLayer(this.laneClosures) : this.map.removeLayer(this.laneClosures);
+    event.checked ? this.mapLayers.addLayer(this.laneClosures) : this.mapLayers.removeLayer(this.laneClosures);
   }
 
   toogleTrafficJams(event){
-    event.checked ? this.map.addLayer(this.trafficJams) : this.map.removeLayer(this.trafficJams);
+    event.checked ? this.mapLayers.addLayer(this.trafficJams) : this.mapLayers.removeLayer(this.trafficJams);
   }
 
   toogleAccidents(event){
-    event.checked ? this.map.addLayer(this.accidents) : this.map.removeLayer(this.accidents);
+    event.checked ? this.mapLayers.addLayer(this.accidents) : this.mapLayers.removeLayer(this.accidents);
   }
 
   toogleDangers(event){
-    event.checked ? this.map.addLayer(this.dangers) : this.map.removeLayer(this.dangers);
+    event.checked ? this.mapLayers.addLayer(this.dangers) : this.mapLayers.removeLayer(this.dangers);
   }
 
   applyClick() {
+    this.makeData();
+  }
+
+  setTestDates() {
+    this.options.dateFrom = new Date(2000, 1, 1);    
+    this.options.dateTo = new Date(2040, 1, 1);
     this.makeData();
   }
   
@@ -186,7 +144,7 @@ export class MapComponent implements AfterViewInit {
     this.makeData();
   }
 
-  makeData()
+  makeData() : void
   {
     let dataFromFormatted = this.options.dateFrom.toISOString().slice(0, 10);
     let dataToFormatted = this.options.dateTo.toISOString().slice(0, 10);
@@ -197,13 +155,47 @@ export class MapComponent implements AfterViewInit {
        });
   }
 
-  markerUpdateRoutine() :void {
-    console.log("Data Length: " + this.trafficData.length);
+  markerUpdateRoutine() : void
+  {
+    var dataLength = this.trafficData.length;    
+    console.log("data lenght: " + dataLength);
+    console.log("cluster range: " + dataLength / 40);
+    var clusterGroupOptions = {
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false,
+      maxClusterRadius: function(zoom) {
+        return dataLength / 40;
+      },
+      //   iconCreateFunction: function(cluster) {
+      // 	var childCount = cluster.getChildCount();
+    
+      // 	var c = ' marker-cluster-';
+      // 	if (childCount < 10) {
+      // 		c += 'small';
+      // 	} else if (childCount < 100) {
+      // 		c += 'medium';
+      // 	} else {
+      // 		c += 'large';
+      // 	}
+    
+      // 	return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster marker-cluster' + c, iconSize: new L.Point(50, 50) });
+      // }
+    };
+
+    this.mapLayers.clearLayers();
+    this.roadClosures = L.markerClusterGroup(clusterGroupOptions);
+    this.constructionSites = L.markerClusterGroup(clusterGroupOptions);
+    this.laneClosures = L.markerClusterGroup(clusterGroupOptions);
+    this.trafficJams = L.markerClusterGroup(clusterGroupOptions);
+    this.accidents = L.markerClusterGroup(clusterGroupOptions);
+    this.dangers = L.markerClusterGroup(clusterGroupOptions);
     this.addMarkers();
     this.updateClusterRange();
   }
 
-  addMarkers() :void {
+  addMarkers() : void
+  {
     this.trafficData.forEach(element => {
       if (element != null && element.location != null){
         let marker = L.marker([element.location.coordinates[1], element.location.coordinates[0]]);
@@ -233,20 +225,22 @@ export class MapComponent implements AfterViewInit {
     });
 
     if(this.options.showRoadClosures)
-      this.map.addLayer(this.roadClosures);
+      this.mapLayers.addLayer(this.roadClosures);
     if(this.options.showConstructionSites)
-      this.map.addLayer(this.constructionSites);
+      this.mapLayers.addLayer(this.constructionSites);
     if(this.options.showLineClosures)
-      this.map.addLayer(this.laneClosures);
+      this.mapLayers.addLayer(this.laneClosures);
     if(this.options.showTrafficJams)
-      this.map.addLayer(this.trafficJams);
+      this.mapLayers.addLayer(this.trafficJams);
     if(this.options.showAccidents)
-      this.map.addLayer(this.accidents);
+      this.mapLayers.addLayer(this.accidents);
     if(this.options.showDangers)
-      this.map.addLayer(this.dangers);
+      this.mapLayers.addLayer(this.dangers);
+    this.map.addLayer(this.mapLayers);
   }
 
-  createPopupContent(element) : string {
+  createPopupContent(element) : string
+  {
     let popUpContent = "<p>";
         if(element.consequence.summary != null)
           popUpContent += `<b>${element.consequence.summary}</b>`;
@@ -263,16 +257,21 @@ export class MapComponent implements AfterViewInit {
         return popUpContent;
   }
 
-  formatDate(dateStr : string) : string {
+  formatDate(dateStr : string) : string
+  {
     var date = new Date(dateStr);
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
     var output = date.toLocaleString('de-DE', options);
     return output;
   }
   
-  updateClusterRange() : void {
-    let totalMarkers:number = 0;
-    //totalMarkers = this.map.getLayers().length;
-    console.log("Activer Markers: " + totalMarkers);
+  updateClusterRange() : void
+  {
+    this.roadClosures.refreshClusters();
+    this.constructionSites.refreshClusters();
+    this.laneClosures.refreshClusters();
+    this.trafficJams.refreshClusters();
+    this.accidents.refreshClusters();
+    this.dangers.refreshClusters();
   }
 }
