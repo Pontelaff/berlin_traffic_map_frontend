@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { ApiService } from 'src/app/api.service';
 import { element } from 'protractor';
+import { start } from 'repl';
+import { cloneDeep } from 'lodash';
 
 interface chartSelect {
   selector: number;
@@ -20,6 +22,8 @@ export class StatisticsPageComponent implements OnInit {
   maxDate = new Date(2024, 8, 10);     //should be last relevant date in the future, TODO Query
 
   trafficData = [];
+  districtData: any;
+  queriesCompleted: number;
 
   currDateStart = new Date();
   currDateEnd = new Date();
@@ -47,6 +51,14 @@ export class StatisticsPageComponent implements OnInit {
 
     this.currDateStart = new Date(2020, 3, 1);
     this.currDateEnd = new Date(2020, 6, 1);
+
+    for(let idx = 0; idx < this.chartList[1].data.length; idx++)
+    {
+      this.chartList[1].data[idx].length = this.allDistricts.length;
+      this.chartList[1].data[idx].fill(0);
+    }
+
+    this.queriesCompleted = 0;
   }
 
   userClick() {
@@ -103,7 +115,30 @@ export class StatisticsPageComponent implements OnInit {
         break;
       }
       case 1: {
-        this.updateStackedEventsChart(); 
+        /*clear data array*/
+        for(let idx = 0; idx < this.chartList[this.selectedChartIndex].data.length; idx++)
+        {
+          this.chartList[this.selectedChartIndex].data[idx].length = this.allDistricts.length;
+          this.chartList[this.selectedChartIndex].data[idx].fill(0);
+        }
+        this.queriesCompleted = 0;
+
+        for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
+        {
+          this.apiService.fetchTimeframeFromDistrict(startString, endString, this.allDistricts[districtIdx]).subscribe((data:any[])=>{
+
+            data.forEach(entry => {
+              for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+              {
+                if(this.allEvents[eventIdx] == entry.consequence.summary)
+                this.chartList[this.selectedChartIndex].data[eventIdx][districtIdx]++;
+              }
+            });
+
+            this.queriesCompleted++;
+            this.updateStackedEventsChart(); 
+          });
+        }
         break;
       }
       default: {
@@ -115,21 +150,42 @@ export class StatisticsPageComponent implements OnInit {
 
   updateStackedEventsChart()
   {
-    /*TODO fill saturation values with data from database*/
-    this.chartList[this.selectedChartIndex].data.forEach(element => {       //iterate through district-level
+    /*only exectute if all queries have been completed*/
+    if(this.queriesCompleted != this.allDistricts.length)
+      return;
 
-      element.length = this.allDistricts.length;
-      for(let iter = 0; iter < element.length; iter++)          //iterate through event-level
+    console.log(this.chartList[this.selectedChartIndex].data);
+
+    /*get total amount of occurences per district*/
+    let totalPerDistrict = [];
+    totalPerDistrict.length = this.allDistricts.length;
+    totalPerDistrict.fill(0);
+    for(let idx = 0; idx < totalPerDistrict.length; idx++)
+    {
+      this.chartList[this.selectedChartIndex].data.forEach(element => {
+        totalPerDistrict[idx] += element[idx];
+      });
+    }
+
+    console.log(totalPerDistrict);
+
+    /*create deep copy without references*/
+    let chartData = cloneDeep(this.chartList[this.selectedChartIndex].data);
+
+    /*convert absolutes to relatives*/    
+    for(let districtIdx = 0; districtIdx < totalPerDistrict.length; districtIdx++)
+    {
+      for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
       {
-        element[iter] += new Date().getMilliseconds() / 1000;
-        if(element[iter] > 1)
-          element[iter] -= 1;
-      } 
-    });
+        if(totalPerDistrict[districtIdx] != 0)
+        chartData[eventIdx][districtIdx] /= totalPerDistrict[districtIdx];
+      }
+    }
+
+    console.log(chartData);
 
     /*create rgb value strings*/
     let colorList:string[][] = [[], [], [], [], [], [], [], []];
-    let vList: any = this.chartList[this.selectedChartIndex].data;    //list of values, used as an alias to avoid lengthy lines
 
     for(let topIdx = 0; topIdx < colorList.length; topIdx++)      //iterate through district-level
     {
@@ -137,7 +193,10 @@ export class StatisticsPageComponent implements OnInit {
       element.length = this.allDistricts.length;
       element.fill('rgba(256, 256, 256, 1)');
       for(let subIdx = 0; subIdx < element.length; subIdx++)    //iterate through event-level
-        element[subIdx] = 'rgba( ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', 1)';
+      {
+        let saturation = 256 - 256 * chartData[topIdx][subIdx];
+        element[subIdx] = 'rgba( ' + saturation + ', ' + saturation + ', ' + saturation + ', 1)';
+      }
     }
 
     /*update Chart*/   
