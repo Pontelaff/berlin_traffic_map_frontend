@@ -9,6 +9,7 @@ import { StatisticsPageComponent } from './components/statistics-page/statistics
 import { InfoPageComponent } from './components/info-page/info-page.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { MapComponent } from './components/home-page/map/map.component';
+import { MaterialModule } from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -29,11 +30,11 @@ export const MY_FORMATS = {
 @NgModule({
   declarations: [
     AppComponent,
+    MapComponent,
     HomePageComponent,
     StatisticsPageComponent,
     InfoPageComponent,
     ErrorPageComponent,
-    MapComponent,
   ],
   imports: [
     BrowserModule,
