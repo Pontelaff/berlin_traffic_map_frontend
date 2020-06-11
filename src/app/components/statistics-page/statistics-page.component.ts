@@ -119,7 +119,7 @@ export class StatisticsPageComponent implements OnInit {
         break;
       }
       case 2: {
-        console.log("Chart update not available");
+        this.updateRoutineDistrictData(startString, endString);
         break;
       }
       case 3: {
