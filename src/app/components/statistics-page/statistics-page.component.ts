@@ -184,9 +184,9 @@ export class StatisticsPageComponent implements OnInit {
     let chartData = cloneDeep(this.chartList[this.selectedChartIndex].data);
 
     /*convert absolutes to relatives*/    
-    for(let districtIdx = 0; districtIdx < totalPerDistrict.length; districtIdx++)
+    for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
     {
-      for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+      for(let districtIdx = 0; districtIdx < totalPerDistrict.length; districtIdx++)
       {
         if(totalPerDistrict[districtIdx] != 0)
           chartData[eventIdx][districtIdx] /= totalPerDistrict[districtIdx];          
@@ -198,15 +198,17 @@ export class StatisticsPageComponent implements OnInit {
     /*create rgb value strings*/
     let colorList:string[][] = [[], [], [], [], [], [], [], []];
 
-    for(let topIdx = 0; topIdx < colorList.length; topIdx++)      //iterate through district-level
+    for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)      //iterate through district-level
     {
-      let element = colorList[topIdx];
+      let element = colorList[eventIdx];
       element.length = this.allDistricts.length;
-      element.fill('rgba(256, 256, 256, 1)');
-      for(let subIdx = 0; subIdx < element.length; subIdx++)    //iterate through event-level
+      element.fill('hsl(0, 0%, 50%)');  //fill with gray
+      for(let districtIdx = 0; districtIdx < element.length; districtIdx++)    //iterate through event-level
       {
-        let saturation = 256 - 256 * chartData[topIdx][subIdx];
-        element[subIdx] = 'rgba( ' + saturation + ', ' + saturation + ', ' + saturation + ', 1)';
+        let hue = (districtIdx + 1) / this.allDistricts.length * 360;
+        let lightness = 100 - chartData[eventIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
+        let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
+        element[districtIdx] = string;     //apply color and lightness
       }
     }
 
@@ -273,13 +275,18 @@ export class StatisticsPageComponent implements OnInit {
     let colorList:string[][] = [[], [], [], [], [], [], [], []];
     let vList: any = this.chartList[this.selectedChartIndex].data;    //list of values, used as an alias to avoid lengthy lines
 
-    for(let topIdx = 0; topIdx < colorList.length; topIdx++)    //iterate through district-level
+    for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)    //iterate through district-level
     {
-      let element = colorList[topIdx];
+      let element = colorList[eventIdx];
       element.length = this.allDistricts.length;
-      element.fill('rgba(256, 256, 256, 1)');
-      for(let subIdx = 0; subIdx < element.length; subIdx++)     //iterate through event-level
-        element[subIdx] = 'rgba( ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', ' + 256 * vList[topIdx][subIdx] + ', 1)';    //apply saturation
+      element.fill('hsl(0, 0%, 50%)');  //fill with gray
+      for(let districtIdx = 0; districtIdx < element.length; districtIdx++)     //iterate through event-level
+      {
+        let hue = (districtIdx + 1) / this.allDistricts.length * 360;
+        let lightness = 100 - vList[eventIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
+        let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
+        element[districtIdx] = string;     //apply color and lightness
+      }  
     }
 
     /*create uniform data*/
@@ -298,42 +305,42 @@ export class StatisticsPageComponent implements OnInit {
           { 
             data: uniformData,
             backgroundColor: colorList[0],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']      //using hoverBackgroundColor as label container since labels stopped working 
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']      //using hoverBackgroundColor as label container since labels stopped working 
           },
           { 
             data: uniformData,
             backgroundColor: colorList[1],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
             backgroundColor: colorList[2],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
             backgroundColor: colorList[3],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
             backgroundColor: colorList[4],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
             backgroundColor: colorList[5],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
             backgroundColor: colorList[6],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
           },
           { 
             data: uniformData,
             backgroundColor: colorList[7],
-            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0']
+            hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
           }
         ]
       },
