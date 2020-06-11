@@ -205,7 +205,7 @@ export class StatisticsPageComponent implements OnInit {
       element.fill('hsl(0, 0%, 50%)');  //fill with gray
       for(let districtIdx = 0; districtIdx < element.length; districtIdx++)    //iterate through event-level
       {
-        let hue = (districtIdx + 1) / this.allDistricts.length * 360;
+        let hue = (districtIdx + 1) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
         let lightness = 100 - chartData[eventIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
         let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
         element[districtIdx] = string;     //apply color and lightness
@@ -282,7 +282,7 @@ export class StatisticsPageComponent implements OnInit {
       element.fill('hsl(0, 0%, 50%)');  //fill with gray
       for(let districtIdx = 0; districtIdx < element.length; districtIdx++)     //iterate through event-level
       {
-        let hue = (districtIdx + 1) / this.allDistricts.length * 360;
+        let hue = (districtIdx + 1) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
         let lightness = 100 - vList[eventIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
         let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
         element[districtIdx] = string;     //apply color and lightness
@@ -358,9 +358,15 @@ export class StatisticsPageComponent implements OnInit {
         },
         plugins: {
           datalabels: {
-            color: 'green',
+            color: function(context) {
+              let hue = (context.dataIndex + 1) / 12 * 360 + 15; //12 being this.allDistricts.length, offset by 15 to avoid unreadable yellow
+              let lightness = 50 - context.dataset.hoverBackgroundColor[context.dataIndex] * 50;    //lightness 0 = 100%, lightness 50 = 0%
+              let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
+              return string;
+              return "#000000";
+            },
             formatter: function(value, context) {
-               return Math.round(context.dataset.hoverBackgroundColor[context.dataIndex] * 100 * 10) / 10 + "%";    //convert to percentage, round to first decimal place and append % sign 
+              return Math.round(context.dataset.hoverBackgroundColor[context.dataIndex] * 100 * 10) / 10 + "%";    //convert to percentage, round to first decimal place and append % sign 
             },
             align: 'center',
             anchor: 'center'
