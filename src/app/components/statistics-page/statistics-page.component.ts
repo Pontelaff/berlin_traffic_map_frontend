@@ -198,12 +198,12 @@ export class StatisticsPageComponent implements OnInit {
     /*create rgb value strings*/
     let colorList:string[][] = [[], [], [], [], [], [], [], []];
 
-    for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)      //iterate through district-level
+    for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)      //iterate through event-level
     {
       let element = colorList[eventIdx];
       element.length = this.allDistricts.length;
       element.fill('hsl(0, 0%, 50%)');  //fill with gray
-      for(let districtIdx = 0; districtIdx < element.length; districtIdx++)    //iterate through event-level
+      for(let districtIdx = 0; districtIdx < element.length; districtIdx++)    //iterate through district-level
       {
         let hue = (districtIdx + 1) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
         let lightness = 100 - chartData[eventIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
@@ -258,11 +258,11 @@ export class StatisticsPageComponent implements OnInit {
     let avalue = 0.5;
     let offset = 0.05;
     let index = 0;
-    this.chartList[this.selectedChartIndex].data.forEach(element => {     //iterate through district-level
+    this.chartList[this.selectedChartIndex].data.forEach(element => {     //iterate through event-level
       
       element.length = this.allDistricts.length;
       element.fill(0);
-      for(let iter = 0; iter < element.length; iter++)      //iterate through event-level
+      for(let iter = 0; iter < element.length; iter++)      //iterate through district-level
       {
         element[iter] = avalue;
         avalue += offset;
@@ -275,12 +275,12 @@ export class StatisticsPageComponent implements OnInit {
     let colorList:string[][] = [[], [], [], [], [], [], [], []];
     let vList: any = this.chartList[this.selectedChartIndex].data;    //list of values, used as an alias to avoid lengthy lines
 
-    for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)    //iterate through district-level
+    for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)    //iterate through event-level
     {
       let element = colorList[eventIdx];
       element.length = this.allDistricts.length;
       element.fill('hsl(0, 0%, 50%)');  //fill with gray
-      for(let districtIdx = 0; districtIdx < element.length; districtIdx++)     //iterate through event-level
+      for(let districtIdx = 0; districtIdx < element.length; districtIdx++)     //iterate through district-level
       {
         let hue = (districtIdx + 1) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
         let lightness = 100 - vList[eventIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
