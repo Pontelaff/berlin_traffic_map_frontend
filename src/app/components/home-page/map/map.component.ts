@@ -92,8 +92,16 @@ export class MapComponent implements AfterViewInit {
   }
 
   applyClick() {
-    this.mapLayers.clearLayers();    
-    this.entriesPerCategory = ["loading", "loading", "loading", "loading", "loading", "loading"];
+    this.roadClosures.clearLayers();
+    this.constructionSites.clearLayers();
+    this.laneClosures.clearLayers();
+    this.trafficJams.clearLayers();
+    this.accidents.clearLayers();
+    this.dangers.clearLayers();    
+    this.mapLayers.clearLayers();
+    this.entriesPerCategory.forEach( element => {
+      element = "loading";
+    })
     this.makeData();
   }
 
@@ -121,10 +129,6 @@ export class MapComponent implements AfterViewInit {
 
   makeData() : void
   {
-    this.entriesPerCategory.forEach( element => {
-      element = "loading";
-    })
-
     let dataFromFormatted = this.options.dateFrom.toISOString().slice(0, 10);
     let dataToFormatted = this.options.dateTo.toISOString().slice(0, 10);
 
@@ -196,14 +200,14 @@ export class MapComponent implements AfterViewInit {
           this.dangers.addLayer(marker);
         }
       }
-
-      this.entriesPerCategory[0] = this.roadClosures.getLayers().length.toString();
-      this.entriesPerCategory[1] = this.constructionSites.getLayers().length.toString();
-      this.entriesPerCategory[2] = this.laneClosures.getLayers().length.toString();
-      this.entriesPerCategory[3] = this.trafficJams.getLayers().length.toString();
-      this.entriesPerCategory[4] = this.accidents.getLayers().length.toString();
-      this.entriesPerCategory[5] = this.dangers.getLayers().length.toString();
     });
+
+    this.entriesPerCategory[0] = this.roadClosures.getLayers().length.toString();
+    this.entriesPerCategory[1] = this.constructionSites.getLayers().length.toString();
+    this.entriesPerCategory[2] = this.laneClosures.getLayers().length.toString();
+    this.entriesPerCategory[3] = this.trafficJams.getLayers().length.toString();
+    this.entriesPerCategory[4] = this.accidents.getLayers().length.toString();
+    this.entriesPerCategory[5] = this.dangers.getLayers().length.toString();
 
     if(this.options.showRoadClosures)
       this.mapLayers.addLayer(this.roadClosures);
