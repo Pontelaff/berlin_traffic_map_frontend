@@ -1,10 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import { element } from 'protractor';
-import { ElementSchemaRegistry } from '@angular/compiler';
 
 
 @Component({
@@ -147,7 +144,7 @@ export class MapComponent implements AfterViewInit {
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
       maxClusterRadius: function(zoom) {
-        var radius = (dataLength) / (zoom * 7);    //calculating the maxClustering radius on every zoom level indepentently
+        let radius = (dataLength) / (zoom * 7);    //calculating the maxClustering radius on every zoom level indepentently
         if (radius < 32)                           //min radius of 32 to reduce overlapping
           radius = 32;
         console.log("zoom: " + zoom + " radius: " + radius);
