@@ -2,6 +2,7 @@ import * as Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { cloneDeep } from 'lodash';
 import { ChartBase } from './chartBase'
+import { stringify } from 'querystring';
 
 
 export class ChartRadarEvents extends ChartBase {
@@ -43,35 +44,43 @@ export class ChartRadarEvents extends ChartBase {
                 datasets: [
                   { 
                     data: uniformData[0],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(0, 0, 0, 1)',
+                    label: this.allEvents[0],
                   },
                   { 
                     data: uniformData[1],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(256, 0, 0, 1)',
+                    label: this.allEvents[1],
                   },
                   { 
                     data: uniformData[2],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(0, 256, 0, 1)',
+                    label: this.allEvents[2],
                   },
                   { 
                     data: uniformData[3],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(0, 0, 256, 1)',
+                    label: this.allEvents[3],
                   },
                   { 
                     data: uniformData[4],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(256, 256, 0, 1)',
+                    label: this.allEvents[4],
                   },
                   { 
                     data: uniformData[5],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(0, 256, 256, 1)',
+                    label: this.allEvents[5],
                   },
                   { 
                     data: uniformData[6],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(256, 0, 256, 1)',
+                    label: this.allEvents[6],
                   },
                   { 
                     data: uniformData[7],
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
+                    backgroundColor: 'rgba(256, 256, 256, 1)',
+                    label: this.allEvents[7],
                   }
                 ]
               },
@@ -79,13 +88,25 @@ export class ChartRadarEvents extends ChartBase {
                 responsive: true,
                 maintainAspectRatio: false,
                 legend: {
-                  display: false
+                  display: true
                 },
                 tooltips: {
-                  enabled: false
-                },
-                hover: {
-                  mode: null
+                    enabled: true,
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+
+                            let string = <string>data.datasets[tooltipItem.datasetIndex].label + ": ";
+
+                            let val = <number>data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+                            if(tooltipItem.datasetIndex > 0)
+                                val = val - <number>data.datasets[tooltipItem.datasetIndex - 1].data[tooltipItem.index]
+
+                            string += val;
+
+                            return string;
+                        }
+                    }
                 },
                 scale: {
                     ticks: {
