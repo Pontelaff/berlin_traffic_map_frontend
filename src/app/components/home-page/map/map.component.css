@@ -29,6 +29,15 @@
   display: block;
 }
 
+.entries-card{
+  white-space: pre;
+  max-width: 280px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 500;
+}
+
 #map {
   height: 100%;
 }

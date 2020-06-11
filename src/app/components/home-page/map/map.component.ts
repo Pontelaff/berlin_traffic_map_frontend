@@ -18,8 +18,8 @@ export class MapComponent implements AfterViewInit {
 
   private map:any;
 
-  lastTwoWeeks = [];
   trafficData = [];
+  entriesPerCategory = ["loading", "loading", "loading", "loading", "loading", "loading"];
   options = {
   dateFrom: new Date(),
   dateTo: new Date(),
@@ -92,7 +92,8 @@ export class MapComponent implements AfterViewInit {
   }
 
   applyClick() {
-    this.mapLayers.clearLayers();
+    this.mapLayers.clearLayers();    
+    this.entriesPerCategory = ["loading", "loading", "loading", "loading", "loading", "loading"];
     this.makeData();
   }
 
@@ -120,6 +121,10 @@ export class MapComponent implements AfterViewInit {
 
   makeData() : void
   {
+    this.entriesPerCategory.forEach( element => {
+      element = "loading";
+    })
+
     let dataFromFormatted = this.options.dateFrom.toISOString().slice(0, 10);
     let dataToFormatted = this.options.dateTo.toISOString().slice(0, 10);
 
@@ -177,12 +182,12 @@ export class MapComponent implements AfterViewInit {
         } else if(cause == "Baustelle" || cause == "Bauarbeiten") {
           marker.setIcon(this.constructionSiteIcon);
           this.constructionSites.addLayer(marker);
-        } else if(cause == "Stau") {
-          marker.setIcon(this.trafficJamIcon);
-          this.trafficJams.addLayer(marker);
         } else if(cause == "Fahrstreifensperrung") {
           marker.setIcon(this.lineClosureIcon);
           this.laneClosures.addLayer(marker);
+        } else if(cause == "Stau") {
+          marker.setIcon(this.trafficJamIcon);
+          this.trafficJams.addLayer(marker);
         } else if(cause == "Unfall") {
           marker.setIcon(this.accidentIcon);
           this.accidents.addLayer(marker);
@@ -191,6 +196,13 @@ export class MapComponent implements AfterViewInit {
           this.dangers.addLayer(marker);
         }
       }
+
+      this.entriesPerCategory[0] = this.roadClosures.getLayers().length.toString();
+      this.entriesPerCategory[1] = this.constructionSites.getLayers().length.toString();
+      this.entriesPerCategory[2] = this.laneClosures.getLayers().length.toString();
+      this.entriesPerCategory[3] = this.trafficJams.getLayers().length.toString();
+      this.entriesPerCategory[4] = this.accidents.getLayers().length.toString();
+      this.entriesPerCategory[5] = this.dangers.getLayers().length.toString();
     });
 
     if(this.options.showRoadClosures)
