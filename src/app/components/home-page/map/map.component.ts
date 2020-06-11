@@ -96,9 +96,7 @@ export class MapComponent implements AfterViewInit {
     this.accidents.clearLayers();
     this.dangers.clearLayers();    
     this.mapLayers.clearLayers();
-    this.entriesPerCategory.forEach( element => {
-      element = "loading";
-    })
+    this.entriesPerCategory = ["loading", "loading", "loading", "loading", "loading", "loading"];
     this.makeData();
   }
 
