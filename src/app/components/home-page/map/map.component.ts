@@ -25,7 +25,7 @@ export class MapComponent implements AfterViewInit {
   dateTo: new Date(),
   showRoadClosures: true,
   showConstructionSites: true,  
-  showLineClosures: true,
+  showLaneClosures: true,
   showTrafficJams: true,
   showAccidents: true,
   showDangers: true,
@@ -42,44 +42,44 @@ export class MapComponent implements AfterViewInit {
 
   roadClosureIcon = L.icon({
     iconUrl: 'assets/200px-Closure.png',
-    iconSize:     [50, 50], // size of the icon
-    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -27] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [40, 40], // size of the icon
+    iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -22] // point from which the popup should open relative to the iconAnchor
   });
 
   constructionSiteIcon = L.icon({
     iconUrl: 'assets/200px-Construction.png',
-    iconSize:     [50, 44], // size of the icon
-    iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [42, 37], // size of the icon
+    iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAncho
   });
 
   lineClosureIcon = L.icon({
     iconUrl: 'assets/200px-Lane-Closure.png',
-    iconSize:     [50, 44], // size of the icon
-    iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [42, 37], // size of the icon
+    iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   trafficJamIcon = L.icon({
     iconUrl: 'assets/200px-Traffic-Jam.png',
-    iconSize:     [50, 44], // size of the icon
-    iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [42, 37], // size of the icon
+    iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   accidentIcon = L.icon({
     iconUrl: 'assets/200px-Accident.png',
-    iconSize:     [50, 44], // size of the icon
-    iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [42, 37], // size of the icon
+    iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   dangerIcon = L.icon({
     iconUrl: 'assets/200px-Danger.png',
-    iconSize:     [50, 44], // size of the icon
-    iconAnchor:   [25, 22], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -24] // point from which the popup should open relative to the iconAnchor
+    iconSize:     [42, 37], // size of the icon
+    iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   ngAfterViewInit(): void {
@@ -87,28 +87,8 @@ export class MapComponent implements AfterViewInit {
     this.initMap();
   }
 
-  toogleRoadClosures(event){
-    event.checked ? this.mapLayers.addLayer(this.roadClosures) : this.mapLayers.removeLayer(this.roadClosures);
-  }
-
-  toogleConstructionSites(event){
-    event.checked ? this.mapLayers.addLayer(this.constructionSites) : this.mapLayers.removeLayer(this.constructionSites);
-  }
-
-  toogleLaneClosures(event){
-    event.checked ? this.mapLayers.addLayer(this.laneClosures) : this.mapLayers.removeLayer(this.laneClosures);
-  }
-
-  toogleTrafficJams(event){
-    event.checked ? this.mapLayers.addLayer(this.trafficJams) : this.mapLayers.removeLayer(this.trafficJams);
-  }
-
-  toogleAccidents(event){
-    event.checked ? this.mapLayers.addLayer(this.accidents) : this.mapLayers.removeLayer(this.accidents);
-  }
-
-  toogleDangers(event){
-    event.checked ? this.mapLayers.addLayer(this.dangers) : this.mapLayers.removeLayer(this.dangers);
+  toogleMapOptions(event, layer){
+    event.checked ? this.mapLayers.addLayer(layer) : this.mapLayers.removeLayer(layer);
   }
 
   applyClick() {
@@ -153,13 +133,16 @@ export class MapComponent implements AfterViewInit {
   {
     let dataLength = this.trafficData.length;    
     console.log("data lenght: " + dataLength);
-    console.log("cluster range: " + dataLength / (this.map.zoom * 7));
     let clusterGroupOptions = {
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
       maxClusterRadius: function(zoom) {
-        return (dataLength + 500) / (zoom * 5);   //calculating tha maxClustering radius on every zoom level indepentently
+        var radius = (dataLength) / (zoom * 7);    //calculating the maxClustering radius on every zoom level indepentently
+        if (radius < 32)                           //min radius of 32 to reduce overlapping
+          radius = 32;
+        console.log("zoom: " + zoom + " radius: " + radius);
+        return radius;
       },
       //   iconCreateFunction: function(cluster) {
       // 	var childCount = cluster.getChildCount();    
@@ -214,7 +197,7 @@ export class MapComponent implements AfterViewInit {
       this.mapLayers.addLayer(this.roadClosures);
     if(this.options.showConstructionSites)
       this.mapLayers.addLayer(this.constructionSites);
-    if(this.options.showLineClosures)
+    if(this.options.showLaneClosures)
       this.mapLayers.addLayer(this.laneClosures);
     if(this.options.showTrafficJams)
       this.mapLayers.addLayer(this.trafficJams);
