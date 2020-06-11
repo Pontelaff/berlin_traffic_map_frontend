@@ -79,6 +79,8 @@ export class StatisticsPageComponent implements OnInit {
 
     if(this.selectedChartIndex != this.cachedChartIndex){     //only create new chart if type doesn't match currently displayed one
       this.cachedChartIndex = this.selectedChartIndex;        //update currently displayed chart index
+      if(this.selection != undefined)         //destroy chart if doesn't exist
+        this.selection.chart.destroy();
       this.createChart(this.selectedChartIndex);
     }
 
@@ -127,7 +129,7 @@ export class StatisticsPageComponent implements OnInit {
         break;
       }
       default: {
-        console.log("Chart update not available");
+        console.log("Selection invalid");
         break;
       }
     }    
