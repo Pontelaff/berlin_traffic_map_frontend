@@ -69,6 +69,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "bb-traffic:build",
+	    "proxyConfig": "proxy.conf.json",
 			"port": 3020
           },
           "configurations": {
@@ -137,3 +138,4 @@
   },
   "defaultProject": "bb-traffic"
 }
+
