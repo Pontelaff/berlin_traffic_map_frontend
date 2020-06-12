@@ -42,7 +42,7 @@ stage ('Start') {
 
         try {
 
-            sh 'ng serve'
+            sh 'ng serve --host 0.0.0.0 --disableHostCheck true'
 
             echo "\u2713 success"
             currentBuild.result = 'SUCCESS'
