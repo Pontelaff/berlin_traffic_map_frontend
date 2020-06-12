@@ -1,0 +1,60 @@
+#!groovy
+
+properties ([
+    [$class: 'GitLabConnectionProperty', gitLabConnection: 'htw'],
+    buildDiscarder(logRotator(numToKeepStr: '10')),
+    ])
+
+timeout(time: 60, unit: 'MINUTES') {
+
+ansiColor('css') {
+
+stage ('Build') {
+
+    node {
+
+
+        checkout scm
+
+        try {
+
+            sh 'npm install'
+            sh 'npm run build'
+
+            echo "\u2713 success"
+            currentBuild.result = 'SUCCESS'
+
+        } catch (any) {
+            echo "\u274C failure"
+            currentBuild.result = 'FAILURE'
+            throw any //rethrow exception to prevent the build from
+proceeding
+        }
+    }
+}
+
+stage ('Start') {
+
+    node {
+
+
+        checkout scm
+
+        try {
+
+            sh 'ng serve'
+
+            echo "\u2713 success"
+            currentBuild.result = 'SUCCESS'
+
+        } catch (any) {
+            echo "\u274C failure"
+            currentBuild.result = 'FAILURE'
+            throw any //rethrow exception to prevent the build from
+proceeding
+        }
+    }
+}
+
+// vim: ft=groovy
+
