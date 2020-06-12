@@ -79,7 +79,7 @@ export class ChartBubbleEvents extends ChartBase {
                 },
                 scales: {
                     xAxes: [{
-                        ticks:{
+                        ticks:{     //set custom label
                             max: 12,
                             min: 0,
                             stepSize: 0.5,
@@ -89,7 +89,6 @@ export class ChartBubbleEvents extends ChartBase {
                                 else
                                     return districts[Math.round(<number>value) - 1];
                             }
-
                         }
                     }],
                   yAxes: [{

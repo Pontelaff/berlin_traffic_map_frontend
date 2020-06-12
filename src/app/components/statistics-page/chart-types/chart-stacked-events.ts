@@ -155,7 +155,6 @@ export class ChartStackedEvents extends ChartBase{
                   let lightness = 50 - context.dataset.hoverBackgroundColor[context.dataIndex] * 50;    //lightness 0 = 100%, lightness 50 = 0%
                   let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
                   return string;
-                  return "#000000";
                 },
                 formatter: function(value, context) {
                   return Math.round(context.dataset.hoverBackgroundColor[context.dataIndex] * 100 * 10) / 10 + "%";    //convert to percentage, round to first decimal place and append % sign 
