@@ -95,7 +95,7 @@ export class ChartRadarEvents extends ChartBase {
                     callbacks: {
                         label: function(tooltipItem, data) {
 
-                            let string = <string>data.datasets[tooltipItem.datasetIndex].label + ": ";
+                            let string = data.datasets[tooltipItem.datasetIndex].label + ": ";
 
                             let val = <number>data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 

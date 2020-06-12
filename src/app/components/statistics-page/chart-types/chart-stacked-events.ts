@@ -86,6 +86,8 @@ export class ChartStackedEvents extends ChartBase{
         uniformData.fill(1);
     
         /*create chart*/
+        let events = this.allEvents;
+
         this.chart = new Chart(this.ctx, {
           plugins: [ChartDataLabels],
           type: 'bar',
@@ -153,7 +155,6 @@ export class ChartStackedEvents extends ChartBase{
                   let lightness = 50 - context.dataset.hoverBackgroundColor[context.dataIndex] * 50;    //lightness 0 = 100%, lightness 50 = 0%
                   let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
                   return string;
-                  return "#000000";
                 },
                 formatter: function(value, context) {
                   return Math.round(context.dataset.hoverBackgroundColor[context.dataIndex] * 100 * 10) / 10 + "%";    //convert to percentage, round to first decimal place and append % sign 
@@ -173,17 +174,10 @@ export class ChartStackedEvents extends ChartBase{
                   min: 0,
                   stepSize: 0.5,
                   callback: function(value, index, values) {
-                    switch (value) {
-                      case 0.5: return 'Bauarbeiten';
-                      case 1.5: return 'Baustelle';
-                      case 2.5: return 'Fahrstreifensperrung';
-                      case 3.5: return 'Gefahr';
-                      case 4.5: return 'Sperrung';
-                      case 5.5: return 'Stau';
-                      case 6.5: return 'Störung';
-                      case 7.5: return 'Unfall';
-                      default: return null;
-                    }
+                    if(<number>value - Math.round(<number>value) == 0)
+                      return null;
+                      else
+                        return events[Math.round(<number>value) - 1];
                   }
                 },
                 stacked: true

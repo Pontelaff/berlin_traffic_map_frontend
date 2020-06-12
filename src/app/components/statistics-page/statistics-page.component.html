@@ -35,12 +35,12 @@
     </p> -->
 
     <mat-form-field>
-        <mat-label>Chart to display</mat-label>
-        <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
-            <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
-            {{chartSelection.viewValue}}
-            </mat-option>
-        </mat-select>
+            <mat-label>Chart to display</mat-label>
+            <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
+                <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
+                    {{chartSelection.viewValue}}
+                </mat-option>
+            </mat-select>
     </mat-form-field>
 
     <br>
@@ -50,7 +50,7 @@
     <br>
 
     <div id="chart">
-        <canvas id="canvas" width="200" height="500"></canvas>
+        <canvas id="canvas" width="200" height="800"></canvas>
     </div>
 
 </div>
