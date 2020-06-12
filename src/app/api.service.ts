@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ApiService{
 
-    private SERVER_URL = "/api";
+    private SERVER_URL = "api";
     constructor(private httpClient: HttpClient) { }
 
     public fetchDataCount(){
