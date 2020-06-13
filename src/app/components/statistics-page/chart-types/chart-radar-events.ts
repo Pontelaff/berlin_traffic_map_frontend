@@ -31,7 +31,9 @@ export class ChartRadarEvents extends ChartBase {
     create()
     {
         let uniformData = [[], [], [], [], [], [], [], []];
-        for(let idx = 0; idx < this.allEvents.length; idx++)
+        uniformData.length = this.relevantEvents.length;
+
+        for(let idx = 0; idx < this.relevantEvents.length; idx++)
         {
             uniformData[idx].length = this.allDistricts.length;
             uniformData[idx].fill(idx + 1);
@@ -45,42 +47,27 @@ export class ChartRadarEvents extends ChartBase {
                   { 
                     data: uniformData[0],
                     backgroundColor: 'rgba(0, 0, 0, 1)',
-                    label: this.allEvents[0],
+                    label: this.relevantEvents[0],
                   },
                   { 
                     data: uniformData[1],
                     backgroundColor: 'rgba(256, 0, 0, 1)',
-                    label: this.allEvents[1],
+                    label: this.relevantEvents[1],
                   },
                   { 
                     data: uniformData[2],
                     backgroundColor: 'rgba(0, 256, 0, 1)',
-                    label: this.allEvents[2],
+                    label: this.relevantEvents[2],
                   },
                   { 
                     data: uniformData[3],
                     backgroundColor: 'rgba(0, 0, 256, 1)',
-                    label: this.allEvents[3],
+                    label: this.relevantEvents[3],
                   },
                   { 
                     data: uniformData[4],
                     backgroundColor: 'rgba(256, 256, 0, 1)',
-                    label: this.allEvents[4],
-                  },
-                  { 
-                    data: uniformData[5],
-                    backgroundColor: 'rgba(0, 256, 256, 1)',
-                    label: this.allEvents[5],
-                  },
-                  { 
-                    data: uniformData[6],
-                    backgroundColor: 'rgba(256, 0, 256, 1)',
-                    label: this.allEvents[6],
-                  },
-                  { 
-                    data: uniformData[7],
-                    backgroundColor: 'rgba(256, 256, 256, 1)',
-                    label: this.allEvents[7],
+                    label: this.relevantEvents[4],
                   }
                 ]
               },

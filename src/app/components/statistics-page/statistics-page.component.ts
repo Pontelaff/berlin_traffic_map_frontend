@@ -29,15 +29,19 @@ export class StatisticsPageComponent implements OnInit {
 
   allDistricts: string[] = ["Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf", "Spandau", "Steglitz-Zehlendorf", 
                           "Tempelhof-Schöneberg", "Neukölln", "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf"];
-  allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Stau", "Störung", "Unfall"];
+  allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Störung", "Unfall"];
+  relevantEvents: string[] = ["Baustelle", "Fahrstreifensperrung", "Gefahr", "Sperrung", "Unfall"];
+  eventsToRelevantMap: number[] = [0, 0, 1, 2, 3, 2, 4];
+
+
   allTimeSteps: number[] = [0, 2, 4, 8, 16];
 
   chart: any;
 
   chartList: chartSelect[] = [
     {selector: 0, viewValue: 'Farbdiagramm: Störungsdauer', chart: null, data: [[], [], [], [], []]},
-    {selector: 1, viewValue: 'Farbdiagramm: Störungsarten', chart: null, data: [[], [], [], [], [], [], [], []]},
-    {selector: 2, viewValue: 'Radardiagramm: Störungsvorkommen', chart: null, data: [[], [], [], [], [], [], [], []]},
+    {selector: 1, viewValue: 'Farbdiagramm: Störungsarten', chart: null, data: [[], [], [], [], []]},
+    {selector: 2, viewValue: 'Radardiagramm: Störungsvorkommen', chart: null, data: [[], [], [], [], []]},
     {selector: 3, viewValue: 'Blasendiagramm: Störungsarten', chart: null, data: []}
   ];
 
@@ -79,7 +83,7 @@ export class StatisticsPageComponent implements OnInit {
         this.selection.chart.destroy();
       this.createChart(this.selectedChartIndex);
     }
-    
+
     this.clearSelectionData();
     this.makeData();
   }
@@ -91,10 +95,10 @@ export class StatisticsPageComponent implements OnInit {
 
     switch(chartIndex)
     {
-      case 0: { this.selection.chart = new ChartStackedDuration(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
-      case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
-      case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
-      case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
+      case 0: { this.selection.chart = new ChartStackedDuration(ctx, this.allDistricts, this.relevantEvents, this.allTimeSteps); break; }
+      case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.relevantEvents, this.allTimeSteps); break; }
+      case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.relevantEvents, this.allTimeSteps); break; }
+      case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.relevantEvents, this.allTimeSteps); break; }
       default: { console.log("Chart creation not available"); break; }
     }    
 
@@ -147,7 +151,10 @@ export class StatisticsPageComponent implements OnInit {
             for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
             {
               if(this.allEvents[eventIdx] == entry.consequence.summary)
-                this.chartList[this.selectedChartIndex].data[eventIdx][districtIdx]++;
+              {
+                let relevantIdx = this.eventsToRelevantMap[eventIdx];
+                this.chartList[this.selectedChartIndex].data[relevantIdx][districtIdx]++;
+              }
             }
           });
         }

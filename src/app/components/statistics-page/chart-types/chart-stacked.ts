@@ -69,7 +69,7 @@ export class ChartStacked extends ChartBase {
             element.fill('hsl(0, 0%, 50%)');  //fill with gray
             for(let districtIdx = 0; districtIdx < element.length; districtIdx++)    //iterate through district-level
             {
-                let hue = (districtIdx + 1) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
+                let hue = (districtIdx) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
                 let lightness = 100 - chartData[timeStepIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
                 let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
                 element[districtIdx] = string;     //apply color and lightness

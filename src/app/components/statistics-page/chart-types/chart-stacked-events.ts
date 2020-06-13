@@ -7,7 +7,7 @@ export class ChartStackedEvents extends ChartStacked {
 
     update(data: any)
     {
-        this.updateRoutine(data, this.allEvents.length);
+        this.updateRoutine(data, this.relevantEvents.length);
     }
 
     create() 
@@ -27,7 +27,7 @@ export class ChartStackedEvents extends ChartStacked {
         uniformData.fill(1);
     
         /*create chart*/
-        let events = this.allEvents;
+        let events = this.relevantEvents;
 
         this.chart = new Chart(this.ctx, {
           plugins: [ChartDataLabels],
@@ -58,21 +58,6 @@ export class ChartStackedEvents extends ChartStacked {
               { 
                 data: uniformData,
                 backgroundColor: colorList[4],
-                hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
-              },
-              { 
-                data: uniformData,
-                backgroundColor: colorList[5],
-                hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
-              },
-              { 
-                data: uniformData,
-                backgroundColor: colorList[6],
-                hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
-              },
-              { 
-                data: uniformData,
-                backgroundColor: colorList[7],
                 hoverBackgroundColor: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
               }
             ]
@@ -111,7 +96,7 @@ export class ChartStackedEvents extends ChartStacked {
               }],
               yAxes: [{
                 ticks: {  //set custom label
-                  max: 8,
+                  max: 5,
                   min: 0,
                   stepSize: 0.5,
                   callback: function(value, index, values) {

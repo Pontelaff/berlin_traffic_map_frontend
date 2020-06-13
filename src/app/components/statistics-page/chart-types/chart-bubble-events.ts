@@ -13,14 +13,14 @@ export class ChartBubbleEvents extends ChartBase {
 
     update(data: any)
     {
-        
+
     }
 
     generateData()
     {
         let data = [];
 
-        for(let y = 0.5; y < this.allEvents.length; y++)
+        for(let y = 0.5; y < this.relevantEvents.length; y++)
         {
             for(let x = 0.5; x < this.allDistricts.length; x ++)
             {
@@ -37,7 +37,7 @@ export class ChartBubbleEvents extends ChartBase {
     create()
     {
         let districts = this.allDistricts;
-        let events = this.allEvents;
+        let events = this.relevantEvents;
 
         this.chart = new Chart(this.ctx, {
             type: 'bubble',
@@ -93,7 +93,7 @@ export class ChartBubbleEvents extends ChartBase {
                     }],
                   yAxes: [{
                     ticks: {  //set custom label
-                      max: 8,
+                      max: 5,
                       min: 0,
                       stepSize: 0.5,
                       callback: function(value, index, values) {

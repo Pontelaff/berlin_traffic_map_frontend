@@ -5,14 +5,14 @@ export class ChartBase {
 
     ctx: HTMLCanvasElement;
     allDistricts: string[];
-    allEvents: string[];
+    relevantEvents: string[];
     allTimeSteps: number[];
 
-    constructor (ctx: HTMLCanvasElement, allDistricts: string[], allEvents: string[], allTimeSteps: number[])
+    constructor (ctx: HTMLCanvasElement, allDistricts: string[], relevantEvents: string[], allTimeSteps: number[])
     {
         this.ctx = ctx;
         this.allDistricts = allDistricts;
-        this.allEvents = allEvents;
+        this.relevantEvents = relevantEvents;
         this.allTimeSteps = allTimeSteps;
     }
 

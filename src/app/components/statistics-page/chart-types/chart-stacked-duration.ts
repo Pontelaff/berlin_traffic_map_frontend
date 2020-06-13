@@ -27,8 +27,6 @@ export class ChartStackedDuration extends ChartStacked {
         uniformData.fill(1);
     
         /*create chart*/
-        let events = this.allEvents;
-
         this.chart = new Chart(this.ctx, {
           plugins: [ChartDataLabels],
           type: 'bar',
