@@ -1,14 +1,13 @@
 import * as Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { cloneDeep } from 'lodash';
-import { ChartBase } from './chartBase'
+import { ChartStacked } from './chart-stacked'
 
 
-export class ChartStackedDuration extends ChartBase {
+export class ChartStackedDuration extends ChartStacked {
 
     update(data: any)
     {
-
+        this.updateRoutine(data, this.allTimeSteps.length);
     }
 
     create() 

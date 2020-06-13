@@ -13,7 +13,7 @@ export class ChartBubbleEvents extends ChartBase {
 
     update(data: any)
     {
-
+        
     }
 
     generateData()
