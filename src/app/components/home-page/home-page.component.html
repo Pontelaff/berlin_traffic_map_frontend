@@ -8,9 +8,8 @@
                         <mat-checkbox class="options-checkbox" [(ngModel)]="options.showRoadClosures" (change)="toogleMapOptions($event, this.roadClosures)">Sperrungen</mat-checkbox>
                         <mat-checkbox class="options-checkbox" [(ngModel)]="options.showConstructionSites" (change)="toogleMapOptions($event, this.constructionSites)">Baustellen</mat-checkbox>
                         <mat-checkbox class="options-checkbox" [(ngModel)]="options.showLaneClosures" (change)="toogleMapOptions($event, this.laneClosures)">Fahrstreifensperrungen</mat-checkbox>
-                        <mat-checkbox class="options-checkbox" [(ngModel)]="options.showTrafficJams" (change)="toogleMapOptions($event, this.trafficJams)">Staus</mat-checkbox>
                         <mat-checkbox class="options-checkbox" [(ngModel)]="options.showAccidents" (change)="toogleMapOptions($event, this.accidents)">Unfälle</mat-checkbox>
-                        <mat-checkbox class="options-checkbox" [(ngModel)]="options.showDangers" (change)="toogleMapOptions($event, this.dangers)">Gefahren und Störungen</mat-checkbox>
+                        <mat-checkbox class="options-checkbox" [(ngModel)]="options.showDangers" (change)="toogleMapOptions($event, this.dangers)">Gefahren</mat-checkbox>
                     </div>
     
                     <mat-form-field matInput>
@@ -36,13 +35,12 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
     
-            <mat-card class="entries-card" *ngIf="options.showRoadClosures || options.showConstructionSites || options.showConstructionSites || options.showLaneClosures || options.showTrafficJams || options.showAccidents || options.showDangers">
+            <mat-card class="entries-card" *ngIf="options.showRoadClosures || options.showConstructionSites || options.showConstructionSites || options.showLaneClosures || options.showAccidents || options.showDangers">
                 <div *ngIf="options.showRoadClosures">Sperrungen: {{entriesPerCategory[0]}} <br></div>
                 <div *ngIf="options.showConstructionSites">Baustellen: {{entriesPerCategory[1]}} <br></div>
                 <div *ngIf="options.showLaneClosures">Fahrstreifensperrungen: {{entriesPerCategory[2]}} <br></div>
-                <div *ngIf="options.showTrafficJams">Staus: {{entriesPerCategory[3]}} <br></div>
-                <div *ngIf="options.showAccidents">Unfälle: {{entriesPerCategory[4]}} <br></div>
-                <div *ngIf="options.showDangers">Gefahren und Störungen: {{entriesPerCategory[5]}} </div>
+                <div *ngIf="options.showAccidents">Unfälle: {{entriesPerCategory[3]}} <br></div>
+                <div *ngIf="options.showDangers">Gefahren: {{entriesPerCategory[5]}} </div>
             </mat-card>
                 
             <div id="map"></div>

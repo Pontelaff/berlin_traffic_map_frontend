@@ -15,14 +15,13 @@ export class HomePageComponent implements AfterViewInit {
   private map:any;
 
   trafficData = [];
-  entriesPerCategory = ["loading", "loading", "loading", "loading", "loading", "loading"];
+  entriesPerCategory = ["loading", "loading", "loading", "loading", "loading"];
   options = {
   dateFrom: new Date(),
   dateTo: new Date(),
   showRoadClosures: true,
   showConstructionSites: true,  
   showLaneClosures: true,
-  showTrafficJams: true,
   showAccidents: true,
   showDangers: true,
   };
@@ -32,7 +31,6 @@ export class HomePageComponent implements AfterViewInit {
   roadClosures = L.layerGroup();
   constructionSites = L.layerGroup();
   laneClosures = L.layerGroup();
-  trafficJams = L.layerGroup();
   accidents = L.layerGroup();
   dangers = L.layerGroup();
 
@@ -47,18 +45,11 @@ export class HomePageComponent implements AfterViewInit {
     iconUrl: 'assets/200px-Construction.png',
     iconSize:     [42, 37], // size of the icon
     iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAncho
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   lineClosureIcon = L.icon({
     iconUrl: 'assets/200px-Lane-Closure.png',
-    iconSize:     [42, 37], // size of the icon
-    iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
-  });
-
-  trafficJamIcon = L.icon({
-    iconUrl: 'assets/200px-Traffic-Jam.png',
     iconSize:     [42, 37], // size of the icon
     iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
@@ -91,11 +82,10 @@ export class HomePageComponent implements AfterViewInit {
     this.roadClosures.clearLayers();
     this.constructionSites.clearLayers();
     this.laneClosures.clearLayers();
-    this.trafficJams.clearLayers();
     this.accidents.clearLayers();
     this.dangers.clearLayers();    
     this.mapLayers.clearLayers();
-    this.entriesPerCategory = ["loading", "loading", "loading", "loading", "loading", "loading"];
+    this.entriesPerCategory = ["loading", "loading", "loading", "loading", "loading"];
     this.makeData();
   }
 
@@ -183,9 +173,6 @@ export class HomePageComponent implements AfterViewInit {
         } else if(cause == "Fahrstreifensperrung") {
           marker.setIcon(this.lineClosureIcon);
           this.laneClosures.addLayer(marker);
-        } else if(cause == "Stau") {
-          marker.setIcon(this.trafficJamIcon);
-          this.trafficJams.addLayer(marker);
         } else if(cause == "Unfall") {
           marker.setIcon(this.accidentIcon);
           this.accidents.addLayer(marker);
@@ -199,9 +186,8 @@ export class HomePageComponent implements AfterViewInit {
     this.entriesPerCategory[0] = this.roadClosures.getLayers().length.toString();
     this.entriesPerCategory[1] = this.constructionSites.getLayers().length.toString();
     this.entriesPerCategory[2] = this.laneClosures.getLayers().length.toString();
-    this.entriesPerCategory[3] = this.trafficJams.getLayers().length.toString();
-    this.entriesPerCategory[4] = this.accidents.getLayers().length.toString();
-    this.entriesPerCategory[5] = this.dangers.getLayers().length.toString();
+    this.entriesPerCategory[3] = this.accidents.getLayers().length.toString();
+    this.entriesPerCategory[4] = this.dangers.getLayers().length.toString();
 
     if(this.options.showRoadClosures)
       this.mapLayers.addLayer(this.roadClosures);
@@ -209,8 +195,6 @@ export class HomePageComponent implements AfterViewInit {
       this.mapLayers.addLayer(this.constructionSites);
     if(this.options.showLaneClosures)
       this.mapLayers.addLayer(this.laneClosures);
-    if(this.options.showTrafficJams)
-      this.mapLayers.addLayer(this.trafficJams);
     if(this.options.showAccidents)
       this.mapLayers.addLayer(this.accidents);
     if(this.options.showDangers)
