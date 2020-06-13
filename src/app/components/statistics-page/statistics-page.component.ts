@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
-import * as Chart from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { element } from 'protractor';
-import { start } from 'repl';
-import { cloneDeep } from 'lodash';
 import { ChartStackedEvents } from './chart-types/chart-stacked-events';
 import { ChartStackedDuration } from './chart-types/chart-stacked-duration';
 import { ChartRadarEvents } from './chart-types/chart-radar-events';
@@ -35,11 +30,12 @@ export class StatisticsPageComponent implements OnInit {
   allDistricts: string[] = ["Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf", "Spandau", "Steglitz-Zehlendorf", 
                           "Tempelhof-Schöneberg", "Neukölln", "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf"];
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Stau", "Störung", "Unfall"];
+  allTimeSteps: number[] = [0, 2, 4, 8, 16];
 
   chart: any;
 
   chartList: chartSelect[] = [
-    {selector: 0, viewValue: 'Farbdiagramm: Störungsdauer', chart: null, data: [0, 0, 0, 0, 0, 0, 0, 0]},
+    {selector: 0, viewValue: 'Farbdiagramm: Störungsdauer', chart: null, data: [[], [], [], [], []]},
     {selector: 1, viewValue: 'Farbdiagramm: Störungsarten', chart: null, data: [[], [], [], [], [], [], [], []]},
     {selector: 2, viewValue: 'Radardiagramm: Störungsvorkommen', chart: null, data: [[], [], [], [], [], [], [], []]},
     {selector: 3, viewValue: 'Blasendiagramm: Störungsarten', chart: null, data: []}
@@ -58,6 +54,7 @@ export class StatisticsPageComponent implements OnInit {
     this.currDateStart = new Date(2020, 3, 1);
     this.currDateEnd = new Date(2020, 6, 1);
 
+
     for(let idx = 0; idx < this.chartList[1].data.length; idx++)
     {
       this.chartList[1].data[idx].length = this.allDistricts.length;
@@ -68,7 +65,6 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   userClick() {
-
     if(this.selectedChartIndex == undefined){
       console.log("No chart selected");
       return;
@@ -84,6 +80,8 @@ export class StatisticsPageComponent implements OnInit {
       this.createChart(this.selectedChartIndex);
     }
 
+    this.calculateTimespan(this.currDateStart, this.currDateEnd);
+
     this.clearSelectionData();
     this.makeData();
   }
@@ -95,10 +93,10 @@ export class StatisticsPageComponent implements OnInit {
 
     switch(chartIndex)
     {
-      case 0: { this.selection.chart = new ChartStackedDuration(ctx, this.allDistricts, this.allEvents); break; }
-      case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.allEvents); break; }
-      case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.allEvents); break; }
-      case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.allEvents); break; }
+      case 0: { this.selection.chart = new ChartStackedDuration(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
+      case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
+      case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
+      case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
       default: { console.log("Chart creation not available"); break; }
     }    
 
@@ -112,26 +110,11 @@ export class StatisticsPageComponent implements OnInit {
 
     switch(this.selectedChartIndex)
     {
-      case 0: {
-        console.log("Chart update not available");
-        break;
-      }
-      case 1: {
-        this.updateRoutineDistrictData(startString, endString);
-        break;
-      }
-      case 2: {
-        this.updateRoutineDistrictData(startString, endString);
-        break;
-      }
-      case 3: {
-        console.log("Chart update not available");
-        break;
-      }
-      default: {
-        console.log("Selection invalid");
-        break;
-      }
+      case 0: { this.updateRoutineDistrictData(startString, endString, true); break; }
+      case 1: { this.updateRoutineDistrictData(startString, endString, false); break; }
+      case 2: { this.updateRoutineDistrictData(startString, endString, false); break; }
+      case 3: { console.log("Chart update not available"); break; }
+      default: { console.log("Selection invalid"); break; }
     }    
   }
 
@@ -148,11 +131,11 @@ export class StatisticsPageComponent implements OnInit {
   {
     if(this.queriesCompleted != this.allDistricts.length)
       return;
-
-    this.selection.chart.update(this.chartList[this.selectedChartIndex].data)
+    
+    this.selection.chart.update(this.chartList[this.selectedChartIndex].data);
   }
 
-  updateRoutineDistrictData(start: string, end: string)
+  updateRoutineDistrictData(start: string, end: string, storeTime: boolean)
   {
     this.queriesCompleted = 0;
 
@@ -160,16 +143,50 @@ export class StatisticsPageComponent implements OnInit {
     {
       this.apiService.fetchTimeframeFromDistrict(start, end, this.allDistricts[districtIdx]).subscribe((data:any[])=>{
 
-        data.forEach(entry => {
-          for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
-          {
-            if(this.allEvents[eventIdx] == entry.consequence.summary)
-            this.chartList[this.selectedChartIndex].data[eventIdx][districtIdx]++;
-          }
-        });
+        if(!storeTime)
+        {
+          data.forEach(entry => {
+            for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+            {
+              if(this.allEvents[eventIdx] == entry.consequence.summary)
+                this.chartList[this.selectedChartIndex].data[eventIdx][districtIdx]++;
+            }
+          });
+        }
+        else
+        {
+          data.forEach(entry => {
+            for(let timeIdx = 0; timeIdx < this.allTimeSteps.length; timeIdx++)
+            {
+              let strFrom = entry.validities[0].timeFrom;
+              let strTo = entry.validities[0].timeTo;
+              let diffDays = this.calculateTimespan(new Date(strFrom), new Date(strTo));
+
+              if(timeIdx == this.allTimeSteps.length - 1)
+              {
+                this.chartList[this.selectedChartIndex].data[timeIdx][districtIdx]++;
+                break;
+              }
+
+              if(diffDays >= this.allTimeSteps[timeIdx] && diffDays < this.allTimeSteps[timeIdx + 1])
+              {
+                this.chartList[this.selectedChartIndex].data[timeIdx][districtIdx]++;
+                break;
+              }
+            }
+          });
+        }
+
         this.queriesCompleted++;
         this.updateSelected(); 
       });
     }
+  }
+
+  calculateTimespan(start:Date, end:Date)
+  {
+    let diff = Math.abs(end.getTime() - start.getTime());
+    let diffDays = Math.ceil(diff / (1000 * 3600 * 24)); 
+    return diffDays;
   }
 }

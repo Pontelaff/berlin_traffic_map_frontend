@@ -1,19 +1,19 @@
-import * as Chart from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 
 export class ChartBase {
     public chart:any;
 
-    ctx:HTMLCanvasElement;
-    allDistricts:string[];
-    allEvents:string[];
+    ctx: HTMLCanvasElement;
+    allDistricts: string[];
+    allEvents: string[];
+    allTimeSteps: number[];
 
-    constructor (ctx: HTMLCanvasElement, allDistricts: string[], allEvents: string[])
+    constructor (ctx: HTMLCanvasElement, allDistricts: string[], allEvents: string[], allTimeSteps: number[])
     {
         this.ctx = ctx;
         this.allDistricts = allDistricts;
         this.allEvents = allEvents;
+        this.allTimeSteps = allTimeSteps;
     }
 
     destroy()

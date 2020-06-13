@@ -1,72 +1,13 @@
 import * as Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { cloneDeep } from 'lodash';
-import { ChartBase } from './chartBase'
+import { ChartStacked } from './chart-stacked'
 
 
-export class ChartStackedEvents extends ChartBase{
+export class ChartStackedEvents extends ChartStacked {
 
-    update(data:any)
+    update(data: any)
     {
-        /*get total amount of occurences per district*/
-        let totalPerDistrict = [];
-        totalPerDistrict.length = this.allDistricts.length;
-        totalPerDistrict.fill(0);
-        for(let idx = 0; idx < totalPerDistrict.length; idx++)
-        {
-            data.forEach(element => {
-            totalPerDistrict[idx] += element[idx];
-            });
-        }
-
-        console.log(totalPerDistrict);
-
-        /*create deep copy without references*/
-        let chartData = cloneDeep(data);
-
-        /*convert absolutes to relatives*/    
-        for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
-        {
-            for(let districtIdx = 0; districtIdx < totalPerDistrict.length; districtIdx++)
-            {
-            if(totalPerDistrict[districtIdx] != 0)
-                chartData[eventIdx][districtIdx] /= totalPerDistrict[districtIdx];          
-            }
-        }
-
-        console.log(chartData);
-
-        /*create rgb value strings*/
-        let colorList:string[][] = [[], [], [], [], [], [], [], []];
-
-        for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)      //iterate through event-level
-        {
-            let element = colorList[eventIdx];
-            element.length = this.allDistricts.length;
-            element.fill('hsl(0, 0%, 50%)');  //fill with gray
-            for(let districtIdx = 0; districtIdx < element.length; districtIdx++)    //iterate through district-level
-            {
-            let hue = (districtIdx + 1) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
-            let lightness = 100 - chartData[eventIdx][districtIdx] * 50;    //lightness 50 = 100%, lightness 100 = 0%
-            let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
-            element[districtIdx] = string;     //apply color and lightness
-            }
-        }
-
-        /*update Chart*/   
-        for(let iter = 0; iter < colorList.length; iter++)
-        {
-            let element = colorList[iter];
-            this.chart.data.datasets[iter].backgroundColor = element;
-        }
-
-        for(let idx = 0; idx < chartData.length; idx++)
-        {
-            //this.chart.data.datasets[idx].labels = chartData[idx];
-            this.chart.data.datasets[idx].hoverBackgroundColor = chartData[idx];
-        }
-
-        this.chart.update();
+        this.updateRoutine(data, this.allEvents.length);
     }
 
     create() 
