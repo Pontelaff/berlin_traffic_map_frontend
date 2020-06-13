@@ -79,9 +79,7 @@ export class StatisticsPageComponent implements OnInit {
         this.selection.chart.destroy();
       this.createChart(this.selectedChartIndex);
     }
-
-    this.calculateTimespan(this.currDateStart, this.currDateEnd);
-
+    
     this.clearSelectionData();
     this.makeData();
   }
