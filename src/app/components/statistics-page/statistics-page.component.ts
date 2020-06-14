@@ -74,8 +74,8 @@ export class StatisticsPageComponent implements OnInit {
       return;
     }
 
-    console.log("Start: " + this.currDateStart.toISOString().slice(0, 10));
-    console.log("End: " + this.currDateEnd.toISOString().slice(0, 10));
+    // console.log("Start: " + this.currDateStart.toISOString().slice(0, 10));
+    // console.log("End: " + this.currDateEnd.toISOString().slice(0, 10));
 
     if(this.selectedChartIndex != this.cachedChartIndex){     //only create new chart if type doesn't match currently displayed one
       this.cachedChartIndex = this.selectedChartIndex;        //update currently displayed chart index

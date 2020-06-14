@@ -12,27 +12,32 @@ interface Bubble {
 
 export class ChartBubbleEvents extends ChartBase {
 
-    maxOccurences: number = 0;
     maxBubbleRadius: number = 50;
 
     determineMaximum(data: any)
     {
+        let max = 0;
         data.forEach(element => {
             element.forEach(element => {
-                if(element > this.maxOccurences)
-                    this.maxOccurences = element;
+                if(element > max)
+                max = element;
             });
         });
+
+        return max;
     }
 
     update(data: any)
     {
         let occurenceData = data[0];
-        let durationData = data[1];
-        this.determineMaximum(occurenceData);
+        let maxOccurences = this.determineMaximum(occurenceData);
+        if(maxOccurences == 0)
+            maxOccurences = 1;
 
-        console.log(occurenceData);
-        console.log(durationData);
+        let durationData = data[1];
+        let maxDuration = this.determineMaximum(durationData);
+        if(maxDuration == 0)
+            maxDuration = 0.1;
 
         for(let eventIdx = 0; eventIdx < occurenceData.length; eventIdx++)
         {
@@ -40,10 +45,16 @@ export class ChartBubbleEvents extends ChartBase {
             {
                 let dataIndex = eventIdx * this.allDistricts.length + districtIdx;
 
-                /*set radii of bubbles relative to maximum value, scaled to maxOccurences and maxBubbleRadius*/
-                let normalizedRadius = this.maxBubbleRadius * (occurenceData[eventIdx][districtIdx] / this.maxOccurences);
+                /*set radii of bubbles relative to maximum occurence count, scaled to maxOccurences and maxBubbleRadius*/
+                let normalizedRadius = this.maxBubbleRadius * (occurenceData[eventIdx][districtIdx] / maxOccurences);
                 normalizedRadius = Math.round(normalizedRadius * 10) / 10;
                 this.chart.data.datasets[0].data[dataIndex].r = normalizedRadius;
+                
+                /*set background color of bubbles relative to maximum duration count, scaled to maxDuration*/
+                let ratio = durationData[eventIdx][districtIdx] / maxDuration;
+                let normalizedLightness = 75 - ratio * 50;          //caps at lightness between 25% and 75% with higher durations being darker
+                let colorString = 'hsl(0, 0%, ' + normalizedLightness + '%)';
+                this.chart.data.datasets[0].backgroundColor[dataIndex] = colorString;
 
                 /*set labels for tooltips in absolute numbers*/
                 this.chart.data.datasets[0].hoverBackgroundColor[dataIndex] = occurenceData[eventIdx][districtIdx];

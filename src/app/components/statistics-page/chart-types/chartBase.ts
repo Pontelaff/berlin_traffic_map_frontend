@@ -18,7 +18,6 @@ export class ChartBase {
 
     destroy()
     {
-        console.log("Chart destroyed");
         this.chart.destroy();
     }
 
