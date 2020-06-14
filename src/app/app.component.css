@@ -2,19 +2,9 @@ h1, h2, h3, h4, h5, h6, p {
     display: inline;
 }
 
-
 #main-toolbar{
     display: flex;
     width: 100%;
-}
-
-#navbar ul{
-	list-style: none;
-}
-
-#navbar li{
-	padding-bottom: 20px;
-	list-style: none;
 }
 
 #navbar a{
@@ -36,7 +26,6 @@ mat-sidenav-content{
 	background-image: url('../assets/Stau.jpg');
 	background-repeat: no-repeat;
 	background-attachment: fixed;
-	/*background-position: 50% 50%;*/
 	background-blend-mode: soft-light;
 	background-size: cover;
 	background-position: center;
