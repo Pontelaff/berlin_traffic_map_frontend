@@ -7,6 +7,8 @@ import { cloneDeep } from 'lodash';
 
 export class ChartStacked extends ChartBase {
 
+    options: any;
+
 
     updateRoutine(data: any, containerSize: number)
     {
@@ -102,9 +104,47 @@ export class ChartStacked extends ChartBase {
         this.chart.update();
     }
 
-    
+    createDefaultOptions()
+    {
+        this.options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              display: false
+            },
+            tooltips: {
+              enabled: false
+            },
+            hover: {
+              mode: null
+            },
+            plugins: {
+              datalabels: {
+                color: function(context) {
+                  let datasetSize = context.dataset.data.length;
+                  let hue = (context.dataIndex + 1) / datasetSize * 360 + 15; //offset by 15 to avoid unreadable yellow
+                  let lightness = 50 - context.dataset.hoverBackgroundColor[context.dataIndex] * 50;    //lightness 0 = 100%, lightness 50 = 0%
+                  let string = 'hsl(' + hue + ', 100%,' + lightness + '%)';
+                  return string;
+                },
+                formatter: function(value, context) {
+                  return Math.round(context.dataset.hoverBackgroundColor[context.dataIndex] * 100 * 10) / 10 + "%";    //convert to percentage, round to first decimal place and append % character 
+                },
+                align: 'center',
+                anchor: 'center'
+              }
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+                display: true
+              }],
+              yAxes: [],
+            }
+          }
+    }
 
-    createChart(datasetCount: number, customOptions: any)
+    createChart(datasetCount: number)
     {
         /*create default rgb value strings*/
         let colorList:string[][] = [[]];
@@ -145,7 +185,7 @@ export class ChartStacked extends ChartBase {
               labels: this.allDistricts,
               datasets: allData
             },
-            options: customOptions
+            options: this.options
           });
     }
 
