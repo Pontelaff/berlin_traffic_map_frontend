@@ -42,7 +42,7 @@ export class StatisticsPageComponent implements OnInit {
     {selector: 0, viewValue: 'Farbdiagramm: Störungsdauer', chart: null, data: [[], [], [], [], []]},
     {selector: 1, viewValue: 'Farbdiagramm: Störungsarten', chart: null, data: [[], [], [], [], []]},
     {selector: 2, viewValue: 'Radardiagramm: Störungsvorkommen', chart: null, data: [[], [], [], [], []]},
-    {selector: 3, viewValue: 'Blasendiagramm: Störungsarten', chart: null, data: []}
+    {selector: 3, viewValue: 'Blasendiagramm: Störungsarten', chart: null, data: [[], [], [], [], []]}
   ];
 
   selection: any;
@@ -115,7 +115,7 @@ export class StatisticsPageComponent implements OnInit {
       case 0: { this.updateRoutineDistrictData(startString, endString, true); break; }
       case 1: { this.updateRoutineDistrictData(startString, endString, false); break; }
       case 2: { this.updateRoutineDistrictData(startString, endString, false); break; }
-      case 3: { console.log("Chart update not available"); break; }
+      case 3: { this.updateRoutineDistrictData(startString, endString, false); break; }
       default: { console.log("Selection invalid"); break; }
     }    
   }

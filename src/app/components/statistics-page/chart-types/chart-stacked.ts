@@ -81,10 +81,10 @@ export class ChartStacked extends ChartBase {
 
     updateChart(chartData:any, colorList: any)
     {
-        for(let iter = 0; iter < colorList.length; iter++)
+        for(let idx = 0; idx < colorList.length; idx++)
         {
-            let element = colorList[iter];
-            this.chart.data.datasets[iter].backgroundColor = element;
+            let element = colorList[idx];
+            this.chart.data.datasets[idx].backgroundColor = element;
         }
   
         for(let idx = 0; idx < chartData.length; idx++)
