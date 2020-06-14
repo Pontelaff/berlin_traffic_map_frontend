@@ -35,35 +35,35 @@ export class HomePageComponent implements AfterViewInit {
   dangers = L.layerGroup();
 
   roadClosureIcon = L.icon({
-    iconUrl: 'assets/200px-Closure.png',
+    iconUrl: 'assets/road_closure_icon.svg',
     iconSize:     [40, 40], // size of the icon
     iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -22] // point from which the popup should open relative to the iconAnchor
   });
 
   constructionSiteIcon = L.icon({
-    iconUrl: 'assets/200px-Construction.png',
+    iconUrl: 'assets/construction_site_icon.svg',
     iconSize:     [42, 37], // size of the icon
     iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   lineClosureIcon = L.icon({
-    iconUrl: 'assets/200px-Lane-Closure.png',
+    iconUrl: 'assets/lane_closure_icon.svg',
     iconSize:     [42, 37], // size of the icon
     iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   accidentIcon = L.icon({
-    iconUrl: 'assets/200px-Accident.png',
+    iconUrl: 'assets/accident_icon.svg',
     iconSize:     [42, 37], // size of the icon
     iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
   dangerIcon = L.icon({
-    iconUrl: 'assets/200px-Danger.png',
+    iconUrl: 'assets/danger_icon.svg',
     iconSize:     [42, 37], // size of the icon
     iconAnchor:   [21, 18], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor

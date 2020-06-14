@@ -36,11 +36,11 @@
             </button>
     
             <mat-card class="entries-card" *ngIf="options.showRoadClosures || options.showConstructionSites || options.showConstructionSites || options.showLaneClosures || options.showAccidents || options.showDangers">
-                <div *ngIf="options.showRoadClosures">Sperrungen: {{entriesPerCategory[0]}} <br></div>
-                <div *ngIf="options.showConstructionSites">Baustellen: {{entriesPerCategory[1]}} <br></div>
-                <div *ngIf="options.showLaneClosures">Fahrstreifensperrungen: {{entriesPerCategory[2]}} <br></div>
-                <div *ngIf="options.showAccidents">Unfälle: {{entriesPerCategory[3]}} <br></div>
-                <div *ngIf="options.showDangers">Gefahren: {{entriesPerCategory[5]}} </div>
+                <div *ngIf="options.showRoadClosures"> <mat-icon svgIcon="road_closure"></mat-icon> Sperrungen: {{entriesPerCategory[0]}} <br></div>
+                <div *ngIf="options.showConstructionSites"> <mat-icon svgIcon="construction_site"></mat-icon> Baustellen: {{entriesPerCategory[1]}} <br></div>
+                <div *ngIf="options.showLaneClosures"> <mat-icon svgIcon="lane_closure"></mat-icon> Fahrstreifensperrungen: {{entriesPerCategory[2]}} <br></div>
+                <div *ngIf="options.showAccidents"> <mat-icon svgIcon="accident"></mat-icon> Unfälle: {{entriesPerCategory[3]}} <br></div>
+                <div *ngIf="options.showDangers"> <mat-icon svgIcon="danger"></mat-icon> Gefahren und Störungen: {{entriesPerCategory[4]}} </div>
             </mat-card>
                 
             <div id="map"></div>
