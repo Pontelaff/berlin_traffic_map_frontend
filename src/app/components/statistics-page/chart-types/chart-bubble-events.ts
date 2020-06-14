@@ -138,8 +138,6 @@ export class ChartBubbleEvents extends ChartBase {
                                 description += occurences;
 
                             multiLineReturn[0] = description;
-                            description = "";
-
                             description = "Dauer insgesamt: "
 
                             let duration = data.datasets[tooltipItem.datasetIndex].hoverBorderColor[tooltipItem.index];

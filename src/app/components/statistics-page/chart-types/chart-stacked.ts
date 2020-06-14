@@ -176,8 +176,6 @@ export class ChartStacked extends ChartBase {
         }
 
         /*create chart*/
-        let events = this.relevantEvents;
-
         this.chart = new Chart(this.ctx, {
             plugins: [ChartDataLabels],
             type: 'bar',

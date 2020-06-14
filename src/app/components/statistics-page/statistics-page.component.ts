@@ -110,14 +110,13 @@ export class StatisticsPageComponent implements OnInit {
     let startString = this.currDateStart.toISOString().slice(0, 10);
     let endString = this.currDateEnd.toISOString().slice(0, 10);
 
-    switch(this.selectedChartIndex)
+    if(this.selectedChartIndex < 0 || this.selectedChartIndex > 3)
     {
-      case 0: { this.updateRoutineDistrictData(startString, endString, 0); break; }
-      case 2: { this.updateRoutineDistrictData(startString, endString, 1); break; }
-      case 1: { this.updateRoutineDistrictData(startString, endString, 2); break; }
-      case 3: { this.updateRoutineDistrictData(startString, endString, 3); break; }
-      default: { console.log("Selection invalid"); break; }
-    }    
+      console.log("Selection invalid");
+      return;
+    }
+
+    this.updateRoutineDistrictData(startString, endString, this.selectedChartIndex); 
   }
 
   clearChartData(chartIdx: number)
@@ -153,11 +152,6 @@ export class StatisticsPageComponent implements OnInit {
     this.selection.chart.update(this.chartList[this.selectedChartIndex].data);
   }
 
-  arrangeBubbleChartData(data:any)
-  {
-
-  }
-
   updateRoutineDistrictData(start: string, end: string, chartIdx: number)
   {
     this.queriesCompleted = 0;
@@ -168,82 +162,82 @@ export class StatisticsPageComponent implements OnInit {
 
         let container = this.chartList[this.selectedChartIndex].data;
 
-        if(chartIdx == 3)
-        {
-          data.forEach(entry => {
-            for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
-            {
-              if(this.allEvents[eventIdx] == entry.consequence.summary)
-              {
-                let relevantIdx = this.eventsToRelevantMap[eventIdx];
-                container[0][relevantIdx][districtIdx]++;
-
-                let dateFrom = entry.validities[0].timeFrom;
-                let dateTo = entry.validities[0].timeTo;
-                let diffMinutes = this.calculateTimespanInMinutes(new Date(dateFrom), new Date(dateTo));
-
-                container[1][relevantIdx][districtIdx] += diffMinutes;
-              }
-            }
-          });
-
-          data.forEach(entry => {
-            for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
-            {
-              if(this.allEvents[eventIdx] == entry.consequence.summary)
-              {
-                let relevantIdx = this.eventsToRelevantMap[eventIdx];
-
-
-
-                container[1][relevantIdx][districtIdx]++;
-              }
-            }
-          });
-        }
-
-        if(chartIdx == 1 || chartIdx == 2)
-        {
-          data.forEach(entry => {
-            for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
-            {
-              if(this.allEvents[eventIdx] == entry.consequence.summary)
-              {
-                let relevantIdx = this.eventsToRelevantMap[eventIdx];
-                container[relevantIdx][districtIdx]++;
-              }
-            }
-          });
-        }
-        
         if(chartIdx == 0)
-        {
-          data.forEach(entry => {
-            for(let timeIdx = 0; timeIdx < this.allTimeSteps.length; timeIdx++)
-            {
-              let dateFrom = entry.validities[0].timeFrom;
-              let dateTo = entry.validities[0].timeTo;
-              let diffDays = this.calculateTimespanInDays(new Date(dateFrom), new Date(dateTo));
-
-              if(timeIdx == this.allTimeSteps.length - 1)
-              {
-                container[timeIdx][districtIdx]++;
-                break;
-              }
-
-              if(diffDays >= this.allTimeSteps[timeIdx] && diffDays < this.allTimeSteps[timeIdx + 1])
-              {
-                container[timeIdx][districtIdx]++;
-                break;
-              }
-            }
-          });
-        }
+          this.arrangeTimeSpanData(data, districtIdx);
+          
+        if(chartIdx == 1 || chartIdx == 2)
+          this.arrangeOccurenceData(data, districtIdx, chartIdx);
+        
+        if(chartIdx == 3)
+          this.arrangeBubbleChartData(data, districtIdx);
 
         this.queriesCompleted++;
         this.updateSelected(); 
       });
     }
+  }
+
+  arrangeTimeSpanData(data, districtIdx)
+  {
+    let container = this.chartList[0].data;
+
+    data.forEach(entry => {
+      for(let timeIdx = 0; timeIdx < this.allTimeSteps.length; timeIdx++)
+      {
+        let dateFrom = entry.validities[0].timeFrom;
+        let dateTo = entry.validities[0].timeTo;
+        let diffDays = this.calculateTimespanInDays(new Date(dateFrom), new Date(dateTo));
+
+        if(timeIdx == this.allTimeSteps.length - 1)
+        {
+          container[timeIdx][districtIdx]++;
+          break;
+        }
+
+        if(diffDays >= this.allTimeSteps[timeIdx] && diffDays < this.allTimeSteps[timeIdx + 1])
+        {
+          container[timeIdx][districtIdx]++;
+          break;
+        }
+      }
+    });
+  }
+
+  arrangeOccurenceData(data, districtIdx, chartIdx)
+  {
+    let container = this.chartList[chartIdx].data;
+
+    data.forEach(entry => {
+      for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+      {
+        if(this.allEvents[eventIdx] == entry.consequence.summary)
+        {
+          let relevantIdx = this.eventsToRelevantMap[eventIdx];
+          container[relevantIdx][districtIdx]++;
+        }
+      }
+    });
+  }
+
+  arrangeBubbleChartData(data: any, districtIdx: number)
+  {
+    let container = this.chartList[3].data;
+
+    data.forEach(entry => {
+      for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+      {
+        if(this.allEvents[eventIdx] == entry.consequence.summary)
+        {
+          let relevantIdx = this.eventsToRelevantMap[eventIdx];
+          container[0][relevantIdx][districtIdx]++;
+
+          let dateFrom = entry.validities[0].timeFrom;
+          let dateTo = entry.validities[0].timeTo;
+          let diffMinutes = this.calculateTimespanInMinutes(new Date(dateFrom), new Date(dateTo));
+          container[1][relevantIdx][districtIdx] += diffMinutes;
+        }
+      }
+    });
   }
 
   calculateTimespanInDays(start: Date, end: Date)
