@@ -2,6 +2,7 @@ import * as Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { cloneDeep } from 'lodash';
 import { ChartBase } from './chartBase'
+import { duration } from 'moment';
 
 interface Bubble {
     x: number,
@@ -26,21 +27,28 @@ export class ChartBubbleEvents extends ChartBase {
 
     update(data: any)
     {
-        this.determineMaximum(data);
+        let occurenceData = data[0];
+        let durationData = data[1];
+        this.determineMaximum(occurenceData);
 
-        for(let eventIdx = 0; eventIdx < data.length; eventIdx++)
+        console.log(occurenceData);
+        console.log(durationData);
+
+        for(let eventIdx = 0; eventIdx < occurenceData.length; eventIdx++)
         {
             for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
             {
                 let dataIndex = eventIdx * this.allDistricts.length + districtIdx;
 
                 /*set radii of bubbles relative to maximum value, scaled to maxOccurences and maxBubbleRadius*/
-                let normalizedRadius = this.maxBubbleRadius * (data[eventIdx][districtIdx] / this.maxOccurences);
+                let normalizedRadius = this.maxBubbleRadius * (occurenceData[eventIdx][districtIdx] / this.maxOccurences);
                 normalizedRadius = Math.round(normalizedRadius * 10) / 10;
                 this.chart.data.datasets[0].data[dataIndex].r = normalizedRadius;
 
                 /*set labels for tooltips in absolute numbers*/
-                this.chart.data.datasets[0].hoverBackgroundColor[dataIndex] = data[eventIdx][districtIdx];
+                this.chart.data.datasets[0].hoverBackgroundColor[dataIndex] = occurenceData[eventIdx][districtIdx];
+
+                this.chart.data.datasets[0].hoverBorderColor[dataIndex] = durationData[eventIdx][districtIdx];
             }
         }
 
@@ -71,6 +79,10 @@ export class ChartBubbleEvents extends ChartBase {
         let districts = this.allDistricts;
         let events = this.relevantEvents;
 
+        let colorList: string[] = [];
+        colorList.length = this.allDistricts.length * this.relevantEvents.length;
+        colorList.fill('hsl(0, 0%, 50%)');  //fill with gray
+
         this.chart = new Chart(this.ctx, {
             plugins: [ChartDataLabels],
             type: 'bubble',
@@ -79,7 +91,9 @@ export class ChartBubbleEvents extends ChartBase {
                 datasets: [
                     {
                         data: this.generateData(),
-                        hoverBackgroundColor: []      //using hoverBackgroundColor as label container since labels stopped working 
+                        backgroundColor: colorList,
+                        hoverBackgroundColor: [],      //actually storing absolute occurence counts, using hoverBackgroundColor as tooltip data container since labels stopped working 
+                        hoverBorderColor: []      //actually storing absolute total duration, same as hoverBackgroundColor
                     }
                 ],
                     
@@ -100,17 +114,10 @@ export class ChartBubbleEvents extends ChartBase {
                 },
                 tooltips: {
                     enabled: true,
+                    displayColors: false,
                     callbacks: {
                         label: function(tooltipItem, data) {
-                            // let eventIndex = Math.floor(tooltipItem.index / districts.length);
-                            // let districtIndex = tooltipItem.index % districts.length;
-                            // let description = "Aufkommen von " + events[eventIndex] + " in " + districts[districtIndex] + ": ";
-
-                            // let bubble = <Bubble>data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                            // let val = bubble.r;
-
-                            // description += val;
-                            // return description;
+                            let multiLineReturn = [""];
 
                             let eventIndex = Math.floor(tooltipItem.index / districts.length);
                             let districtIndex = tooltipItem.index % districts.length;
@@ -120,7 +127,24 @@ export class ChartBubbleEvents extends ChartBase {
                             if(occurences != undefined)
                                 description += occurences;
 
-                            return description;
+                            multiLineReturn[0] = description;
+                            description = "";
+
+                            description = "Dauer insgesamt: "
+
+                            let duration = data.datasets[tooltipItem.datasetIndex].hoverBorderColor[tooltipItem.index];
+                            if(duration != undefined)
+                            {
+                                /*convert to days, hours, minutes */
+                                let minutes = duration % 60;
+                                let hours = Math.floor(duration / 60) % 24;
+                                let days = Math.floor(duration / (60 * 24));
+                                description += days + " Tage, " + hours + " Stunden, " + minutes + " Minuten";
+                            }
+
+                            multiLineReturn.push(description);
+
+                            return multiLineReturn;
                         }
                     }
                 },

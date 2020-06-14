@@ -42,7 +42,7 @@ export class StatisticsPageComponent implements OnInit {
     {selector: 0, viewValue: 'Farbdiagramm: Störungsdauer', chart: null, data: [[], [], [], [], []]},
     {selector: 1, viewValue: 'Farbdiagramm: Störungsarten', chart: null, data: [[], [], [], [], []]},
     {selector: 2, viewValue: 'Radardiagramm: Störungsvorkommen', chart: null, data: [[], [], [], [], []]},
-    {selector: 3, viewValue: 'Blasendiagramm: Störungsarten', chart: null, data: [[], [], [], [], []]}
+    {selector: 3, viewValue: 'Blasendiagramm: Störungsarten', chart: null, data: [[[], [], [], [], []], [[], [], [], [], []]]}    //three dimensional array to store both occurences and durations, I know it's ugly but it'll do for now
   ];
 
   selection: any;
@@ -84,7 +84,7 @@ export class StatisticsPageComponent implements OnInit {
       this.createChart(this.selectedChartIndex);
     }
 
-    this.clearSelectionData();
+    this.clearChartData(this.selectedChartIndex);
     this.makeData();
   }
 
@@ -112,16 +112,32 @@ export class StatisticsPageComponent implements OnInit {
 
     switch(this.selectedChartIndex)
     {
-      case 0: { this.updateRoutineDistrictData(startString, endString, true); break; }
-      case 1: { this.updateRoutineDistrictData(startString, endString, false); break; }
-      case 2: { this.updateRoutineDistrictData(startString, endString, false); break; }
-      case 3: { this.updateRoutineDistrictData(startString, endString, false); break; }
+      case 0: { this.updateRoutineDistrictData(startString, endString, 0); break; }
+      case 2: { this.updateRoutineDistrictData(startString, endString, 1); break; }
+      case 1: { this.updateRoutineDistrictData(startString, endString, 2); break; }
+      case 3: { this.updateRoutineDistrictData(startString, endString, 3); break; }
       default: { console.log("Selection invalid"); break; }
     }    
   }
 
-  clearSelectionData()
+  clearChartData(chartIdx: number)
   {
+    let container = this.chartList[this.selectedChartIndex].data;
+
+    if(chartIdx == 3) //bubble chart needs special treatment due to being this abomination of a 3D array
+    {
+      for(let topIdx = 0; topIdx < container.length; topIdx++)
+      {
+        for(let idx = 0; idx < container[topIdx].length; idx++)
+        {
+          container[topIdx][idx].length = this.allDistricts.length;
+          container[topIdx][idx].fill(0);
+        }
+      }
+
+      return;
+    }
+
     for(let idx = 0; idx < this.chartList[this.selectedChartIndex].data.length; idx++)
     {
       this.chartList[this.selectedChartIndex].data[idx].length = this.allDistricts.length;
@@ -137,7 +153,12 @@ export class StatisticsPageComponent implements OnInit {
     this.selection.chart.update(this.chartList[this.selectedChartIndex].data);
   }
 
-  updateRoutineDistrictData(start: string, end: string, storeTime: boolean)
+  arrangeBubbleChartData(data:any)
+  {
+
+  }
+
+  updateRoutineDistrictData(start: string, end: string, chartIdx: number)
   {
     this.queriesCompleted = 0;
 
@@ -145,7 +166,9 @@ export class StatisticsPageComponent implements OnInit {
     {
       this.apiService.fetchTimeframeFromDistrict(start, end, this.allDistricts[districtIdx]).subscribe((data:any[])=>{
 
-        if(!storeTime)
+        let container = this.chartList[this.selectedChartIndex].data;
+
+        if(chartIdx == 3)
         {
           data.forEach(entry => {
             for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
@@ -153,29 +176,64 @@ export class StatisticsPageComponent implements OnInit {
               if(this.allEvents[eventIdx] == entry.consequence.summary)
               {
                 let relevantIdx = this.eventsToRelevantMap[eventIdx];
-                this.chartList[this.selectedChartIndex].data[relevantIdx][districtIdx]++;
+                container[0][relevantIdx][districtIdx]++;
+
+                let dateFrom = entry.validities[0].timeFrom;
+                let dateTo = entry.validities[0].timeTo;
+                let diffMinutes = this.calculateTimespanInMinutes(new Date(dateFrom), new Date(dateTo));
+
+                container[1][relevantIdx][districtIdx] += diffMinutes;
+              }
+            }
+          });
+
+          data.forEach(entry => {
+            for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+            {
+              if(this.allEvents[eventIdx] == entry.consequence.summary)
+              {
+                let relevantIdx = this.eventsToRelevantMap[eventIdx];
+
+
+
+                container[1][relevantIdx][districtIdx]++;
               }
             }
           });
         }
-        else
+
+        if(chartIdx == 1 || chartIdx == 2)
+        {
+          data.forEach(entry => {
+            for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+            {
+              if(this.allEvents[eventIdx] == entry.consequence.summary)
+              {
+                let relevantIdx = this.eventsToRelevantMap[eventIdx];
+                container[relevantIdx][districtIdx]++;
+              }
+            }
+          });
+        }
+        
+        if(chartIdx == 0)
         {
           data.forEach(entry => {
             for(let timeIdx = 0; timeIdx < this.allTimeSteps.length; timeIdx++)
             {
-              let strFrom = entry.validities[0].timeFrom;
-              let strTo = entry.validities[0].timeTo;
-              let diffDays = this.calculateTimespan(new Date(strFrom), new Date(strTo));
+              let dateFrom = entry.validities[0].timeFrom;
+              let dateTo = entry.validities[0].timeTo;
+              let diffDays = this.calculateTimespanInDays(new Date(dateFrom), new Date(dateTo));
 
               if(timeIdx == this.allTimeSteps.length - 1)
               {
-                this.chartList[this.selectedChartIndex].data[timeIdx][districtIdx]++;
+                container[timeIdx][districtIdx]++;
                 break;
               }
 
               if(diffDays >= this.allTimeSteps[timeIdx] && diffDays < this.allTimeSteps[timeIdx + 1])
               {
-                this.chartList[this.selectedChartIndex].data[timeIdx][districtIdx]++;
+                container[timeIdx][districtIdx]++;
                 break;
               }
             }
@@ -188,10 +246,22 @@ export class StatisticsPageComponent implements OnInit {
     }
   }
 
-  calculateTimespan(start:Date, end:Date)
+  calculateTimespanInDays(start: Date, end: Date)
   {
-    let diff = Math.abs(end.getTime() - start.getTime());
+    let diff = this.calculateTimespanInMS(start, end);
     let diffDays = Math.ceil(diff / (1000 * 3600 * 24)); 
     return diffDays;
+  }
+
+  calculateTimespanInMinutes(start: Date, end: Date)
+  {
+    let diff = this.calculateTimespanInMS(start, end);
+    let diffMinutes = Math.ceil(diff / (1000 *60));
+    return diffMinutes;
+  }
+
+  calculateTimespanInMS(start: Date, end: Date)
+  {
+    return Math.abs(end.getTime() - start.getTime());
   }
 }
