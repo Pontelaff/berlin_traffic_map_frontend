@@ -2,7 +2,7 @@ import * as Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { cloneDeep } from 'lodash';
 import { ChartBase } from './chartBase'
-import { stringify } from 'querystring';
+
 
 
 export class ChartRadarEvents extends ChartBase {
@@ -30,46 +30,27 @@ export class ChartRadarEvents extends ChartBase {
 
     create()
     {
-        let uniformData = [[], [], [], [], [], [], [], []];
-        uniformData.length = this.relevantEvents.length;
-
-        for(let idx = 0; idx < this.relevantEvents.length; idx++)
+        /*create empty datasets*/
+        let allData = [];
+        for(let datasetIdx = 0; datasetIdx < this.relevantEvents.length ;datasetIdx++)
         {
-            uniformData[idx].length = this.allDistricts.length;
-            uniformData[idx].fill(idx + 1);
+          let lightness = (datasetIdx - 2.5) * 7 + 36;
+          let uniformData = [];
+          uniformData.length = this.allDistricts.length;
+          uniformData.fill(datasetIdx + 1);
+          allData.push({
+              data: uniformData,
+              backgroundColor: 'hsl(82, 100%, ' + lightness + '%)',
+              label: this.relevantEvents[datasetIdx]
+          })
         }
 
         this.chart = new Chart(this.ctx, {
+            plugins: [ChartDataLabels],
             type: 'radar',
             data: {
                 labels: this.allDistricts,
-                datasets: [
-                  { 
-                    data: uniformData[0],
-                    backgroundColor: 'rgba(0, 0, 0, 1)',
-                    label: this.relevantEvents[0],
-                  },
-                  { 
-                    data: uniformData[1],
-                    backgroundColor: 'rgba(256, 0, 0, 1)',
-                    label: this.relevantEvents[1],
-                  },
-                  { 
-                    data: uniformData[2],
-                    backgroundColor: 'rgba(0, 256, 0, 1)',
-                    label: this.relevantEvents[2],
-                  },
-                  { 
-                    data: uniformData[3],
-                    backgroundColor: 'rgba(0, 0, 256, 1)',
-                    label: this.relevantEvents[3],
-                  },
-                  { 
-                    data: uniformData[4],
-                    backgroundColor: 'rgba(256, 256, 0, 1)',
-                    label: this.relevantEvents[4],
-                  }
-                ]
+                datasets: allData
               },
             options: {
                 responsive: true,
@@ -94,6 +75,11 @@ export class ChartRadarEvents extends ChartBase {
                             return string;
                         }
                     }
+                },
+                plugins: {
+                  datalabels: {
+                    display: false,
+                  }
                 },
                 scale: {
                     ticks: {

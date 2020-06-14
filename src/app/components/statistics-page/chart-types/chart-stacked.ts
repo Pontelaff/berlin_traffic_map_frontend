@@ -1,4 +1,5 @@
 import * as Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartBase } from './chartBase'
 import { cloneDeep } from 'lodash';
 
@@ -55,18 +56,16 @@ export class ChartStacked extends ChartBase {
         return chartData;
     }
 
-    createColorStrings(chartData: any, )
+    createColorStrings(chartData: any)
     {
         /*create hsl value strings*/
-        let colorList: string[][] = [[]];
-        colorList.length = chartData.length;            //resize to either event array size or timestep array size
+         let colorList: string[][] = [[]];
+         colorList.length = chartData.length;            //resize to either event array size or timestep array size
 
         for(let timeStepIdx = 0; timeStepIdx < colorList.length; timeStepIdx++)      //iterate through timeStep-level
         {
-            colorList[timeStepIdx] = [];            //initialize sub array
+            colorList[timeStepIdx] = this.initializeColorSubArray(this.allDistricts.length);
             let element = colorList[timeStepIdx];
-            element.length = this.allDistricts.length;
-            element.fill('hsl(0, 0%, 50%)');  //fill with gray
             for(let districtIdx = 0; districtIdx < element.length; districtIdx++)    //iterate through district-level
             {
                 let hue = (districtIdx) / this.allDistricts.length * 360 + 15; //offset by 15 to avoid unreadable yellow
@@ -76,7 +75,15 @@ export class ChartStacked extends ChartBase {
             }
         }
 
-        return colorList;
+         return colorList;
+    }
+
+    initializeColorSubArray(length: number)
+    {
+        let array = [];            //initialize sub array
+        array.length = length;
+        array.fill('hsl(0, 0%, 50%)');  //fill with gray
+        return array;
     }
 
     updateChart(chartData:any, colorList: any)
@@ -93,6 +100,53 @@ export class ChartStacked extends ChartBase {
         }
   
         this.chart.update();
+    }
+
+    
+
+    createChart(datasetCount: number, customOptions: any)
+    {
+        /*create default rgb value strings*/
+        let colorList:string[][] = [[]];
+        colorList.length = datasetCount;
+
+        for(let eventIdx = 0; eventIdx < colorList.length; eventIdx++)    //iterate through event-level
+        {
+            colorList[eventIdx] = this.initializeColorSubArray(this.allDistricts.length);
+        }
+    
+        /*create uniform data*/
+        let uniformData: number[] = [];
+        uniformData.length = this.allDistricts.length;
+        uniformData.fill(1);
+        
+        let uniformLabels: string[] = [];
+        uniformLabels.length = this.allDistricts.length;
+        uniformLabels.fill("0");
+
+        /*create empty datasets*/
+        let allData = [];
+        for(let datasetIdx = 0; datasetIdx < datasetCount ;datasetIdx++)
+        {
+            allData.push({
+                data: uniformData,
+                backgroundColor: colorList[datasetIdx],
+                hoverBackgroundColor: uniformLabels      //using hoverBackgroundColor as label container since labels stopped working 
+            })
+        }
+
+        /*create chart*/
+        let events = this.relevantEvents;
+
+        this.chart = new Chart(this.ctx, {
+            plugins: [ChartDataLabels],
+            type: 'bar',
+            data: {
+              labels: this.allDistricts,
+              datasets: allData
+            },
+            options: customOptions
+          });
     }
 
 }

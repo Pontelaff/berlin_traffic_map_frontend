@@ -1,8 +1,7 @@
 import * as Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { cloneDeep } from 'lodash';
 import { ChartBase } from './chartBase'
-import { duration } from 'moment';
+
 
 interface Bubble {
     x: number,
