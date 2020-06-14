@@ -145,9 +145,18 @@ export class ChartBubbleEvents extends ChartBase {
                             {
                                 /*convert to days, hours, minutes */
                                 let minutes = duration % 60;
+                                let minuteDescriptor: string;
+                                (minutes == 1) ? minuteDescriptor = "Minute" : minuteDescriptor = "Minuten";
+
                                 let hours = Math.floor(duration / 60) % 24;
+                                let hourDescriptor: string;
+                                (hours == 1) ? hourDescriptor = "Stunde" : hourDescriptor = "Stunden";
+
                                 let days = Math.floor(duration / (60 * 24));
-                                description += days + " Tage, " + hours + " Stunden, " + minutes + " Minuten";
+                                let dayDescriptor: string;
+                                (days == 1) ? dayDescriptor = "Tag" : dayDescriptor = "Tage";
+
+                                description += days + " " + dayDescriptor + ", " + hours + " " + hourDescriptor + ", " + minutes + " " + minuteDescriptor;
                             }
 
                             multiLineReturn.push(description);
