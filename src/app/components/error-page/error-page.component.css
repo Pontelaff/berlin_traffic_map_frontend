@@ -1,9 +1,10 @@
 #errorBox {
     text-align: center;
     display: block; 
-    max-width: 40%;
+    max-width: 500px;
     border-radius: 2;
     margin: auto;
+    padding: 50px;
 }
 
 .h-100{

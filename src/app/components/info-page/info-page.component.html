@@ -1,40 +1,29 @@
 
-<div>
-    
-    <div id="projectNameBox" class="htw-border-theme">
-        <b> 
-            <u>
-                Team Name: <br>
-            </u>
-            {{teamName}}
-        </b>  
-    </div>
-    
-    <div>
-        <div id="infoBox" class="htw-border-theme">
+<div class="info-container">
+    <mat-card class="htw-border-theme team-card">
+        <mat-card-title>Team Name:</mat-card-title>
+        <mat-card-content class="indent">{{teamName}}</mat-card-content>
+        <mat-card-title>Team Mitglieder:</mat-card-title>
+        <mat-card-content class="indent">
+            Niklas Matthias<br>
+            Jonas Gesch<br>
+            Lorenz Handschack
+        </mat-card-content>
+    </mat-card>    
+
+    <mat-card class="htw-border-theme info-card">
+        <mat-card-title>Über das Projekt</mat-card-title>
+        <mat-card-content>
             <p>
-                Traffic Map Berlin ist eine Awendung, die Baustellen, Sperrungen und andere Verkehrsbehinderungen
-                in Berlin visualisiert und analysiert. Die entsprechenden Daten werden bereitgestellt von der 
-                Verkehrsinformationszentrale VMZ. Die Daten können nach Zeitraum, Ursache und Bezirk gefiltert
-                werden. <br>
-                Dieses Projekt entstand im Rahmen des Moduls "C72 Projekt Softwareentwicklung" an der HTW Berlin.
-                Das Frontend wurde mit Angular 9.1.4 entwickelt und benutzt die Leaflet Bibliothek mit Markercluster
-                Plugin in Zusammenhang mit OpenStreetMaps für die Karte und Chart.js für die Statistiken. Das UI wurde
-                mit Angular Material realisiert.
-            </p>
-        </div>
-        <div id="teamMemberBox" class="htw-border-theme">
-            <b>
-                <u>
-                    Team Members:<br>
-                </u>
-                Niklas Matthias<br>
-                Jonas Gesch<br>
-                Lorenz Handschack
-            </b>
-        </div>
-    </div>
-
-
-    
+            Traffic Map Berlin ist eine Awendung, die Baustellen, Sperrungen und andere Verkehrsbehinderungen
+            in Berlin visualisiert und analysiert. Die entsprechenden Daten werden von der 
+            Verkehrsinformationszentrale VMZ bereitgestellt. Die Daten können nach Zeitraum und Ursache gefiltert
+            werden. <br>
+            Dieses Projekt entstand im Rahmen des Moduls "C72 Projekt Softwareentwicklung" an der HTW Berlin.
+            Das Frontend wurde mit Angular 9.1.4 entwickelt und benutzt die Leaflet Bibliothek mit Markercluster
+            Plugin in Zusammenhang mit OpenStreetMaps für die Karte und Chart.js für die Statistiken. Das UI wurde
+            mit Angular Material realisiert.
+        </p>
+        </mat-card-content>
+    </mat-card>
 </div>
