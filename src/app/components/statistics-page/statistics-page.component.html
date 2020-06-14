@@ -1,56 +1,53 @@
 <div>
     
-    <mat-form-field matInput id="StartPicker">
-        <mat-label>Start Date</mat-label>
-        <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
-        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-        <mat-datepicker #pickerStart></mat-datepicker>
-    </mat-form-field>
+    <div id="inputContainer" class="htw-border-theme">
 
-    <br>
-
-    <mat-form-field matInput  id="EndPicker">
-        <mat-label>End Date</mat-label>
-        <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-        <mat-datepicker #pickerEnd></mat-datepicker>
-    </mat-form-field>
-    
-    <br>
-
-    <!-- <mat-selection-list #districtSelector>
-        <mat-list-option *ngFor="let district of allDistricts">
-          {{district}}
-        </mat-list-option>
-    </mat-selection-list>
-
-    <mat-selection-list #eventSelector>
-        <mat-list-option *ngFor="let event of allEvents">
-          {{event}}
-        </mat-list-option>
-    </mat-selection-list> -->
-      
-    <!-- <p>
-        Options selected: {{districtSelector.selectedOptions.selected.length}}
-    </p> -->
-
-    <mat-form-field>
+        <mat-form-field matInput id="startPicker">
+            <mat-label>Start Date</mat-label>
+            <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
+            <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field matInput  id="endPicker">
+            <mat-label>End Date</mat-label>
+            <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+        
+        <!-- <mat-selection-list #districtSelector>
+            <mat-list-option *ngFor="let district of allDistricts">
+                {{district}}
+            </mat-list-option>
+        </mat-selection-list>
+        
+        <mat-selection-list #eventSelector>
+            <mat-list-option *ngFor="let event of allEvents">
+                {{event}}
+            </mat-list-option>
+        </mat-selection-list> -->
+        
+        <!-- <p>
+            Options selected: {{districtSelector.selectedOptions.selected.length}}
+        </p> -->
+        
+        <mat-form-field id="chartSelector">
             <mat-label>Chart to display</mat-label>
             <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
                 <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
                     {{chartSelection.viewValue}}
                 </mat-option>
             </mat-select>
-    </mat-form-field>
-
-    <br>
-
-    <button (click)="userClick()">Plot</button>
-
+        </mat-form-field>
+        
+        <button mat-raised-button class="htw-theme-action" id="btn" (click)="userClick()">Plot</button>
+    </div>
+        
     <br>
 
     <div id="chart">
-        <canvas id="canvas" width="200" height="650"></canvas>
+        <canvas id="canvas"></canvas>
     </div>
 
 </div>

@@ -159,9 +159,7 @@ export class StatisticsPageComponent implements OnInit {
     for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
     {
       this.apiService.fetchTimeframeFromDistrict(start, end, this.allDistricts[districtIdx]).subscribe((data:any[])=>{
-
-        let container = this.chartList[this.selectedChartIndex].data;
-
+        
         if(chartIdx == 0)
           this.arrangeTimeSpanData(data, districtIdx);
           

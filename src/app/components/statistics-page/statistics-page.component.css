@@ -1,0 +1,36 @@
+#inputContainer{
+    margin: 0 auto;
+    margin-top: 2%;
+    width: 55%;
+    max-width: 1100px;
+    align-content: center;
+    text-align: center;
+    background-color: white;
+}
+
+#startPicker{
+    margin: auto;
+    padding: 2%;
+}
+
+#endPicker{
+    margin: auto;
+    padding: 2%;
+}
+
+#chartSelector{
+    margin: auto;
+    padding: 2%;
+}
+
+#btn{
+    margin-left: 7%;
+}
+
+#chart{
+    margin: 0 auto;
+    width: 75%;
+    height: 600px;
+    align-content: center;
+    padding-top: 3%;
+}
