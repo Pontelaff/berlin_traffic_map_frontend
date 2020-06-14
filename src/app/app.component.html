@@ -8,18 +8,17 @@
 
   <mat-sidenav-container>
     <mat-sidenav id="navbar" class="htw-theme-d3" #sidenav mode="over" >
-      <!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->
-      <nav>
-        <ul class="p-15">
-          <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
-          <li><a routerLink="/statistics" routerLinkActive="active">Statistics</a></li>
-          <li><a routerLink="/info" routerLinkActive="active">Info</a></li>
-        </ul>
-      </nav>
+      <!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->      
+      <mat-nav-list class="p-15">
+        <mat-list-item><a routerLink="/home" routerLinkActive="active">Home</a></mat-list-item>
+        <mat-list-item><a routerLink="/statistics" routerLinkActive="active">Statistics</a></mat-list-item>
+        <mat-list-item><a routerLink="/info" routerLinkActive="active">Info</a></mat-list-item>
+      </mat-nav-list>
     </mat-sidenav>
       
     <mat-sidenav-content id="main-container">
-      <!-- The routed views render in the <router-outlet>-->
+      <!-- The routed views render in the <router-outlet>
+        It displays the main content of the app-->
       <router-outlet></router-outlet>
     
     </mat-sidenav-content>
