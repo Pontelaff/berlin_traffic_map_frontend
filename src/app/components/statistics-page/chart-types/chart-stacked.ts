@@ -9,14 +9,13 @@ export class ChartStacked extends ChartBase {
 
     options: any;
 
-
-    updateRoutine(data: any, containerSize: number)
+    updateRoutine(containerSize: number)
     {
         /*get total amount of occurences per district*/
-        let totalPerDistrict = this.getTotalsPerDistrict(data);
+        let totalPerDistrict = this.getTotalsPerDistrict();
 
         /*convert absolutes to relatives*/    
-        let chartData = this.convertToRelatives(data, totalPerDistrict, containerSize);
+        let chartData = this.convertToRelatives(totalPerDistrict, containerSize);
 
         /*create hsl value strings*/
         let colorList:string[][] = this.createColorStrings(chartData);
@@ -25,7 +24,7 @@ export class ChartStacked extends ChartBase {
         this.updateChart(chartData, colorList);
     }
 
-    getTotalsPerDistrict(data: any)
+    getTotalsPerDistrict()
     {
         /*get total amount of occurences per district*/
         let totalPerDistrict = [];
@@ -33,17 +32,17 @@ export class ChartStacked extends ChartBase {
         totalPerDistrict.fill(0);
         for(let idx = 0; idx < totalPerDistrict.length; idx++)
         {
-            data.forEach(element => {
+            this.data.forEach(element => {
             totalPerDistrict[idx] += element[idx];
             });
         }
         return totalPerDistrict;
     }
 
-    convertToRelatives(baseData: any, totalsPerDistrict: any, arrayCount: number)
+    convertToRelatives(totalsPerDistrict: any, arrayCount: number)
     {
         /*create deep copy without references*/
-        let chartData = cloneDeep(baseData);
+        let chartData = cloneDeep(this.data);
 
         /*convert absolutes to relatives*/    
         for(let arrayIdx = 0; arrayIdx < arrayCount; arrayIdx++)

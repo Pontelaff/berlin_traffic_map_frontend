@@ -7,87 +7,107 @@ import { ChartBase } from './chartBase'
 
 export class ChartRadarEvents extends ChartBase {
 
-    update(data: any)
+
+  containerSetup()
+  {
+    this.initContainer2D(this.relevantEvents.length, this.allDistricts.length);
+  }
+
+  addData(incomingData: any, districtIdx: number)
+  {
+    incomingData.forEach(entry => {
+      for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+      {
+        if(this.allEvents[eventIdx] == entry.consequence.summary)
+        {
+          let relevantIdx = this.eventsToRelevantMap[eventIdx];
+          this.data[relevantIdx][districtIdx]++;
+        }
+      }
+    });
+  }
+
+  update()
+  {
+    let chartData = cloneDeep(this.data);
+
+    for(let eventIdx = 1; eventIdx < chartData.length; eventIdx++)
     {
-        let chartData = cloneDeep(data);
-
-        for(let eventIdx = 1; eventIdx < chartData.length; eventIdx++)
+        for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
         {
-            for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
-            {
-                chartData[eventIdx][districtIdx] += chartData[eventIdx - 1][districtIdx];
-            }
+            chartData[eventIdx][districtIdx] += chartData[eventIdx - 1][districtIdx];
         }
-
-        for(let idx = 0; idx < chartData.length; idx++)
-        {
-            let element = chartData[idx];
-            this.chart.data.datasets[idx].data = element;
-        }
-
-        this.chart.update();
     }
 
-    create()
+    for(let idx = 0; idx < chartData.length; idx++)
     {
-        /*create empty datasets*/
-        let allData = [];
-        for(let datasetIdx = 0; datasetIdx < this.relevantEvents.length ;datasetIdx++)
-        {
-          let lightness = (datasetIdx - 2.5) * 7 + 36;
-          let uniformData = [];
-          uniformData.length = this.allDistricts.length;
-          uniformData.fill(datasetIdx + 1);
-          allData.push({
-              data: uniformData,
-              backgroundColor: 'hsl(82, 100%, ' + lightness + '%)',
-              label: this.relevantEvents[datasetIdx]
-          })
-        }
+        let element = chartData[idx];
+        this.chart.data.datasets[idx].data = element;
+    }
 
-        this.chart = new Chart(this.ctx, {
-            plugins: [ChartDataLabels],
-            type: 'radar',
-            data: {
-                labels: this.allDistricts,
-                datasets: allData
-              },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                  display: true
-                },
-                tooltips: {
-                    enabled: true,
-                    callbacks: {
-                        label: function(tooltipItem, data) {
+    this.chart.update();
+  }
 
-                            let string = data.datasets[tooltipItem.datasetIndex].label + ": ";
+  create()
+  {
+    /*create empty datasets*/
+    let allData = [];
+    for(let datasetIdx = 0; datasetIdx < this.relevantEvents.length ;datasetIdx++)
+    {
+      let lightness = (datasetIdx - 2.5) * 7 + 36;
+      let uniformData = [];
+      uniformData.length = this.allDistricts.length;
+      uniformData.fill(datasetIdx + 1);
+      allData.push({
+          data: uniformData,
+          backgroundColor: 'hsl(82, 100%, ' + lightness + '%)',
+          label: this.relevantEvents[datasetIdx]
+      })
+    }
 
-                            let val = <number>data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+    this.chart = new Chart(this.ctx, {
+        plugins: [ChartDataLabels],
+        type: 'radar',
+        data: {
+            labels: this.allDistricts,
+            datasets: allData
+          },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              display: true
+            },
+            tooltips: {
+                enabled: true,
+                callbacks: {
+                    label: function(tooltipItem, data) {
 
-                            if(tooltipItem.datasetIndex > 0)
-                                val = val - <number>data.datasets[tooltipItem.datasetIndex - 1].data[tooltipItem.index]
+                        let string = data.datasets[tooltipItem.datasetIndex].label + ": ";
 
-                            string += val;
+                        let val = <number>data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
-                            return string;
-                        }
-                    }
-                },
-                plugins: {
-                  datalabels: {
-                    display: false,
-                  }
-                },
-                scale: {
-                    ticks: {
-                        suggestedMin: 0
+                        if(tooltipItem.datasetIndex > 0)
+                            val = val - <number>data.datasets[tooltipItem.datasetIndex - 1].data[tooltipItem.index]
+
+                        string += val;
+
+                        return string;
                     }
                 }
+            },
+            plugins: {
+              datalabels: {
+                display: false,
               }
-        })
-    }
+            },
+            scale: {
+                ticks: {
+                    suggestedMin: 0
+                }
+            }
+          }
+    })
+  }
 
 }

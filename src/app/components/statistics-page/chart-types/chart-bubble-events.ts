@@ -13,6 +13,33 @@ export class ChartBubbleEvents extends ChartBase {
 
     maxBubbleRadius: number = 50;
 
+
+    containerSetup()
+    {
+        this.initContainer3D(2, this.relevantEvents.length, this.allDistricts.length);
+    }
+
+    addData(incomingData: any, districtIdx: number)
+    {
+        incomingData.forEach(entry => {
+        for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+        {
+            if(this.allEvents[eventIdx] == entry.consequence.summary)
+            {
+                /*fill occurence data*/
+                let relevantIdx = this.eventsToRelevantMap[eventIdx];
+                this.data[0][relevantIdx][districtIdx]++;
+
+                /*fill duration data*/
+                let dateFrom = entry.validities[0].timeFrom;
+                let dateTo = entry.validities[0].timeTo;
+                let diffMinutes = this.calculateTimespanInMinutes(new Date(dateFrom), new Date(dateTo));
+                this.data[1][relevantIdx][districtIdx] += diffMinutes;
+            }
+        }
+        });
+    }
+
     determineMaximum(data: any)
     {
         let max = 0;
@@ -26,14 +53,14 @@ export class ChartBubbleEvents extends ChartBase {
         return max;
     }
 
-    update(data: any)
+    update()
     {
-        let occurenceData = data[0];
+        let occurenceData = this.data[0];
         let maxOccurences = this.determineMaximum(occurenceData);
         if(maxOccurences == 0)
             maxOccurences = 1;
 
-        let durationData = data[1];
+        let durationData = this.data[1];
         let maxDuration = this.determineMaximum(durationData);
         if(maxDuration == 0)
             maxDuration = 0.1;
@@ -145,9 +172,18 @@ export class ChartBubbleEvents extends ChartBase {
                             {
                                 /*convert to days, hours, minutes */
                                 let minutes = duration % 60;
+                                let minuteDescriptor: string;
+                                (minutes == 1) ? minuteDescriptor = "Minute" : minuteDescriptor = "Minuten";
+
                                 let hours = Math.floor(duration / 60) % 24;
+                                let hourDescriptor: string;
+                                (hours == 1) ? hourDescriptor = "Stunde" : hourDescriptor = "Stunden";
+
                                 let days = Math.floor(duration / (60 * 24));
-                                description += days + " Tage, " + hours + " Stunden, " + minutes + " Minuten";
+                                let dayDescriptor: string;
+                                (days == 1) ? dayDescriptor = "Tag" : dayDescriptor = "Tage";
+
+                                description += days + " " + dayDescriptor + ", " + hours + " " + hourDescriptor + ", " + minutes + " " + minuteDescriptor;
                             }
 
                             multiLineReturn.push(description);
