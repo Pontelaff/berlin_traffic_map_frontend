@@ -54,13 +54,13 @@ export class ChartRadarEvents extends ChartBase {
     let allData = [];
     for(let datasetIdx = 0; datasetIdx < this.relevantEvents.length ;datasetIdx++)
     {
-      let lightness = (datasetIdx - 2.5) * 7 + 36;
+      let lightness = (datasetIdx - 2.5) * 7 + 36;      //outer layers are lighter, center layers are darker
       let uniformData = [];
       uniformData.length = this.allDistricts.length;
       uniformData.fill(datasetIdx + 1);
       allData.push({
           data: uniformData,
-          backgroundColor: 'hsl(82, 100%, ' + lightness + '%)',
+          backgroundColor: 'hsl(82, 100%, ' + lightness + '%)',   //htw corporate identity green
           label: this.relevantEvents[datasetIdx]
       })
     }

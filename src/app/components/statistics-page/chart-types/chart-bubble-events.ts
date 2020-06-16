@@ -79,7 +79,7 @@ export class ChartBubbleEvents extends ChartBase {
                 /*set background color of bubbles relative to maximum duration count, scaled to maxDuration*/
                 let ratio = durationData[eventIdx][districtIdx] / maxDuration;
                 let normalizedLightness = 75 - ratio * 50;          //caps at lightness between 25% and 75% with higher durations being darker
-                let colorString = 'hsl(0, 0%, ' + normalizedLightness + '%)';
+                let colorString = 'hsl(82, 100%, ' + normalizedLightness + '%)';    //htw corporate identity green
                 this.chart.data.datasets[0].backgroundColor[dataIndex] = colorString;
 
                 /*set labels for tooltips in absolute numbers*/
@@ -144,11 +144,6 @@ export class ChartBubbleEvents extends ChartBase {
                 hover: {
                   mode: null
                 },
-                elements: {
-                    point: {
-                        backgroundColor: "rgba(120, 256, 32, 0.6)"
-                    }
-                },
                 tooltips: {
                     enabled: true,
                     displayColors: false,
@@ -161,29 +156,44 @@ export class ChartBubbleEvents extends ChartBase {
                             let description = "Aufkommen von " + events[eventIndex] + " in " + districts[districtIndex] + ": ";
 
                             let occurences = data.datasets[tooltipItem.datasetIndex].hoverBackgroundColor[tooltipItem.index];
-                            if(occurences != undefined)
-                                description += occurences;
+                            (occurences != undefined) ? description += occurences : description += "[ERROR]";
 
                             multiLineReturn[0] = description;
                             description = "Dauer insgesamt: "
 
                             let duration = data.datasets[tooltipItem.datasetIndex].hoverBorderColor[tooltipItem.index];
+
+                            /* don't include duration if there is no time available */
+                            if(duration == 0)
+                                return multiLineReturn;
+
                             if(duration != undefined)
                             {
-                                /*convert to days, hours, minutes */
-                                let minutes = duration % 60;
-                                let minuteDescriptor: string;
-                                (minutes == 1) ? minuteDescriptor = "Minute" : minuteDescriptor = "Minuten";
+                                function createString(count: number, descriptor: string)
+                                {
+                                    let str = count + " " + descriptor + ", ";
+                                    return str;
+                                }
 
+                                /* convert to years, days, hours, minutes */
+                                /* allows for e.g. "2 Jahre, 0 Tage, 5 Stunden, 11 Minuten" and "5 Stunden, 11 Minuten" as tooltip text */
+                                /* basically serves to include values equal to 0 only if the respective unit is not the most significant needed for describing the duration */
+                                let years = Math.floor(duration / (60 * 24 * 365));
+                                if(years != 0)                                                                          //only keep string when years are nonzero 
+                                    description += createString(years, ((years == 1) ? "Jahr" : "Jahre"));
+                                
+                                let days = Math.floor(duration / (60 * 24) % 365);
+                                if(years + days != 0)                                                                   //only keep string when days are nonzero or years are nonzero 
+                                    description += createString(days, ((days == 1) ? "Tag" : "Tage"));
+                                
                                 let hours = Math.floor(duration / 60) % 24;
-                                let hourDescriptor: string;
-                                (hours == 1) ? hourDescriptor = "Stunde" : hourDescriptor = "Stunden";
-
-                                let days = Math.floor(duration / (60 * 24));
-                                let dayDescriptor: string;
-                                (days == 1) ? dayDescriptor = "Tag" : dayDescriptor = "Tage";
-
-                                description += days + " " + dayDescriptor + ", " + hours + " " + hourDescriptor + ", " + minutes + " " + minuteDescriptor;
+                                if(years + days + hours != 0)                                                           //same concept as above
+                                    description += createString(hours, ((hours == 1) ? "Stunde" : "Stunden"));
+                                
+                                let minutes = duration % 60;
+                                description += createString(minutes, ((minutes == 1) ? "Minute" : "Minuten"));
+                                
+                                description = description.slice(0, description.length - 2);                             //cut off trailing ", " characters 
                             }
 
                             multiLineReturn.push(description);

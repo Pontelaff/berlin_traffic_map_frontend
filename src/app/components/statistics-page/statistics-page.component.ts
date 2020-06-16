@@ -18,8 +18,8 @@ interface chartSelect {
 })
 export class StatisticsPageComponent implements OnInit {
 
-  minDate = new Date(2016, 4, 10);     //should be first relevant date in the past, TODO Query
-  maxDate = new Date(2024, 8, 10);     //should be last relevant date in the future, TODO Query
+  minDate = new Date(2010, 0, 1);     //should be first relevant date in the past, TODO Query
+  maxDate = new Date(2029, 11, 31);     //should be last relevant date in the future, TODO Query
   currDateStart = new Date();
   currDateEnd = new Date();
 
