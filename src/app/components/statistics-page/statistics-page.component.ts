@@ -104,6 +104,8 @@ export class StatisticsPageComponent implements OnInit {
 
   generalUpdateRoutine(start: string, end: string, chartIdx: number)
   {
+    this.selection.chart.indicateBusy();
+
     this.queriesCompleted = 0;
 
     for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)

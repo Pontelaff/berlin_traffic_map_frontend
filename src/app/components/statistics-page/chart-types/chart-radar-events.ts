@@ -13,6 +13,11 @@ export class ChartRadarEvents extends ChartBase {
     this.initContainer2D(this.relevantEvents.length, this.allDistricts.length);
   }
 
+  indicateBusy()
+  {
+      
+  }
+
   addData(incomingData: any, districtIdx: number)
   {
     incomingData.forEach(entry => {

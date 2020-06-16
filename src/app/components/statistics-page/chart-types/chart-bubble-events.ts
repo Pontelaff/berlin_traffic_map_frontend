@@ -19,6 +19,11 @@ export class ChartBubbleEvents extends ChartBase {
         this.initContainer3D(2, this.relevantEvents.length, this.allDistricts.length);
     }
 
+    indicateBusy()
+    {
+        
+    }
+
     addData(incomingData: any, districtIdx: number)
     {
         incomingData.forEach(entry => {
