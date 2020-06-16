@@ -12,6 +12,9 @@ export class ChartBase {
     
     data: any[];
 
+    busySaturation = 0.4;
+    defaultSaturation = 1;
+
     constructor (ctx: HTMLCanvasElement, allDistricts: string[], allEvents: string[], allTimeSteps: number[])
     {
         this.ctx = ctx;

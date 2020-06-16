@@ -1,6 +1,7 @@
 import * as Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartBase } from './chartBase'
+import { cloneDeep } from 'lodash';
 
 
 interface Bubble {
@@ -13,6 +14,8 @@ export class ChartBubbleEvents extends ChartBase {
 
     maxBubbleRadius: number = 50;
 
+    occurenceData: any = [];
+    durationData: any = [];
 
     containerSetup()
     {
@@ -21,13 +24,26 @@ export class ChartBubbleEvents extends ChartBase {
 
     indicateBusy()
     {
+        if(this.durationData.length == 0)
+            return;
+
+        let maximum = this.determineMaximum(this.durationData);
+
+        for(let eventIdx = 0; eventIdx < this.relevantEvents.length; eventIdx++)
+        {
+            for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
+            {
+                this.setBubbleBackgroundColor(eventIdx, districtIdx, maximum, this.busySaturation);
+            }
+        }
         
+        this.chart.update();
     }
 
     addData(incomingData: any, districtIdx: number)
     {
         incomingData.forEach(entry => {
-        for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
+        for(let eventIdx = 0; eventIdx < this.relevantEvents.length; eventIdx++)
         {
             if(this.allEvents[eventIdx] == entry.consequence.summary)
             {
@@ -60,42 +76,49 @@ export class ChartBubbleEvents extends ChartBase {
 
     update()
     {
-        let occurenceData = this.data[0];
-        let maxOccurences = this.determineMaximum(occurenceData);
+        this.occurenceData = cloneDeep(this.data[0]);
+        let maxOccurences = this.determineMaximum(this.occurenceData);
         if(maxOccurences == 0)
             maxOccurences = 1;
 
-        let durationData = this.data[1];
-        let maxDuration = this.determineMaximum(durationData);
+        this.durationData = cloneDeep(this.data[1]);
+        let maxDuration = this.determineMaximum(this.durationData);
         if(maxDuration == 0)
             maxDuration = 0.1;
 
-        for(let eventIdx = 0; eventIdx < occurenceData.length; eventIdx++)
+        for(let eventIdx = 0; eventIdx < this.occurenceData.length; eventIdx++)
         {
             for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
             {
                 let dataIndex = eventIdx * this.allDistricts.length + districtIdx;
 
-                /*set radii of bubbles relative to maximum occurence count, scaled to maxOccurences and maxBubbleRadius*/
-                let normalizedRadius = this.maxBubbleRadius * (occurenceData[eventIdx][districtIdx] / maxOccurences);
+                /* set radii of bubbles relative to maximum occurence count, scaled to maxOccurences and maxBubbleRadius */
+                let normalizedRadius = this.maxBubbleRadius * (this.occurenceData[eventIdx][districtIdx] / maxOccurences);
                 normalizedRadius = Math.round(normalizedRadius * 10) / 10;
                 this.chart.data.datasets[0].data[dataIndex].r = normalizedRadius;
                 
-                /*set background color of bubbles relative to maximum duration count, scaled to maxDuration*/
-                let ratio = durationData[eventIdx][districtIdx] / maxDuration;
-                let normalizedLightness = 75 - ratio * 50;          //caps at lightness between 25% and 75% with higher durations being darker
-                let colorString = 'hsl(82, 100%, ' + normalizedLightness + '%)';    //htw corporate identity green
-                this.chart.data.datasets[0].backgroundColor[dataIndex] = colorString;
+                /* set color */
+                this.setBubbleBackgroundColor(eventIdx, districtIdx, maxDuration);
 
-                /*set labels for tooltips in absolute numbers*/
-                this.chart.data.datasets[0].hoverBackgroundColor[dataIndex] = occurenceData[eventIdx][districtIdx];
-
-                this.chart.data.datasets[0].hoverBorderColor[dataIndex] = durationData[eventIdx][districtIdx];
+                /* set labels for tooltips in absolute numbers */
+                this.chart.data.datasets[0].hoverBackgroundColor[dataIndex] = this.occurenceData[eventIdx][districtIdx];
+                this.chart.data.datasets[0].hoverBorderColor[dataIndex] = this.durationData[eventIdx][districtIdx];
             }
         }
 
         this.chart.update();
 
+    }
+
+    /*set background color of bubbles relative to maximum duration count, scaled to maxDuration*/
+    setBubbleBackgroundColor(eventIdx: number, districtIdx: number, absoluteMax: number, saturation: number = 1)
+    {
+        let dataIndex = eventIdx * this.allDistricts.length + districtIdx;
+        let ratio = this.durationData[eventIdx][districtIdx] / absoluteMax;
+        let normalizedLightness = 75 - ratio * 50;          //caps at lightness between 25% and 75% with higher durations being darker
+        let colorString = "hsl(82, " + saturation * 100 + "%, " + normalizedLightness + "%)";    //htw corporate identity green
+
+        this.chart.data.datasets[0].backgroundColor[dataIndex] = colorString;
     }
 
     generateData()

@@ -15,7 +15,16 @@ export class ChartRadarEvents extends ChartBase {
 
   indicateBusy()
   {
-      
+    this.setChartSaturation(this.busySaturation);
+    this.chart.update();
+  }
+
+  setChartSaturation(saturation: number)
+  {
+    for(let layerIdx = 0; layerIdx < this.data.length; layerIdx++)
+    {
+      this.chart.data.datasets[layerIdx].backgroundColor = this.getLayerColor(layerIdx, saturation);
+    }
   }
 
   addData(incomingData: any, districtIdx: number)
@@ -50,7 +59,15 @@ export class ChartRadarEvents extends ChartBase {
         this.chart.data.datasets[idx].data = element;
     }
 
+    this.setChartSaturation(1);
     this.chart.update();
+  }
+
+  getLayerColor(layerIdx: number, saturation: number = 1)
+  {
+    let lightness = (layerIdx - 2.5) * 7 + 36;      //outer layers are lighter, center layers are darker
+    let str = "hsl(82, " + saturation * 100 + "%, " + lightness + "%)";
+    return str;  //htw corporate identity green
   }
 
   create()
@@ -59,13 +76,12 @@ export class ChartRadarEvents extends ChartBase {
     let allData = [];
     for(let datasetIdx = 0; datasetIdx < this.relevantEvents.length ;datasetIdx++)
     {
-      let lightness = (datasetIdx - 2.5) * 7 + 36;      //outer layers are lighter, center layers are darker
       let uniformData = [];
       uniformData.length = this.allDistricts.length;
       uniformData.fill(datasetIdx + 1);
       allData.push({
           data: uniformData,
-          backgroundColor: 'hsl(82, 100%, ' + lightness + '%)',   //htw corporate identity green
+          backgroundColor: this.getLayerColor(datasetIdx, this.busySaturation),
           label: this.relevantEvents[datasetIdx]
       })
     }

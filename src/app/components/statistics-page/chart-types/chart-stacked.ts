@@ -29,8 +29,8 @@ export class ChartStacked extends ChartBase {
     {
       if(this.chartData.length == 0 )
         return;
-        
-      let busyColors:string[][] = this.createColorStrings(this.chartData, 0.25);
+
+      let busyColors:string[][] = this.createColorStrings(this.chartData, this.busySaturation);
 
       this.updateChart([], busyColors);
     }
