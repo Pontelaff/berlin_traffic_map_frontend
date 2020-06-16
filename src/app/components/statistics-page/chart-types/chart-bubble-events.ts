@@ -32,9 +32,7 @@ export class ChartBubbleEvents extends ChartBase {
         for(let eventIdx = 0; eventIdx < this.relevantEvents.length; eventIdx++)
         {
             for(let districtIdx = 0; districtIdx < this.allDistricts.length; districtIdx++)
-            {
                 this.setBubbleBackgroundColor(eventIdx, districtIdx, maximum, this.busySaturation);
-            }
         }
         
         this.chart.update();
@@ -43,7 +41,7 @@ export class ChartBubbleEvents extends ChartBase {
     addData(incomingData: any, districtIdx: number)
     {
         incomingData.forEach(entry => {
-        for(let eventIdx = 0; eventIdx < this.relevantEvents.length; eventIdx++)
+        for(let eventIdx = 0; eventIdx < this.allEvents.length; eventIdx++)
         {
             if(this.allEvents[eventIdx] == entry.consequence.summary)
             {
