@@ -12,8 +12,8 @@ export class ChartBase {
     
     data: any[];
 
-    busySaturation = 0.4;
-    defaultSaturation = 1;
+    busySaturation = 40;
+    defaultSaturation = 100;
 
     constructor (ctx: HTMLCanvasElement, allDistricts: string[], allEvents: string[], allTimeSteps: number[])
     {
@@ -62,6 +62,11 @@ export class ChartBase {
     clearData()
     {
         this.clearContainer(this.data);
+    }
+
+    getHSLColorString(hue: number, saturation: number, lightness: number)
+    {
+        return "hsl(" + hue + ", " + saturation + "%," + lightness + "%)";
     }
 
     /* recursively reset an n dimensional container to all 0 */

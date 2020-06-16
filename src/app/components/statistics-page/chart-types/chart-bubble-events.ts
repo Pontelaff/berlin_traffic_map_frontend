@@ -111,12 +111,12 @@ export class ChartBubbleEvents extends ChartBase {
     }
 
     /*set background color of bubbles relative to maximum duration count, scaled to maxDuration*/
-    setBubbleBackgroundColor(eventIdx: number, districtIdx: number, absoluteMax: number, saturation: number = 1)
+    setBubbleBackgroundColor(eventIdx: number, districtIdx: number, absoluteMax: number, saturation: number = this.defaultSaturation)
     {
         let dataIndex = eventIdx * this.allDistricts.length + districtIdx;
         let ratio = this.durationData[eventIdx][districtIdx] / absoluteMax;
         let normalizedLightness = 75 - ratio * 50;          //caps at lightness between 25% and 75% with higher durations being darker
-        let colorString = "hsl(82, " + saturation * 100 + "%, " + normalizedLightness + "%)";    //htw corporate identity green
+        let colorString = this.getHSLColorString(82, saturation, normalizedLightness)    //htw corporate identity green
 
         this.chart.data.datasets[0].backgroundColor[dataIndex] = colorString;
     }
@@ -146,7 +146,7 @@ export class ChartBubbleEvents extends ChartBase {
 
         let colorList: string[] = [];
         colorList.length = this.allDistricts.length * this.relevantEvents.length;
-        colorList.fill('hsl(0, 0%, 50%)');  //fill with gray
+        colorList.fill(this.getHSLColorString(0, 0, 50));  //fill with gray
 
         this.chart = new Chart(this.ctx, {
             plugins: [ChartDataLabels],

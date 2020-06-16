@@ -59,14 +59,14 @@ export class ChartRadarEvents extends ChartBase {
         this.chart.data.datasets[idx].data = element;
     }
 
-    this.setChartSaturation(1);
+    this.setChartSaturation(this.defaultSaturation);
     this.chart.update();
   }
 
-  getLayerColor(layerIdx: number, saturation: number = 1)
+  getLayerColor(layerIdx: number, saturation: number = this.defaultSaturation)
   {
     let lightness = (layerIdx - 2.5) * 7 + 36;      //outer layers are lighter, center layers are darker
-    let str = "hsl(82, " + saturation * 100 + "%, " + lightness + "%)";
+    let str = this.getHSLColorString(82, saturation, lightness)
     return str;  //htw corporate identity green
   }
 
