@@ -26,12 +26,12 @@
                         <mat-datepicker #pickerEnd></mat-datepicker>
                     </mat-form-field>
                     
-                    <button (click)="applyClick()">Zeitraum anwenden</button>
-                    <button (click)="setTestDates()">Test</button>
+                    <button mat-raised-button color="primary" (click)="applyClick()">Zeitraum anwenden</button>
+                    <button mat-raised-button color="primary" (click)="setTestDates()">Test</button>
                 </div>
             </mat-menu>
                 
-            <button class="mat-menu-button" mat-icon-button [matMenuTriggerFor]="mapMenu">
+            <button mat-mini-fab class="mat-menu-button" color="basic" [matMenuTriggerFor]="mapMenu">
                 <mat-icon>more_vert</mat-icon>
             </button>
     
