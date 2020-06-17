@@ -147,7 +147,7 @@ export class ChartStacked extends ChartBase {
                 let datasetSize = context.dataset.data.length;
                 let hue = (context.dataIndex + 1) / datasetSize * 360 + 15; //offset by 15 to avoid unreadable yellow
                 let lightness = 50 - context.dataset.hoverBackgroundColor[context.dataIndex] * 50;    //lightness 0 = 100%, lightness 50 = 0%
-                let string = "hsl(" + hue + ", 100%," + lightness + "%)";;
+                let string = "hsl(" + hue + ", 100%," + lightness + "%)";
                 return string;
               },
               formatter: function(value, context) {
