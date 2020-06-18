@@ -21,6 +21,7 @@
 #chartSelector{
     margin: auto;
     padding: 2%;
+    width: 225px;
 }
 
 #btn{

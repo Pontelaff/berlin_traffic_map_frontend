@@ -3,14 +3,14 @@
     <div id="inputContainer" class="htw-border-theme">
 
         <mat-form-field matInput id="startPicker">
-            <mat-label>Start Date</mat-label>
+            <mat-label>Start-Datum</mat-label>
             <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
             <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
             <mat-datepicker #pickerStart></mat-datepicker>
         </mat-form-field>
         
         <mat-form-field matInput  id="endPicker">
-            <mat-label>End Date</mat-label>
+            <mat-label>End-Datum</mat-label>
             <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
             <mat-datepicker #pickerEnd></mat-datepicker>
@@ -33,7 +33,7 @@
         </p> -->
         
         <mat-form-field id="chartSelector">
-            <mat-label>Chart to display</mat-label>
+            <mat-label>Diagrammauswahl</mat-label>
             <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
                 <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
                     {{chartSelection.viewValue}}

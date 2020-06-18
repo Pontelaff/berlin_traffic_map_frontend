@@ -32,10 +32,10 @@ export class StatisticsPageComponent implements OnInit {
   allTimeSteps: number[] = [0, 2, 4, 8, 16];
   
   chartList: chartSelect[] = [
-    {selector: 0, viewValue: 'Farbdiagramm: Störungsdauer', chart: null},
-    {selector: 1, viewValue: 'Farbdiagramm: Störungsarten', chart: null},
-    {selector: 2, viewValue: 'Radardiagramm: Störungsvorkommen', chart: null},
-    {selector: 3, viewValue: 'Blasendiagramm: Störungsarten', chart: null},
+    {selector: 0, viewValue: 'Störungsdauer (Farbe)', chart: null},
+    {selector: 1, viewValue: 'Störungsarten (Farbe)', chart: null},
+    {selector: 2, viewValue: 'Störungsarten (Radar)', chart: null},
+    {selector: 3, viewValue: 'Störungsarten (Blasen)', chart: null},
     {selector: 4, viewValue: '[temp]', chart: null}
   ];
   selection: chartSelect;
