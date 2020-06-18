@@ -17,6 +17,19 @@ h1, h2, h3, h4, h5, h6, p {
     height: 100%;
 }
 
+@media (max-width: 600px) {
+    .logo {
+        height: 46px;
+    }
+}
+
+@media (min-width: 600px) {
+    .logo {
+        height: 53px;
+    }
+}
+
+
 mat-sidenav-container{
     height: calc(100% - 64px);
 }
