@@ -96,7 +96,7 @@ export class ChartBubbleEvents extends ChartBase {
                 this.chart.data.datasets[0].data[dataIndex].r = normalizedRadius;
                 
                 /* set color */
-                this.setBubbleBackgroundColor(eventIdx, districtIdx, Math.log(maxDuration));
+                this.setBubbleBackgroundColor(eventIdx, districtIdx, maxDuration);
 
                 /* set labels for tooltips in absolute numbers */
                 this.chart.data.datasets[0].hoverBackgroundColor[dataIndex] = this.occurenceData[eventIdx][districtIdx];
@@ -113,7 +113,8 @@ export class ChartBubbleEvents extends ChartBase {
     {
         let dataIndex = eventIdx * this.allDistricts.length + districtIdx;
         let logval =  Math.log(this.durationData[eventIdx][districtIdx]);
-        let ratio = logval / absoluteMax;
+        let logMax = Math.log(absoluteMax);
+        let ratio = logval / logMax;
         let normalizedLightness = 75 - ratio * 50;          //caps at lightness between 25% and 75% with higher durations being darker
         let colorString = this.getHSLColorString(82, saturation, normalizedLightness)    //htw corporate identity green
 
