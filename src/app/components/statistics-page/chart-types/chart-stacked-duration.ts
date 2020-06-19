@@ -7,7 +7,7 @@ export class ChartStackedDuration extends ChartStacked {
 
   containerSetup()
   {
-    this.initContainer2D(this.allTimeSteps.length, this.allDistricts.length);
+    this.data = this.initContainer2D(this.allTimeSteps.length, this.allDistricts.length);
   }
 
   update()

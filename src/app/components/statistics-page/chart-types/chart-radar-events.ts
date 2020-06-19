@@ -10,7 +10,7 @@ export class ChartRadarEvents extends ChartBase {
 
   containerSetup()
   {
-    this.initContainer2D(this.relevantEvents.length, this.allDistricts.length);
+    this.data = this.initContainer2D(this.relevantEvents.length, this.allDistricts.length);
   }
 
   indicateBusy()

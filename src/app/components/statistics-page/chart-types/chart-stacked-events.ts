@@ -7,7 +7,7 @@ export class ChartStackedEvents extends ChartStacked {
 
   containerSetup()
   {
-    this.initContainer2D(this.relevantEvents.length, this.allDistricts.length);
+    this.data = this.initContainer2D(this.relevantEvents.length, this.allDistricts.length);
   }
 
   update()

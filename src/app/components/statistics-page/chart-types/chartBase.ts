@@ -15,7 +15,7 @@ export class ChartBase {
     busySaturation = 40;
     defaultSaturation = 100;
 
-    constructor (ctx: HTMLCanvasElement, allDistricts: string[], allEvents: string[], allTimeSteps: number[])
+    constructor (ctx: any, allDistricts: string[], allEvents: string[], allTimeSteps: number[])
     {
         this.ctx = ctx;
         this.allDistricts = allDistricts;
@@ -32,31 +32,26 @@ export class ChartBase {
 
     initContainer2D(topArrSize: number, subArrSize: number)
     {
-        this.data = [];
-        this.data.length = topArrSize;
-        for(let eventIdx = 0; eventIdx < this.data.length; eventIdx++)
+        let container = [];
+        container.length = topArrSize;
+        for(let eventIdx = 0; eventIdx < container.length; eventIdx++)
         {
-          this.data[eventIdx] = [];
-          this.data[eventIdx].length = subArrSize;
-          this.data[eventIdx].fill(0);
+            container[eventIdx] = [];
+            container[eventIdx].length = subArrSize;
+          container[eventIdx].fill(0);
         }
+
+        return container;
     }
 
     initContainer3D(count: number, topArrSize: number, subArrSize: number)
     {
-        this.data = [];
-        this.data.length = count;
-        for(let arrIdx = 0; arrIdx < this.data.length; arrIdx++)
-        {
-            this.data[arrIdx] = [];
-            this.data[arrIdx].length = topArrSize;
-            for(let eventIdx = 0; eventIdx < this.data[arrIdx].length; eventIdx++)
-            {
-                this.data[arrIdx][eventIdx] = [];
-                this.data[arrIdx][eventIdx].length = subArrSize;
-                this.data[arrIdx][eventIdx].fill(0);
-            }
-        }
+        let container = [];
+        container.length = count;
+        for(let arrIdx = 0; arrIdx < container.length; arrIdx++)
+            container[arrIdx] = this.initContainer2D(topArrSize, subArrSize);
+
+        return container;
     }
 
     clearData()

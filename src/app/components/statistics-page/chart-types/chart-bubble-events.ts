@@ -19,7 +19,7 @@ export class ChartBubbleEvents extends ChartBase {
 
     containerSetup()
     {
-        this.initContainer3D(2, this.relevantEvents.length, this.allDistricts.length);
+        this.data = this.initContainer3D(2, this.relevantEvents.length, this.allDistricts.length);
     }
 
     indicateBusy()
