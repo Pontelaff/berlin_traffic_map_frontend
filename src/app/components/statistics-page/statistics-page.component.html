@@ -2,37 +2,21 @@
     
     <div id="inputContainer" class="htw-border-theme">
 
-        <mat-form-field matInput id="startPicker">
+        <mat-form-field matInput id="startPicker" color="accent">
             <mat-label>Start-Datum</mat-label>
             <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
             <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
             <mat-datepicker #pickerStart></mat-datepicker>
         </mat-form-field>
         
-        <mat-form-field matInput  id="endPicker">
+        <mat-form-field matInput  id="endPicker" color="accent">
             <mat-label>End-Datum</mat-label>
             <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
             <mat-datepicker #pickerEnd></mat-datepicker>
         </mat-form-field>
         
-        <!-- <mat-selection-list #districtSelector>
-            <mat-list-option *ngFor="let district of allDistricts">
-                {{district}}
-            </mat-list-option>
-        </mat-selection-list>
-        
-        <mat-selection-list #eventSelector>
-            <mat-list-option *ngFor="let event of allEvents">
-                {{event}}
-            </mat-list-option>
-        </mat-selection-list> -->
-        
-        <!-- <p>
-            Options selected: {{districtSelector.selectedOptions.selected.length}}
-        </p> -->
-        
-        <mat-form-field id="chartSelector">
+        <mat-form-field id="chartSelector" color="accent">
             <mat-label>Diagrammauswahl</mat-label>
             <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
                 <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
@@ -41,7 +25,7 @@
             </mat-select>
         </mat-form-field>
         
-        <button mat-raised-button class="htw-theme-action" id="btn" (click)="userClick()">Plot</button>
+        <button mat-raised-button color="primary" id="btn" (click)="userClick()">Plot</button>
     </div>
         
     <br>
