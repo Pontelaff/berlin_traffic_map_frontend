@@ -37,18 +37,26 @@ export class ChartStackedEvents extends ChartStacked {
     /*customize optionbs*/
     let events = this.relevantEvents;
     this.options.scales.yAxes.push({
-        ticks: {  //set custom label
-          max: events.length,
-          min: 0,
-          stepSize: 0.5,
-          callback: function(value, index, values) {
-            if(<number>value - Math.round(<number>value) == 0)
-              return null;
-              else
-                return events[Math.round(<number>value) - 1];
-          }
-        },
-        stacked: true
+      scaleLabel: {
+        labelString: "Störungsarten",
+        display: true,
+        fontStyle: "bold",
+        fontSize: 14
+      },
+      ticks: {  //set custom label
+        max: events.length,
+        min: 0,
+        fontStyle: "bold",
+        fontSize: 14,
+        stepSize: 0.5,
+        callback: function(value, index, values) {
+          if(<number>value - Math.round(<number>value) == 0)
+            return null;
+            else
+              return events[Math.round(<number>value) - 1];
+        }
+      },
+      stacked: true
     });
 
     /*intialize chart creation*/

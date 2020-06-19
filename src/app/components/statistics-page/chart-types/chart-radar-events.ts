@@ -97,7 +97,11 @@ export class ChartRadarEvents extends ChartBase {
             responsive: true,
             maintainAspectRatio: false,
             legend: {
-              display: true
+              display: true,
+              labels: {
+                fontStyle: "bold",
+                fontSize: 14
+              }
             },
             tooltips: {
                 enabled: true,
@@ -123,10 +127,14 @@ export class ChartRadarEvents extends ChartBase {
               }
             },
             scale: {
-                ticks: {
-                    suggestedMin: 0
-                }
-            }
+              pointLabels: {
+                fontStyle: "bold",
+                fontSize: 14,
+              },
+              ticks: {
+                  suggestedMin: 0
+              }
+            },
           }
     })
   }

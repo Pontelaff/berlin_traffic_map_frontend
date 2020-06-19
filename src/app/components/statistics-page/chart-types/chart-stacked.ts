@@ -160,8 +160,18 @@ export class ChartStacked extends ChartBase {
           },
           scales: {
             xAxes: [{
+              scaleLabel: {
+                labelString: "Bezirke",
+                display: true,
+                fontStyle: "bold",
+                fontSize: 14
+            },
               stacked: true,
-              display: true
+              display: true,
+              ticks: {
+                fontStyle: "bold",
+                fontSize: 14,
+              }
             }],
             yAxes: [],
           }

@@ -237,9 +237,17 @@ export class ChartBubbleEvents extends ChartBase {
                 },
                 scales: {
                     xAxes: [{
+                        scaleLabel: {
+                            labelString: "Bezirke",
+                            display: true,
+                            fontStyle: "bold",
+                            fontSize: 14
+                        },
                         ticks:{     //set custom label
                             max: 12,
                             min: 0,
+                            fontStyle: "bold",
+                            fontSize: 14,
                             stepSize: 0.5,
                             callback: function(value, index, values) {
                                 if(<number>value - Math.round(<number>value) == 0)
@@ -250,9 +258,17 @@ export class ChartBubbleEvents extends ChartBase {
                         }
                     }],
                   yAxes: [{
+                    scaleLabel: {
+                        labelString: "Störungsarten",
+                        display: true,
+                        fontStyle: "bold",
+                        fontSize: 14
+                    },
                     ticks: {  //set custom label
                       max: 5,
                       min: 0,
+                      fontStyle: "bold",
+                      fontSize: 14,
                       stepSize: 0.5,
                       callback: function(value, index, values) {
                         if(<number>value - Math.round(<number>value) == 0)
@@ -260,7 +276,7 @@ export class ChartBubbleEvents extends ChartBase {
                         else
                             return events[Math.round(<number>value) - 1];
                       }
-                    }
+                    },
                   }],
                 }
             }

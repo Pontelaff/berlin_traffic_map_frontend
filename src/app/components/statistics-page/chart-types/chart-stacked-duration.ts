@@ -47,9 +47,17 @@ export class ChartStackedDuration extends ChartStacked {
     /*customize optionbs*/
     let timesteps = this.allTimeSteps;
     this.options.scales.yAxes.push({
+      scaleLabel: {
+        labelString: "Störungsdauer",
+        display: true,
+        fontStyle: "bold",
+        fontSize: 14
+      },
       ticks: {  //set custom label
         max: timesteps.length,
         min: 0,
+        fontStyle: "bold",
+        fontSize: 14,
         stepSize: 0.5,
         callback: function(value, index, values) {
           if(<number>value - Math.round(<number>value) == 0)
