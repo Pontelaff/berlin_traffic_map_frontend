@@ -25,11 +25,11 @@ export class ApiService{
         return this.httpClient.get(`${this.SERVER_URL}/timeframe/${from}/${to}/${district}`);
     }
 
-    public fetchFirstDate(){
-        return this.httpClient.get(`${this.SERVER_URL}/relevantDate/first`);
+    public fetchFirstRelevantDate(){
+        return this.httpClient.get(`${this.SERVER_URL}/relevantDate/first`, {responseType: 'text'});
     }
 
-    public fetchLastDate(){
-        return this.httpClient.get(`${this.SERVER_URL}/relevantDate/last`);
+    public fetchLastRelevantDate(){
+        return this.httpClient.get(`${this.SERVER_URL}/relevantDate/last`, {responseType: 'text'});
     }
 }

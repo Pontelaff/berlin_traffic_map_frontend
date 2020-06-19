@@ -21,8 +21,8 @@ interface chartSelect {
 })
 export class StatisticsPageComponent implements OnInit {
 
-  minDate = new Date(2010, 0, 1);     //should be first relevant date in the past, TODO Query
-  maxDate = new Date(2029, 11, 31);     //should be last relevant date in the future, TODO Query
+  minDate = new Date(2010, 0, 1);
+  maxDate = new Date(2029, 11, 31);
   currDateStart = new Date();
   currDateEnd = new Date();
 
@@ -52,6 +52,15 @@ export class StatisticsPageComponent implements OnInit {
     this.currDateEnd = new Date(2020, 6, 1);
 
     this.queriesCompleted = 0;
+
+    /* determine min and max dates from database for date pickers */
+    this.apiService.fetchFirstRelevantDate().subscribe((data:string)=>{
+      this.minDate = new Date(data);
+    });
+    
+    this.apiService.fetchLastRelevantDate().subscribe((data:string)=>{
+      this.maxDate = new Date(data);
+    });
   }
 
   userClick() 
