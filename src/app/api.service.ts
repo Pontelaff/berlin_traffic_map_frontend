@@ -24,4 +24,12 @@ export class ApiService{
     public fetchTimeframeFromDistrict(from:string, to:string, district:string){
         return this.httpClient.get(`${this.SERVER_URL}/timeframe/${from}/${to}/${district}`);
     }
+
+    public fetchFirstRelevantDate(){
+        return this.httpClient.get(`${this.SERVER_URL}/relevantDate/first`, {responseType: 'text'});
+    }
+
+    public fetchLastRelevantDate(){
+        return this.httpClient.get(`${this.SERVER_URL}/relevantDate/last`, {responseType: 'text'});
+    }
 }
