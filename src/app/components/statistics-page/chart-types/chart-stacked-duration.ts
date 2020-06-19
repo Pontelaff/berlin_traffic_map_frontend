@@ -18,12 +18,13 @@ export class ChartStackedDuration extends ChartStacked {
   addData(incomingData: any, districtIdx: number)
   {
     incomingData.forEach(entry => {
+      
+      let dateFrom = entry.validities[0].timeFrom;
+      let dateTo = entry.validities[0].timeTo;
+      let diffDays = this.calculateTimespanInDays(new Date(dateFrom), new Date(dateTo));
+
       for(let timeIdx = 0; timeIdx < this.allTimeSteps.length; timeIdx++)
       {
-        let dateFrom = entry.validities[0].timeFrom;
-        let dateTo = entry.validities[0].timeTo;
-        let diffDays = this.calculateTimespanInDays(new Date(dateFrom), new Date(dateTo));
-
         if(timeIdx == this.allTimeSteps.length - 1)
         {
           this.data[timeIdx][districtIdx]++;
