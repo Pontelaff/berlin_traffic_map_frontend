@@ -20,11 +20,10 @@ describe('ChartStackedDuration', () => {
 
   it('should make chart', () => {
     subject.create();
-    expect(subject.chart.data.datasets.length).toEqual(5);
+    expect(subject.chart.data.datasets.length).toEqual(allTimeSteps.length);
   });
 
   it('should create container', () => {
-    subject.containerSetup();
     expect(subject.data.length).toEqual(allTimeSteps.length);
   })
 
@@ -46,5 +45,14 @@ describe('ChartStackedDuration', () => {
     
     subject.addData(data, 0);
     expect(subject.data[4][0]).toEqual(testAmount);
+
+    let chartSpy = jasmine.createSpyObj({update: null});
+    let chartMock = {chart: chartSpy};
+    chartMock.chart.options = subject.chart.options;
+    chartMock.chart.data = subject.chart.data;
+    subject.chart = chartMock.chart;
+    subject.update();
+
+    expect(chartSpy.update).toHaveBeenCalled();
   });
 });
