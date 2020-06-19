@@ -25,7 +25,72 @@ describe('ChartBubbleEvents', () => {
 
   it('should create container', () => {
     expect(subject.data[0].length).toEqual(allTimeSteps.length);
-  })
+  });
+
+  it('should survive empty data', () => {
+    subject.create();
+  
+    subject.addData([], 0);
+
+    let chartSpy = jasmine.createSpyObj({update: null});
+    let chartMock = {chart: chartSpy};
+    chartMock.chart.options = subject.chart.options;
+    chartMock.chart.data = subject.chart.data;
+    subject.chart = chartMock.chart;
+
+    subject.update();
+
+    expect(chartSpy.update).toHaveBeenCalled();
+  });
+
+  it('should show tooltip', () => {
+    subject.create();
+
+    let chartSpy = jasmine.createSpyObj({update: null});
+    let chartMock = {chart: chartSpy};
+    chartMock.chart.options = subject.chart.options;
+    chartMock.chart.data = subject.chart.data;
+    subject.chart = chartMock.chart;
+
+    let testData = subject.chart.data;
+    testData.datasets[0].hoverBackgroundColor.length = testData.datasets[0].data.length;      //occurences
+    testData.datasets[0].hoverBorderColor.length = testData.datasets[0].data.length;          //duration
+
+    let multiLine:string;
+    let label:string;
+    
+    /* minimum test */
+    testData.datasets[0].hoverBackgroundColor[0] = undefined;
+    testData.datasets[0].hoverBorderColor[0] = undefined;
+
+    multiLine = subject.chart.options.tooltips.callbacks.label({index: 0, datasetIndex: 0}, subject.chart.data);
+    label = multiLine[0] + multiLine[1];
+    expect(label).toEqual("Aufkommen von Baustelle in Mitte: [ERROR]Dauer insgesamt: [ERROR]");
+
+    /* no time test, occurences undefined */
+    testData.datasets[0].hoverBackgroundColor[1] = 0;
+    testData.datasets[0].hoverBorderColor[1] = 0;
+
+    multiLine = subject.chart.options.tooltips.callbacks.label({index: 1, datasetIndex: 0}, subject.chart.data);
+    label = multiLine[0];
+    expect(label).toEqual("Aufkommen von Baustelle in Friedrichshain-Kreuzberg: 0");
+
+    /* all singular test */
+    testData.datasets[0].hoverBackgroundColor[2] = 10;
+    testData.datasets[0].hoverBorderColor[2] = 525600 + 1440 + 60 + 1;
+
+    multiLine = subject.chart.options.tooltips.callbacks.label({index: 2, datasetIndex: 0}, subject.chart.data);
+    label = multiLine[0] + multiLine[1];
+    expect(label).toEqual("Aufkommen von Baustelle in Pankow: 10Dauer insgesamt: 1 Jahr, 1 Tag, 1 Stunde, 1 Minute");
+
+    /* all plural test */
+    testData.datasets[0].hoverBackgroundColor[3] = 10;
+    testData.datasets[0].hoverBorderColor[3] = 525600 * 2 + 1440 * 2 + 60 * 2 + 1 * 2;
+
+    multiLine = subject.chart.options.tooltips.callbacks.label({index: 3, datasetIndex: 0}, subject.chart.data);
+    label = multiLine[0] + multiLine[1];
+    expect(label).toEqual("Aufkommen von Baustelle in Charlottenburg-Wilmersdorf: 10Dauer insgesamt: 2 Jahre, 2 Tage, 2 Stunden, 2 Minuten");
+  });
 
   it('should update chart', () => {
     subject.create();
@@ -50,11 +115,14 @@ describe('ChartBubbleEvents', () => {
     subject.addData(data, 0);
     expect(subject.data[0][0][0]).toEqual(testAmount);
 
+    
     let chartSpy = jasmine.createSpyObj({update: null});
     let chartMock = {chart: chartSpy};
     chartMock.chart.options = subject.chart.options;
     chartMock.chart.data = subject.chart.data;
     subject.chart = chartMock.chart;
+
+    subject.indicateBusy();
     subject.update();
 
     expect(chartSpy.update).toHaveBeenCalled();

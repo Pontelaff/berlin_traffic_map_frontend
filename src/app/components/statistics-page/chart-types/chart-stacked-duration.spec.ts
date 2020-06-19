@@ -51,6 +51,8 @@ describe('ChartStackedDuration', () => {
     chartMock.chart.options = subject.chart.options;
     chartMock.chart.data = subject.chart.data;
     subject.chart = chartMock.chart;
+
+    subject.indicateBusy();
     subject.update();
 
     expect(chartSpy.update).toHaveBeenCalled();

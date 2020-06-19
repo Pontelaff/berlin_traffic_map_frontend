@@ -223,6 +223,10 @@ export class ChartBubbleEvents extends ChartBase {
                                 
                                 description = description.slice(0, description.length - 2);                             //cut off trailing ", " characters 
                             }
+                            else
+                            {
+                                description += "[ERROR]";
+                            }
 
                             multiLineReturn.push(description);
 
