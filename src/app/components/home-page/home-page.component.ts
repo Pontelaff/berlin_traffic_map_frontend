@@ -72,7 +72,13 @@ export class HomePageComponent implements AfterViewInit {
   });
 
   ngAfterViewInit(): void {
-    this.options.dateFrom.setDate(this.options.dateFrom.getDate()-14);    
+    this.options.dateFrom.setDate(this.options.dateFrom.getDate()-14);
+    this.apiService.fetchFirstRelevantDate().subscribe((data:string)=>{
+      this.options.dateMin = new Date(data);
+    });
+    this.apiService.fetchLastRelevantDate().subscribe((data:string)=>{
+      this.options.dateMax = new Date(data);
+    });
     this.initMap();
   }
 
