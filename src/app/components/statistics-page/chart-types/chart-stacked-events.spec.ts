@@ -25,7 +25,41 @@ describe('ChartStackedEvents', () => {
 
   it('should create container', () => {
     expect(subject.data.length).toEqual(subject.relevantEvents.length);
-  })
+  });
+
+  it('should show y axis labels', () => {
+    subject.create();
+
+    let label:string;
+
+    /* test whole number label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(1, 0, 0);
+    expect(label).toEqual(null);
+
+    /* test offset label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(0.5, 0, 0);
+    expect(label).toEqual(subject.relevantEvents[0]);
+  });
+
+  it('should show label', () => {
+    subject.create();
+
+    let chartSpy = jasmine.createSpyObj({update: null});
+    let chartMock = {chart: chartSpy};
+    chartMock.chart.options = subject.chart.options;
+    chartMock.chart.data = subject.chart.data;
+    subject.chart = chartMock.chart;
+
+    let label:string;
+    let color:string;
+    let context: any;
+
+    context = {dataset: subject.chart.data.datasets[0], dataIndex: 0};
+    label = subject.chart.options.plugins.datalabels.formatter(0, context);
+    color = subject.chart.options.plugins.datalabels.color(context);
+    expect(label).toEqual("0%");
+    expect(color).toEqual("hsl(45, 100%, 50%)");
+  });
 
   it('should update chart', () => {
     subject.create();

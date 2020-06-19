@@ -46,12 +46,6 @@ describe('ChartBubbleEvents', () => {
   it('should show tooltip', () => {
     subject.create();
 
-    let chartSpy = jasmine.createSpyObj({update: null});
-    let chartMock = {chart: chartSpy};
-    chartMock.chart.options = subject.chart.options;
-    chartMock.chart.data = subject.chart.data;
-    subject.chart = chartMock.chart;
-
     let testData = subject.chart.data;
     testData.datasets[0].hoverBackgroundColor.length = testData.datasets[0].data.length;      //occurences
     testData.datasets[0].hoverBorderColor.length = testData.datasets[0].data.length;          //duration
@@ -125,6 +119,28 @@ describe('ChartBubbleEvents', () => {
     subject.indicateBusy();
     subject.update();
 
+    expect(chartSpy.update).toHaveBeenCalled();
+  });
+
+  it('should indicate loading', () => {
+    subject.create();
+
+    let chartSpy = jasmine.createSpyObj({update: null});
+    let chartMock = {chart: chartSpy};
+    chartMock.chart.options = subject.chart.options;
+    chartMock.chart.data = subject.chart.data;
+    subject.chart = chartMock.chart;
+
+    subject.durationData = [];
+    subject.durationData.length = subject.relevantEvents.length;
+    for(let idx = 0; idx < subject.durationData.length; idx++)
+    {
+      subject.durationData[idx] = [];
+      subject.durationData[idx].length = allDistricts.length;
+      subject.durationData[idx].fill(10);
+    }
+
+    subject.indicateBusy();
     expect(chartSpy.update).toHaveBeenCalled();
   });
 });

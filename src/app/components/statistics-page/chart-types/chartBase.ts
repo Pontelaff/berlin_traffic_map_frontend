@@ -61,7 +61,7 @@ export class ChartBase {
 
     getHSLColorString(hue: number, saturation: number, lightness: number)
     {
-        return "hsl(" + hue + ", " + saturation + "%," + lightness + "%)";
+        return "hsl(" + hue + ", " + saturation + "%, " + lightness + "%)";
     }
 
     /* recursively reset an n dimensional container to all 0 */

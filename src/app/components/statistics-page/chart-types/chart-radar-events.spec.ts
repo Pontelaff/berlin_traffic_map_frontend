@@ -55,4 +55,17 @@ describe('ChartRadarEvents', () => {
 
     expect(chartSpy.update).toHaveBeenCalled();
   });
+
+  // it('should properly destroy', () =>{
+  //   subject.create();
+  //   let chartSpy = jasmine.createSpyObj({update: null});
+  //   let chartMock = {chart: chartSpy};
+  //   chartMock.chart.options = subject.chart.options;
+  //   chartMock.chart.data = subject.chart.data;
+  //   subject.chart = chartMock.chart;
+
+  //   subject.destroy()
+
+  //   expect(chartSpy.destroy).toHaveBeenCalled();
+  // });
 });
