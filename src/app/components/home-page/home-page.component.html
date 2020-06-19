@@ -14,14 +14,14 @@
     
                     <mat-form-field matInput color="accent">
                         <mat-label>Von</mat-label>
-                        <input [(ngModel)]="options.dateFrom" matInput [matDatepicker]="pickerStart" [max]="options.dateTo">
+                        <input [(ngModel)]="options.dateFrom" matInput [matDatepicker]="pickerStart" [min]="options.dateMin" [max]="options.dateTo">
                         <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
                         <mat-datepicker #pickerStart></mat-datepicker>
                     </mat-form-field>
                         
                     <mat-form-field matInput color="accent">
                         <mat-label>Bis</mat-label>
-                        <input [(ngModel)]="options.dateTo" matInput [matDatepicker]="pickerEnd" [min]="options.dateFrom">
+                        <input [(ngModel)]="options.dateTo" matInput [matDatepicker]="pickerEnd" [min]="options.dateFrom" [max]="options.dateMax">
                         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                         <mat-datepicker #pickerEnd></mat-datepicker>
                     </mat-form-field>

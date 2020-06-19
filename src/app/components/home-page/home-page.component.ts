@@ -19,6 +19,8 @@ export class HomePageComponent implements AfterViewInit {
   options = {
   dateFrom: new Date(),
   dateTo: new Date(),
+  dateMin: new Date(2000, 0, 1),
+  dateMax: new Date(2040, 0, 1),
   showRoadClosures: true,
   showConstructionSites: true,  
   showLaneClosures: true,
@@ -70,7 +72,7 @@ export class HomePageComponent implements AfterViewInit {
   });
 
   ngAfterViewInit(): void {
-    this.options.dateFrom.setDate(this.options.dateFrom.getDate()-14);
+    this.options.dateFrom.setDate(this.options.dateFrom.getDate()-14);    
     this.initMap();
   }
 
@@ -90,8 +92,8 @@ export class HomePageComponent implements AfterViewInit {
   }
 
   setTestDates() {
-    this.options.dateFrom = new Date(2000, 1, 1);    
-    this.options.dateTo = new Date(2040, 1, 1);
+    this.options.dateFrom = this.options.dateMin;
+    this.options.dateTo = this.options.dateMax;
     this.applyClick();
   }
   
