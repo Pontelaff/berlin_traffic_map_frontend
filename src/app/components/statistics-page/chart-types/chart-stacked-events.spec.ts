@@ -24,7 +24,7 @@ describe('ChartStackedEvents', () => {
   });
 
   it('should create container', () => {
-    expect(subject.data.length).toEqual(allTimeSteps.length);
+    expect(subject.data.length).toEqual(subject.relevantEvents.length);
   })
 
   it('should update chart', () => {
