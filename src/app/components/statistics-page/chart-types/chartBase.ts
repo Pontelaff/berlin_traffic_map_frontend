@@ -6,6 +6,8 @@ export class ChartBase {
     ctx: HTMLCanvasElement;
     allDistricts: string[];
     allEvents: string[];
+    allTimeSteps: number[] = [0, 2, 4, 8, 16];
+    allPercentiles: number[] = [20, 40, 60, 80, 100];
     relevantEvents: string[] = ["Baustelle", "Fahrstreifensperrung", "Gefahr", "Sperrung", "Unfall"];
     eventsToRelevantMap: number[] = [0, 0, 1, 2, 3, 2, 4];
     
@@ -109,7 +111,7 @@ export class ChartBase {
         return max;
     }
 
-    protected determineMaximum1D(data: any, currentMax: number)
+    determineMaximum1D(data: any, currentMax: number)
     {
         let max = currentMax;
         data.forEach(element => {

@@ -10,7 +10,7 @@ describe('ChartStackedDuration', () => {
   let allTimeSteps: number[] = [0, 2, 4, 8, 16];
 
   beforeEach(() => {
-    subject = new ChartStackedDuration("canvas", allDistricts, allEvents, allTimeSteps);
+    subject = new ChartStackedDuration("canvas", allDistricts, allEvents);
     subject.containerSetup();
   });
 

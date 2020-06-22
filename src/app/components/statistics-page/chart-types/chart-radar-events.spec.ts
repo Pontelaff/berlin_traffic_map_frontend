@@ -10,7 +10,7 @@ describe('ChartRadarEvents', () => {
   let allTimeSteps: number[] = [0, 2, 4, 8, 16];
 
   beforeEach(() => {
-    subject = new ChartRadarEvents("canvas", allDistricts, allEvents, allTimeSteps);
+    subject = new ChartRadarEvents("canvas", allDistricts, allEvents);
     subject.containerSetup();
   });
 

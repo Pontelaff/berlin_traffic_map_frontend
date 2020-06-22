@@ -29,6 +29,8 @@ export class StatisticsPageComponent implements OnInit {
   allDistricts: string[] = ["Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf", "Spandau", "Steglitz-Zehlendorf", 
                             "Tempelhof-Schöneberg", "Neukölln", "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf"];
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Störung", "Unfall"];
+  allTimeSteps: number[] = [0, 2, 4, 8, 16];
+  allPercentiles: number[] = [20, 40, 60, 80, 100];
 
   switches: any[] = [null, null];
   btnDurColor = "primary";
@@ -104,19 +106,46 @@ export class StatisticsPageComponent implements OnInit {
 
   userSwitch(switchId: number)
   {
-    /* highlight selected button */
+    let reference: number[] = [];
+
+    /* highlight selected button, adjust values in input boxes */
     if(switchId == 0)
     {
       this.btnDurColor = "primary";
       this.btnPctColor = "white";
+      reference = this.allTimeSteps;
     }
     else
     {
       this.btnDurColor = "white";
       this.btnPctColor = "primary";
+      reference = this.allPercentiles;
     }
   
     this.cachedOpMode = switchId;
+
+    for(let idx = 0; idx < reference.length; idx++)
+    {
+      let ctx: string = "i" + idx;
+      let val: unknown = reference[idx];
+      (<HTMLInputElement>document.getElementById(ctx)).value = <string>val;
+      (<HTMLInputElement>document.getElementById(ctx)).min = "0";
+      (<HTMLInputElement>document.getElementById(ctx)).max = "100";
+    }
+
+    for(let idx = 1; idx < reference.length; idx++)
+    {
+      let ctx: string = "i" + idx;
+      let val: unknown = reference[idx - 1];
+      (<HTMLInputElement>document.getElementById(ctx)).min = <string>val;
+    }
+
+    for(let idx = 0; idx < reference.length - 1; idx++)
+    {
+      let ctx: string = "i" + idx;
+      let val: unknown = reference[idx + 1];
+      (<HTMLInputElement>document.getElementById(ctx)).max = <string>val;
+    }
   }
 
   createDurationOverviewChart(ctx: any) 
@@ -186,7 +215,20 @@ export class StatisticsPageComponent implements OnInit {
   generalUpdateRoutine(start: string, end: string, chartIdx: number)
   {
     if(this.selectedChartIndex == 0)
+    {
       this.selection.chart.setOpMode(this.cachedOpMode);
+      let intervals = [];
+      intervals.length = this.allTimeSteps.length;
+      for(let idx = 0; idx < this.allTimeSteps.length; idx++)
+      {
+        let ctx: string = "i" + idx;
+        let val:unknown = (<HTMLInputElement>document.getElementById(ctx)).value;
+        intervals[idx] = <number>val;
+      }
+      this.selection.chart.setIntervals(intervals);
+    }
+
+    console.log(this.allTimeSteps);
         
     this.selection.chart.indicateBusy();
 

@@ -11,7 +11,7 @@ describe('ChartBase', () => {
   let allTimeSteps: number[] = [0, 2, 4, 8, 16];
 
   beforeEach(() => {
-    subject = new ChartBase("canvas", allDistricts, allEvents, allTimeSteps);
+    subject = new ChartBase("canvas", allDistricts, allEvents);
   });
 
   it('should create', () => {

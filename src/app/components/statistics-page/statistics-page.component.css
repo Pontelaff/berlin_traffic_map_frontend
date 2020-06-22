@@ -47,6 +47,11 @@
     text-align: center;
 }
 
+.numberInput{
+    width: 50px;
+    margin: 5px;
+}
+
 #chart{
     margin: 0 auto;
     width: 75%;

@@ -4,18 +4,12 @@ import { ChartStacked } from './chart-stacked'
 
 export class ChartStackedDuration extends ChartStacked {
 
-  allTimeSteps: number[] = [0, 2, 4, 8, 16];
-  allPercentiles: number[] = [20, 40, 60, 80, 100];
-
   opMode: string = "timesteps";
   yLabelDuration: string = "Störungsdauer in Tagen";
   yLabelPercentiles: string = "Störungsdauer in Perzentilen";
 
   containerSetup()
   {
-    /* initializing members again here since for some reason they're undefined otherwise */
-    this.allTimeSteps = [0, 2, 4, 8, 16];
-    this.allPercentiles = [20, 40, 60, 80, 100];
     this.opMode = "timesteps";
     this.data = this.initContainer2D(this.allTimeSteps.length, this.allDistricts.length);
   }
@@ -26,6 +20,14 @@ export class ChartStackedDuration extends ChartStacked {
       this.opMode = "timesteps";
     else 
       this.opMode = "percentiles";
+  }
+
+  setIntervals(data: number[])
+  {
+    if(this.opMode == "timesteps")
+      this.allTimeSteps = data;
+    else
+      this.allPercentiles = data;
   }
 
   update()

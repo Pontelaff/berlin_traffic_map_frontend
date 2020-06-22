@@ -10,7 +10,7 @@ describe('ChartBubbleEvents', () => {
   let allTimeSteps: number[] = [0, 2, 4, 8, 16];
 
   beforeEach(() => {
-    subject = new ChartBubbleEvents("canvas", allDistricts, allEvents, allTimeSteps);
+    subject = new ChartBubbleEvents("canvas", allDistricts, allEvents);
     subject.containerSetup();
   });
 
