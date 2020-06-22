@@ -148,38 +148,6 @@ export class StatisticsPageComponent implements OnInit {
     }
   }
 
-  createDurationOverviewChart(ctx: any) 
-  {
-    let chartLabels: string[] = ["< 1 Tag", "< 1 Woche", "< 1 Monat", "< 1 Yar", "< 3 Jahre", "< 10 Jahre", ">= 10 Jahre"];
-    let chartData: number[] = [5718, 455, 523, 443, 109, 24, 1];
-
-    let chart = new Chart(ctx, {
-      type: 'bar',
-      plugins: [ChartDataLabels],
-      data: {
-        labels: chartLabels,
-        datasets: [{
-          data: chartData,
-          label: "Zeitdauer-Vorkommen",
-          backgroundColor: "rgb(0, 0, 0, 0.5)"
-        }]
-      }, 
-      options: {
-        plugins:{
-          datalabels: {
-            color: 'white'
-          }
-        },
-        scales: {
-          yAxes: [{
-             type: 'logarithmic'
-          }]
-        }
-      }
-    });
-    return chart;
-  }
-
   createChart(chartIndex: number)
   {
     this.selection = this.chartList[chartIndex];
@@ -191,7 +159,6 @@ export class StatisticsPageComponent implements OnInit {
       case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.allEvents); break; }
       case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.allEvents); break; }
       case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.allEvents); break; }
-      case 4: { this.selection.chart = this.createDurationOverviewChart(ctx); break; }
       default: { console.log("Chart creation not available"); break; }
     }
 
