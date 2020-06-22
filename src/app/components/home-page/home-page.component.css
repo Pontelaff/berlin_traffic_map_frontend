@@ -40,12 +40,18 @@
 
 .entries-card{
   white-space: pre;
+  line-height: 1.8em;
   max-width: 280px;
   position: absolute;
   bottom: 10px;
   left: 10px;
   z-index: 500;
   font-size: 16px;
+}
+
+mat-icon{
+  display: inline-flex;
+  vertical-align: middle;
 }
 
 #map-spinner{  
@@ -60,25 +66,4 @@
 
 #map {
   height: 100%;
-}
-
-/*useless sh*t!!!*/
-.marker-cluster {
-    background-clip: padding-box;
-    border-radius: 25px !important;
-  }
-  
-.marker-cluster div {
-  width: 40px !important;
-  height: 40px !important;
-  margin-left: 5px;
-  margin-top: 5px;
-  text-align: center;
-  border-radius: 20px !important;
-  font: 20px Roboto, "Helvetica Neue", sans-serif !important;
-  font-weight: bold !important;
-}
-
-.marker-cluster span {
-  line-height: 40px !important;
 }
