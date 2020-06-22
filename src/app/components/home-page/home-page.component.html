@@ -36,11 +36,11 @@
             </button>
     
             <mat-card class="entries-card" *ngIf="options.showRoadClosures || options.showConstructionSites || options.showConstructionSites || options.showLaneClosures || options.showAccidents || options.showDangers">
-                <span *ngIf="options.showRoadClosures"> <mat-icon svgIcon="road_closure" aria-hidden="true"></mat-icon> Sperrungen: {{entriesPerCategory[0]}} <br></span>
-                <span *ngIf="options.showConstructionSites"> <mat-icon svgIcon="construction_site" aria-hidden="true"></mat-icon> Baustellen: {{entriesPerCategory[1]}} <br></span>
-                <span *ngIf="options.showLaneClosures"> <mat-icon svgIcon="lane_closure" aria-hidden="true"></mat-icon> Fahrstreifensperrungen: {{entriesPerCategory[2]}} <br></span>
-                <span *ngIf="options.showAccidents"> <mat-icon svgIcon="accident" aria-hidden="true"></mat-icon> Unfälle: {{entriesPerCategory[3]}} <br></span>
-                <span *ngIf="options.showDangers"> <mat-icon svgIcon="danger" aria-hidden="true"></mat-icon> Gefahren und Störungen: {{entriesPerCategory[4]}} </span>
+                <div *ngIf="options.showRoadClosures"> <mat-icon svgIcon="road_closure" aria-hidden="true"></mat-icon> Sperrungen: {{entriesPerCategory[0]}} <br></div>
+                <div *ngIf="options.showConstructionSites"> <mat-icon svgIcon="construction_site" aria-hidden="true"></mat-icon> Baustellen: {{entriesPerCategory[1]}} <br></div>
+                <div *ngIf="options.showLaneClosures"> <mat-icon svgIcon="lane_closure" aria-hidden="true"></mat-icon> Fahrstreifensperrungen: {{entriesPerCategory[2]}} <br></div>
+                <div *ngIf="options.showAccidents"> <mat-icon svgIcon="accident" aria-hidden="true"></mat-icon> Unfälle: {{entriesPerCategory[3]}} <br></div>
+                <div *ngIf="options.showDangers"> <mat-icon svgIcon="danger" aria-hidden="true"></mat-icon> Gefahren und Störungen: {{entriesPerCategory[4]}} </div>
             </mat-card>
             
             <mat-spinner id="map-spinner" *ngIf="entriesPerCategory[4] == 'loading'"></mat-spinner>
