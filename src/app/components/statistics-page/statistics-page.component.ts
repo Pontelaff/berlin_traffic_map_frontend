@@ -29,7 +29,11 @@ export class StatisticsPageComponent implements OnInit {
   allDistricts: string[] = ["Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf", "Spandau", "Steglitz-Zehlendorf", 
                             "Tempelhof-Schöneberg", "Neukölln", "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf"];
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Störung", "Unfall"];
-  allTimeSteps: number[] = [0, 2, 4, 8, 16];
+
+  switches: any[] = [null, null];
+  btnDurColor = "primary";
+  btnPctColor = "white";
+  cachedOpMode = 0;
   
   chartList: chartSelect[] = [
     {selector: 0, viewValue: 'Störungsdauer (Farbe)', chart: null},
@@ -61,6 +65,9 @@ export class StatisticsPageComponent implements OnInit {
     this.apiService.fetchLastRelevantDate().subscribe((data:string)=>{
       this.maxDate = new Date(data);
     });
+
+    this.switches[0] = document.getElementById("btnDuration");
+    this.switches[1] = document.getElementById("btnPercentile");
   }
 
   userClick() 
@@ -80,13 +87,40 @@ export class StatisticsPageComponent implements OnInit {
     }
     else
       this.selection.chart.clearData();
+
+    this.toggleContainer("yAxisConf");
       
     this.makeData();
   }
 
+  toggleContainer(ctx: string)
+  {
+    let container = document.getElementById(ctx);
+    if(this.selectedChartIndex == 0)
+      container.style.display = "block";
+    else
+      container.style.display = "none";
+  }
+
+  userSwitch(switchId: number)
+  {
+    /* highlight selected button */
+    if(switchId == 0)
+    {
+      this.btnDurColor = "primary";
+      this.btnPctColor = "white";
+    }
+    else
+    {
+      this.btnDurColor = "white";
+      this.btnPctColor = "primary";
+    }
+  
+    this.cachedOpMode = switchId;
+  }
+
   createDurationOverviewChart(ctx: any) 
   {
-
     let chartLabels: string[] = ["< 1 Tag", "< 1 Woche", "< 1 Monat", "< 1 Yar", "< 3 Jahre", "< 10 Jahre", ">= 10 Jahre"];
     let chartData: number[] = [5718, 455, 523, 443, 109, 24, 1];
 
@@ -114,11 +148,7 @@ export class StatisticsPageComponent implements OnInit {
         }
       }
     });
-
-
     return chart;
-
-
   }
 
   createChart(chartIndex: number)
@@ -128,13 +158,13 @@ export class StatisticsPageComponent implements OnInit {
 
     switch(chartIndex)
     {
-      case 0: { this.selection.chart = new ChartStackedDuration(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
-      case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
-      case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
-      case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.allEvents, this.allTimeSteps); break; }
+      case 0: { this.selection.chart = new ChartStackedDuration(ctx, this.allDistricts, this.allEvents); this.selection.chart.setOpMode(this.cachedOpMode); break; }
+      case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.allEvents); break; }
+      case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.allEvents); break; }
+      case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.allEvents); break; }
       case 4: { this.selection.chart = this.createDurationOverviewChart(ctx); break; }
       default: { console.log("Chart creation not available"); break; }
-    }    
+    }
 
     this.selection.chart.create();
   }
@@ -155,6 +185,9 @@ export class StatisticsPageComponent implements OnInit {
 
   generalUpdateRoutine(start: string, end: string, chartIdx: number)
   {
+    if(this.selectedChartIndex == 0)
+      this.selection.chart.setOpMode(this.cachedOpMode);
+        
     this.selection.chart.indicateBusy();
 
     this.queriesCompleted = 0;

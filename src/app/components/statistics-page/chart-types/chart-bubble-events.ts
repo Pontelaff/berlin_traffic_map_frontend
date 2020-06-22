@@ -27,7 +27,7 @@ export class ChartBubbleEvents extends ChartBase {
         if(this.durationData.length == 0)
             return;
 
-        let maximum = this.determineMaximum(this.durationData);
+        let maximum = this.determineMaximum2D(this.durationData);
 
         for(let eventIdx = 0; eventIdx < this.relevantEvents.length; eventIdx++)
         {
@@ -59,28 +59,15 @@ export class ChartBubbleEvents extends ChartBase {
         });
     }
 
-    determineMaximum(data: any)
-    {
-        let max = 0;
-        data.forEach(element => {
-            element.forEach(element => {
-                if(element > max)
-                max = element;
-            });
-        });
-
-        return max;
-    }
-
     update()
     {
         this.occurenceData = cloneDeep(this.data[0]);
-        let maxOccurences = this.determineMaximum(this.occurenceData);
+        let maxOccurences = this.determineMaximum2D(this.occurenceData);
         if(maxOccurences == 0)
             maxOccurences = 1;
 
         this.durationData = cloneDeep(this.data[1]);
-        let maxDuration = this.determineMaximum(this.durationData);
+        let maxDuration = this.determineMaximum2D(this.durationData);
         if(maxDuration == 0)
             maxDuration = 0.1;
 

@@ -8,19 +8,17 @@ export class ChartBase {
     allEvents: string[];
     relevantEvents: string[] = ["Baustelle", "Fahrstreifensperrung", "Gefahr", "Sperrung", "Unfall"];
     eventsToRelevantMap: number[] = [0, 0, 1, 2, 3, 2, 4];
-    allTimeSteps: number[];
     
     data: any[];
 
     busySaturation = 40;
     defaultSaturation = 100;
 
-    constructor (ctx: any, allDistricts: string[], allEvents: string[], allTimeSteps: number[])
+    constructor (ctx: any, allDistricts: string[], allEvents: string[])
     {
         this.ctx = ctx;
         this.allDistricts = allDistricts;
         this.allEvents = allEvents;
-        this.allTimeSteps = allTimeSteps;
 
         this.containerSetup();  //calls each subclass' container setup function
     }
@@ -99,6 +97,26 @@ export class ChartBase {
     calculateTimespanInMS(start: Date, end: Date)
     {
       return Math.abs(end.getTime() - start.getTime());
+    }
+
+    determineMaximum2D(data: any)
+    {
+        let max = 0;
+        data.forEach(element => {
+            max = this.determineMaximum1D(element, max);
+        });
+
+        return max;
+    }
+
+    protected determineMaximum1D(data: any, currentMax: number)
+    {
+        let max = currentMax;
+        data.forEach(element => {
+            if(element > max)
+            max = element;
+        });
+        return max;
     }
 
     logData()

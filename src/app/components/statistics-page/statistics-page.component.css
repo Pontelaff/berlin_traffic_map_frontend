@@ -5,17 +5,18 @@
     max-width: 1100px;
     align-content: center;
     text-align: center;
-    background-color: white;
 }
 
 #startPicker{
     margin: auto;
     padding: 2%;
+    width: 100px;
 }
 
 #endPicker{
     margin: auto;
     padding: 2%;
+    width: 100px;
 }
 
 #chartSelector{
@@ -24,8 +25,26 @@
     width: 225px;
 }
 
-#btn{
+#btnPlot{
     margin-left: 7%;
+}
+
+/* #switchContainer{
+    padding: 1%;
+    margin: 0 auto;
+    margin-top: 2%;
+    width: 20%;
+    align-content: center;
+    text-align: center;
+} */
+
+#yAxisConf{
+    padding: 1%;
+    margin: 0 auto;
+    margin-top: 2%;
+    width: 20%;
+    align-content: center;
+    text-align: center;
 }
 
 #chart{

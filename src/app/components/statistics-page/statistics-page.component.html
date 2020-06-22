@@ -19,16 +19,24 @@
         <mat-form-field id="chartSelector" color="accent">
             <mat-label>Diagrammauswahl</mat-label>
             <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
-                <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
+                <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector" (click)="toggleContainer('switchContainer')">
                     {{chartSelection.viewValue}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         
-        <button mat-raised-button color="primary" id="btn" (click)="userClick()">Plot</button>
+        <button mat-raised-button color="primary" id="btnPlot" (click)="userClick()">Plot</button>
+
+        <div id="switchContainer" style="display: none">
+            <button mat-raised-button [color]="btnDurColor" id="btnDuration" (click)="userSwitch(0)">Zeitspanne</button>
+            <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
+        </div>
+
     </div>
-        
-    <br>
+
+    <div id="yAxisConf" class= "htw-border-theme" style="display: none">
+        SAMPLE TEXT
+    </div>
 
     <div id="chart">
         <canvas id="canvas"></canvas>

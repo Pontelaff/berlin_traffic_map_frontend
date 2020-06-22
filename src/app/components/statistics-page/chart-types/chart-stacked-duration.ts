@@ -4,18 +4,47 @@ import { ChartStacked } from './chart-stacked'
 
 export class ChartStackedDuration extends ChartStacked {
 
+  allTimeSteps: number[] = [0, 2, 4, 8, 16];
+  allPercentiles: number[] = [20, 40, 60, 80, 100];
+
+  opMode: string = "timesteps";
+  yLabelDuration: string = "Störungsdauer in Tagen";
+  yLabelPercentiles: string = "Störungsdauer in Perzentilen";
 
   containerSetup()
   {
+    /* initializing members again here since for some reason they're undefined otherwise */
+    this.allTimeSteps = [0, 2, 4, 8, 16];
+    this.allPercentiles = [20, 40, 60, 80, 100];
+    this.opMode = "timesteps";
     this.data = this.initContainer2D(this.allTimeSteps.length, this.allDistricts.length);
+  }
+
+  setOpMode(opModeIdx: number)
+  {
+    if(opModeIdx == 0)
+      this.opMode = "timesteps";
+    else 
+      this.opMode = "percentiles";
   }
 
   update()
   {
+    console.log(this.opMode);
     this.updateRoutine(this.allTimeSteps.length);
   }
 
   addData(incomingData: any, districtIdx: number)
+  {
+    if(this.opMode == "timesteps")
+      this.addTimeStepData(incomingData, districtIdx);
+    else
+      this.addPercentileData(incomingData, districtIdx);
+      
+    this.reconfigureYAxis();
+  }
+
+  addTimeStepData(incomingData: any, districtIdx: number)
   {
     incomingData.forEach(entry => {
       
@@ -40,16 +69,108 @@ export class ChartStackedDuration extends ChartStacked {
     });
   }
 
+  addPercentileData(incomingData: any, districtIdx: number)
+  {
+    let allTimeSpans: number[] = [];
+    let max = 0;
+
+
+    for(let idx = 0; idx < incomingData.length; idx++)
+    {
+      let dateFrom = incomingData[idx].validities[0].timeFrom;
+      let dateTo = incomingData[idx].validities[0].timeTo;
+      let diffDays = this.calculateTimespanInDays(new Date(dateFrom), new Date(dateTo));
+      allTimeSpans[idx] = diffDays;
+    }
+
+    max = this.determineMaximum1D(allTimeSpans, 0);
+
+    allTimeSpans.forEach(timeSpan => {
+      let percentile = timeSpan / max * 100;
+
+      for(let pctIdx = 0; pctIdx < this.allPercentiles.length; pctIdx++)
+      {
+        if(percentile < this.allPercentiles[0])
+        {
+          this.data[pctIdx][districtIdx]++;
+          break;
+        }
+
+        if(pctIdx == this.allPercentiles.length - 1)
+        {
+          this.data[pctIdx][districtIdx]++;
+          break;
+        }
+
+        if(percentile >= this.allPercentiles[pctIdx] && percentile < this.allPercentiles[pctIdx + 1])
+        {
+          this.data[pctIdx][districtIdx]++;
+          break;
+        }
+      }
+    });
+  }
+
+  reconfigureYAxis()
+  {
+    let timesteps = this.allTimeSteps;
+    let percentiles = this.allPercentiles;
+    if(this.opMode == "timesteps")
+    {
+      this.chart.options.scales.yAxes[0].scaleLabel.labelString = this.yLabelDuration;
+      this.chart.options.scales.yAxes[0].ticks.callback = function(value, index, values) {
+
+        if(<number>value - Math.round(<number>value) == 0)
+          return null;
+          
+        let label = "";
+        let idx = Math.round(<number>value) - 1;
+
+        if(idx == timesteps.length - 1)
+        {
+          label = timesteps[idx] + "+"
+          return label;
+        }
+
+        label += timesteps[idx] + " - " + timesteps[idx + 1];
+
+        return label;
+      };
+    }
+    else
+    {
+      this.chart.options.scales.yAxes[0].scaleLabel.labelString = this.yLabelPercentiles;
+      this.chart.options.scales.yAxes[0].ticks.callback = function(value, index, values) {
+
+        if(<number>value - Math.round(<number>value) == 0)
+          return null;
+          
+        let idx = Math.round(<number>value) - 1;
+        let label = percentiles[idx] + "%";
+        return label;
+      };
+    }
+  }
+
   create() 
   { 
     /*create options*/
     this.createDefaultOptions();
 
-    /*customize optionbs*/
+    
+    /*customize options*/
+    let opmode = this.opMode;
+    let percentiles = this.allPercentiles;
     let timesteps = this.allTimeSteps;
+    let yLabel = "";
+    if(opmode == "timesteps")
+      yLabel = this.yLabelDuration;
+    else 
+      yLabel = this.yLabelPercentiles;
+
     this.options.scales.yAxes.push({
       scaleLabel: {
-        labelString: "Störungsdauer",
+        labelString: yLabel,
         display: true,
         fontStyle: "bold",
         fontSize: 14
@@ -61,20 +182,30 @@ export class ChartStackedDuration extends ChartStacked {
         fontSize: 14,
         stepSize: 0.5,
         callback: function(value, index, values) {
+
           if(<number>value - Math.round(<number>value) == 0)
             return null;
-
+            
           let label = "";
           let idx = Math.round(<number>value) - 1;
-          if(idx == timesteps.length - 1)
+
+          if(opmode == "timesteps")
           {
-            label = timesteps[idx] + "+"
+            if(idx == timesteps.length - 1)
+            {
+              label = timesteps[idx] + "+"
+              return label;
+            }
+  
+            label += timesteps[idx] + " - " + timesteps[idx + 1];
+  
             return label;
           }
-
-          label += timesteps[idx] + " - " + timesteps[idx + 1];
-
-          return label;
+          else
+          {
+            label = percentiles[idx] + "%";
+            return label;
+          }
         }
       },
       stacked: true
