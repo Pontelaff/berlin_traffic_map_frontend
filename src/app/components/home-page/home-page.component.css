@@ -48,6 +48,16 @@
   font-size: 16px;
 }
 
+#map-spinner{  
+  position: absolute;
+  left: 45%;
+  right: 55%;
+  top: 45%;
+  bottom: 55%;
+  text-align: center;
+  z-index: 500;
+}
+
 #map {
   height: 100%;
 }

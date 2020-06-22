@@ -42,7 +42,9 @@
                 <div *ngIf="options.showAccidents"> <mat-icon svgIcon="accident"></mat-icon> Unfälle: {{entriesPerCategory[3]}} <br></div>
                 <div *ngIf="options.showDangers"> <mat-icon svgIcon="danger"></mat-icon> Gefahren und Störungen: {{entriesPerCategory[4]}} </div>
             </mat-card>
-                
+            
+            <mat-spinner id="map-spinner" *ngIf="entriesPerCategory[4] == 'loading'"></mat-spinner>
+
             <div id="map"></div>
         </div>
     </div>
