@@ -25,20 +25,38 @@ describe('StatisticsPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update after click', () => {
+  
+  it('should create chart after click', () => {
+    spyOn(component, 'createChart');
+    spyOn(component, 'makeData');
+    component.selectedChartIndex = 0;
+    component.userClick();
+    
+    expect(component.createChart).toHaveBeenCalled();
+    expect(component.makeData).toHaveBeenCalled();
+  });
+  
+  it('should update duration controls', () => {
+    component.userSwitch(1);
 
-    component.selectedChartIndex = 2;
-    component.createChart(2);
+    let ukn: unknown;
+    let expVal:string;
 
-    let chartSpy = jasmine.createSpyObj({update: null});
-    let chartMock = {chart: chartSpy};
-    chartMock.chart.options = component.selection.chart.chart.options;
-    chartMock.chart.data = component.selection.chart.chart.data;
-    component.selection.chart.chart = chartMock.chart;
+    let newVal:string = (<HTMLInputElement>document.getElementById('i2')).value;
+    let newMin:string = (<HTMLInputElement>document.getElementById('i2')).min;
+    let newMax:string = (<HTMLInputElement>document.getElementById('i2')).max;
 
-    component.makeData();
+    ukn = component.allPercentiles[2];
+    expVal = <string>ukn + "";
+    expect(newVal).toBe(expVal);
 
-    expect(chartSpy.update).toHaveBeenCalled();
+    ukn = component.allPercentiles[1];
+    expVal = <string>ukn + "";
+    expect(newMin).toBe(expVal);
 
-  })
+    ukn = component.allPercentiles[3];
+    expVal = <string>ukn + "";
+    expect(newMax).toBe(expVal);
+  });
+
 });

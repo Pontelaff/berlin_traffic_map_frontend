@@ -45,6 +45,72 @@ describe('ChartStackedDuration', () => {
     expect(label).toEqual(allTimeSteps[allTimeSteps.length - 1] + "+");
   });
 
+  it('should update mode and time intervals', () => {
+    subject.create();
+
+    let testArr: number[] = [0, 5, 10, 15, 35];
+
+    subject.setOpMode(0);
+    subject.setIntervals(testArr);
+    expect(subject.opMode).toEqual("timesteps");
+    expect(subject.allTimeSteps).toEqual(testArr);
+
+    subject.setOpMode(1);
+    subject.setIntervals(testArr);
+    expect(subject.opMode).toEqual("percentiles");
+    expect(subject.allPercentiles).toEqual(testArr);
+  });
+
+  it('should add percentile data', () => {
+    subject.create();
+
+    let testArr: number[] = [20, 25, 60, 65, 100];
+
+    subject.setOpMode(1);
+    subject.setIntervals(testArr);
+
+    let testDateFrom0 = "2020-06-09T05:53:49+02:00";
+    let testDateTo0 = "2020-07-09T05:53:49+02:00";
+    let testDateFrom1 = "2020-06-09T05:53:49+02:00";
+    let testDateTo1 = "2020-06-10T05:53:49+02:00";
+    let testAmount = 100;
+
+    let data = [];
+    data.length = testAmount;
+    data.fill({
+      validities: [{
+        timeFrom: testDateFrom0,
+        timeTo: testDateTo0
+      }]
+    });
+
+    data.push({
+      validities: [{
+        timeFrom: testDateFrom1,
+        timeTo: testDateTo1
+      }]
+    })
+    
+    subject.addData(data, 0);
+    expect(subject.data[4][0]).toEqual(testAmount)
+
+    /* test if correct label function was applied */
+    let label: string;
+
+    /* test whole number label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(1, 0, 0);
+    expect(label).toEqual(null);
+
+    /* test offset label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(0.5, 0, 0);
+    expect(label).toEqual(testArr[0] + "%");
+
+    /* test max label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(allTimeSteps.length - 1 + 0.5, 0, 0);
+    expect(label).toEqual(testArr[testArr.length - 1] + "%");
+
+  })
+
   it('should update chart', () => {
     subject.create();
 
@@ -84,5 +150,20 @@ describe('ChartStackedDuration', () => {
     subject.update();
 
     expect(chartSpy.update).toHaveBeenCalled();
+
+    /* test if correct label function was applied */
+    let label: string;
+
+    /* test whole number label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(1, 0, 0);
+    expect(label).toEqual(null);
+
+    /* test offset label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(0.5, 0, 0);
+    expect(label).toEqual(allTimeSteps[0] + " - " + allTimeSteps[1]);
+
+    /* test max label */
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(allTimeSteps.length - 1 + 0.5, 0, 0);
+    expect(label).toEqual(allTimeSteps[allTimeSteps.length - 1] + "+");
   });
 });

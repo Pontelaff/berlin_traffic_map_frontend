@@ -32,7 +32,6 @@ export class ChartStackedDuration extends ChartStacked {
 
   update()
   {
-    console.log(this.opMode);
     this.updateRoutine(this.allTimeSteps.length);
   }
 
