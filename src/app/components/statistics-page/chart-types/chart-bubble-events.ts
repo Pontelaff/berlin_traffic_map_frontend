@@ -92,7 +92,7 @@ export class ChartBubbleEvents extends ChartBase {
         }
 
         this.chart.update();
-
+        this.isLoading = false;
     }
 
     /*set background color of bubbles relative to maximum duration count, scaled to maxDuration*/

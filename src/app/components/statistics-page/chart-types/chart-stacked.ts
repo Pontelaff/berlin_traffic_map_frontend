@@ -23,6 +23,7 @@ export class ChartStacked extends ChartBase {
 
       /*update Chart*/ 
       this.updateChart(this.chartData, colorList);
+      this.isLoading = false;
     }
 
     indicateBusy()

@@ -15,6 +15,7 @@ export class ChartBase {
 
     busySaturation = 40;
     defaultSaturation = 100;
+    isLoading: boolean = true;
 
     constructor (ctx: any, allDistricts: string[], allEvents: string[])
     {
@@ -85,7 +86,7 @@ export class ChartBase {
     calculateTimespanInDays(start: Date, end: Date)
     {
       let diff = this.calculateTimespanInMS(start, end);
-      let diffDays = Math.ceil(diff / (1000 * 3600 * 24)); 
+      let diffDays = Math.floor(diff / (1000 * 3600 * 24)); 
       return diffDays;
     }
   

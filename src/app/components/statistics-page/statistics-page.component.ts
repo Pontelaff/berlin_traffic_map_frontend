@@ -41,10 +41,9 @@ export class StatisticsPageComponent implements OnInit {
     {selector: 0, viewValue: 'Störungsdauer (Farbe)', chart: null},
     {selector: 1, viewValue: 'Störungsarten (Farbe)', chart: null},
     {selector: 2, viewValue: 'Störungsarten (Radar)', chart: null},
-    {selector: 3, viewValue: 'Störungsarten (Blasen)', chart: null},
-    {selector: 4, viewValue: '[temp]', chart: null}
+    {selector: 3, viewValue: 'Störungsarten (Blasen)', chart: null}
   ];
-  selection: chartSelect;
+  selection: chartSelect = null;
   
   selectedChartIndex: number;
   cachedChartIndex: number;
@@ -194,9 +193,8 @@ export class StatisticsPageComponent implements OnInit {
       }
       this.selection.chart.setIntervals(intervals);
     }
-
-    console.log(this.allTimeSteps);
         
+    this.selection.chart.isLoading = true;
     this.selection.chart.indicateBusy();
 
     this.queriesCompleted = 0;

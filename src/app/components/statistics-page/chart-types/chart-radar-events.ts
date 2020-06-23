@@ -61,6 +61,7 @@ export class ChartRadarEvents extends ChartBase {
 
     this.setChartSaturation(this.defaultSaturation);
     this.chart.update();
+    this.isLoading = false;
   }
 
   getLayerColor(layerIdx: number, saturation: number = this.defaultSaturation)

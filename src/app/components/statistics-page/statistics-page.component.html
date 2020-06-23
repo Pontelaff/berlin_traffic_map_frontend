@@ -26,6 +26,10 @@
         </mat-form-field>
         
         <button mat-raised-button color="primary" id="btnPlot" (click)="userClick()">Plot</button>
+
+        <mat-spinner id="spinner" diameter="40" *ngIf="chartList[selectedChartIndex] != null && 
+                                        chartList[selectedChartIndex].chart != null && 
+                                        chartList[selectedChartIndex].chart.isLoading == true"></mat-spinner>
     </div>
 
     <div id="yAxisConf" class= "htw-border-theme" style="display: none">
