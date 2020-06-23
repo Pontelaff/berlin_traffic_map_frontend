@@ -26,7 +26,7 @@ describe('StatisticsPageComponent', () => {
   });
 
   
-  it('should create chart after click', () => {
+  it('should process click on plot button', () => {
     spyOn(component, 'createChart');
     spyOn(component, 'makeData');
     component.selectedChartIndex = 0;
@@ -35,8 +35,39 @@ describe('StatisticsPageComponent', () => {
     expect(component.createChart).toHaveBeenCalled();
     expect(component.makeData).toHaveBeenCalled();
   });
+
+  it('should get loading state when fetching data', () => {
+    expect(component.selection).toEqual(null);
+    component.selectedChartIndex = 0;
+    component.createChart(0);
+    component.makeData();
+
+    expect(component.selection.chart.isLoading).toEqual(true);
+  });
+
+  it('should create chart and update selection', () => {
+    expect(component.selection).toEqual(null);
+    component.createChart(0);
+    expect(typeof(component.selection.chart)).toEqual("object");
+    
+    component.selection = null;
+    expect(component.selection).toEqual(null);
+    component.createChart(1);   
+    expect(typeof(component.selection.chart)).toEqual("object");
+
+    component.selection = null;
+    expect(component.selection).toEqual(null);
+    component.createChart(2);   
+    expect(typeof(component.selection.chart)).toEqual("object");
+
+    component.selection = null;
+    expect(component.selection).toEqual(null);
+    component.createChart(3);   
+    expect(typeof(component.selection.chart)).toEqual("object");
+  });
   
   it('should update duration controls', () => {
+    component.userSwitch(0);
     component.userSwitch(1);
 
     let ukn: unknown;
