@@ -27,7 +27,7 @@
                         <mat-datepicker #pickerEnd></mat-datepicker>
                     </mat-form-field>
                     
-                    <button mat-raised-button color="primary" (click)="applyClick()">Zeitraum anwenden</button>
+                    <button mat-raised-button class="confirm-btn" color="primary" (click)="applyClick()">Zeitraum anwenden</button>
                     <button mat-raised-button color="primary" (click)="setTestDates()">Test</button>
                 </div>
             </mat-menu>
@@ -44,7 +44,7 @@
                 <div *ngIf="options.showDangers"> <mat-icon svgIcon="danger" aria-hidden="true"></mat-icon> Gefahren und Störungen: {{entriesPerCategory[4]}} </div>
             </mat-card>
             
-            <mat-spinner id="map-spinner" *ngIf="entriesPerCategory[4] == 'loading'"></mat-spinner>
+            <mat-spinner id="map-spinner" color="accent"  *ngIf="entriesPerCategory[4] == 'loading'"></mat-spinner>
 
             <div id="map"></div>
         </div>
