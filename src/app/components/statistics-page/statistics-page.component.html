@@ -25,7 +25,7 @@
             </mat-select>
         </mat-form-field>
         
-        <button mat-raised-button color="primary" id="btnPlot" (click)="userClick()">Plot</button>
+        <button mat-raised-button color="primary" id="btnPlot" (click)="userPlot()">Plot</button>
 
         <mat-spinner id="spinner" diameter="40" *ngIf="chartList[selectedChartIndex] != null && 
                                         chartList[selectedChartIndex].chart != null && 
@@ -39,12 +39,16 @@
                 <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
             </div>
 
-	    Einteilung 1: <input type="number" class="numberInput" id="i0" min="0" max="{{allTimeSteps[1]}}" value="{{allTimeSteps[0]}}"><br>
-	    Einteilung 2: <input type="number" class="numberInput" id="i1" min="{{allTimeSteps[0]}}" max="{{allTimeSteps[2]}}" value="{{allTimeSteps[1]}}"><br>
-	    Einteilung 3: <input type="number" class="numberInput" id="i2" min="{{allTimeSteps[1]}}" max="{{allTimeSteps[3]}}" value="{{allTimeSteps[2]}}"><br>
-	    Einteilung 4: <input type="number" class="numberInput" id="i3" min="{{allTimeSteps[2]}}" max="{{allTimeSteps[4]}}" value="{{allTimeSteps[3]}}"><br>
-	    Einteilung 5: <input type="number" class="numberInput" id="i4" min="{{allTimeSteps[3]}}" max="100000" value="{{allTimeSteps[4]}}"><br>
-            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userClick()">Übernehmen</button>
+        <section *ngFor="let stride of customTimeStrides; let i = index; trackBy: trackByFn">
+            <label> #{{customTimeStrides.length - i}} </label>
+            <input type="text" class="numberInput" [(ngModel)]="customTimeStrides[customTimeStrides.length - 1 - i]"/>
+        </section>
+
+        <div id="inputWarning">
+            Incorrect input format!
+        </div>
+
+            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userSubmit()">Übernehmen</button>
         </div>
 
         <div id="chart">

@@ -5,9 +5,6 @@ import { ChartStackedDuration } from './chart-types/chart-stacked-duration';
 import { ChartRadarEvents } from './chart-types/chart-radar-events';
 import { ChartBubbleEvents } from './chart-types/chart-bubble-events';
 
-import * as Chart from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-
 interface chartSelect {
   selector: number;
   viewValue: string;
@@ -31,6 +28,7 @@ export class StatisticsPageComponent implements OnInit {
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Störung", "Unfall"];
   allTimeSteps: number[] = [0, 2, 4, 8, 16];
   allPercentiles: number[] = [20, 40, 60, 80, 100];
+  customTimeStrides: number[] = [];
 
   switches: any[] = [null, null];
   btnDurColor = "accent";
@@ -72,9 +70,11 @@ export class StatisticsPageComponent implements OnInit {
 
     this.switches[0] = document.getElementById("btnDuration");
     this.switches[1] = document.getElementById("btnPercentile");
+
+    this.customTimeStrides = this.allTimeSteps;
   }
 
-  userClick() 
+  userPlot() 
   {
     if(this.selectedChartIndex == undefined)
     {
@@ -93,8 +93,86 @@ export class StatisticsPageComponent implements OnInit {
       this.selection.chart.clearData();
 
     this.toggleContainer("yAxisConf");
+    this.makeData();
+  }
+
+  userSubmit()
+  {
+    if(!this.checkStrideInput())
+      return;
+
+    this.toggleContainer("yAxisConf");
       
     this.makeData();
+  }
+
+  /* needed for chart #1 input boxes being able to remain focused after keypress */
+  trackByFn(index, item) 
+  {
+    return index;  
+  }
+
+  checkStrideInput()
+  {
+    console.log(this.customTimeStrides);
+
+    /* check for all numbers */
+    for(let idx = 0; idx < this.customTimeStrides.length; idx++)
+    {
+      if(isNaN(<number>this.customTimeStrides[idx]))
+      {
+        console.log("letter found");
+        document.getElementById("inputWarning").style.display = "block";
+        return false;
+      }
+    }
+
+    /* check for negatives */
+    for(let idx = 0; idx < this.customTimeStrides.length; idx++)
+    {
+      if(this.customTimeStrides[idx] < 0)
+      {
+        console.log("negative found");
+        document.getElementById("inputWarning").style.display = "block";
+        return false;
+      }
+    }
+
+    /* check for multiple of the same input */
+    for(let toTestIdx = 0; toTestIdx < this.customTimeStrides.length; toTestIdx++)
+    {
+      for(let idx = 0; idx < this.customTimeStrides.length; idx++)
+      {
+        if(this.customTimeStrides[toTestIdx] == this.customTimeStrides[idx] &&toTestIdx != idx)
+        {
+          console.log("value found multiple times");
+          document.getElementById("inputWarning").style.display = "block";
+          return false;
+        }
+      }
+    }
+
+    /* check for ascending order */
+    for(let idx = 1; idx < this.customTimeStrides.length; idx++)
+    {
+      if(this.customTimeStrides[idx - 1] > this.customTimeStrides[idx])
+      {
+        console.log("non-ascending order");
+        document.getElementById("inputWarning").style.display = "block";
+        return false;
+      }
+    }
+
+    /* check for > 100% */
+    if(this.cachedOpMode == 1 && this.customTimeStrides[this.customTimeStrides.length - 1] > 100)
+    {
+      console.log("more than 100% found");
+      document.getElementById("inputWarning").style.display = "block";
+      return false;
+    }
+
+    document.getElementById("inputWarning").style.display = "none";
+    return true;
   }
 
   toggleContainer(ctx: string)
@@ -108,46 +186,21 @@ export class StatisticsPageComponent implements OnInit {
 
   userSwitch(switchId: number)
   {
-    let reference: number[] = [];
-
     /* highlight selected button, adjust values in input boxes */
     if(switchId == 0)
     {
       this.btnDurColor = "accent";
       this.btnPctColor = "white";
-      reference = this.allTimeSteps;
+      this.customTimeStrides = this.allTimeSteps;
     }
     else
     {
       this.btnDurColor = "white";
       this.btnPctColor = "accent";
-      reference = this.allPercentiles;
+      this.customTimeStrides = this.allPercentiles;
     }
   
     this.cachedOpMode = switchId;
-
-    for(let idx = 0; idx < reference.length; idx++)
-    {
-      let ctx: string = "i" + idx;
-      let val: unknown = reference[idx];
-      (<HTMLInputElement>document.getElementById(ctx)).value = <string>val;
-      (<HTMLInputElement>document.getElementById(ctx)).min = "0";
-      (<HTMLInputElement>document.getElementById(ctx)).max = "100";
-    }
-
-    for(let idx = 1; idx < reference.length; idx++)
-    {
-      let ctx: string = "i" + idx;
-      let val: unknown = reference[idx - 1];
-      (<HTMLInputElement>document.getElementById(ctx)).min = <string>val;
-    }
-
-    for(let idx = 0; idx < reference.length - 1; idx++)
-    {
-      let ctx: string = "i" + idx;
-      let val: unknown = reference[idx + 1];
-      (<HTMLInputElement>document.getElementById(ctx)).max = <string>val;
-    }
   }
 
   createChart(chartIndex: number)
@@ -190,15 +243,7 @@ export class StatisticsPageComponent implements OnInit {
     if(this.selectedChartIndex == 0)
     {
       this.selection.chart.setOpMode(this.cachedOpMode);
-      let intervals = [];
-      intervals.length = this.allTimeSteps.length;
-      for(let idx = 0; idx < this.allTimeSteps.length; idx++)
-      {
-        let ctx: string = "i" + idx;
-        let val:unknown = (<HTMLInputElement>document.getElementById(ctx)).value;
-        intervals[idx] = <number>val;
-      }
-      this.selection.chart.setIntervals(intervals);
+      this.selection.chart.setIntervals(this.customTimeStrides);
     }
         
     this.selection.chart.isLoading = true;

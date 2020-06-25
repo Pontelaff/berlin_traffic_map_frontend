@@ -33,7 +33,7 @@ describe('StatisticsPageComponent', () => {
     spyOn(component, 'createChart');
     spyOn(component, 'makeData');
     component.selectedChartIndex = 0;
-    component.userClick();
+    component.userPlot();
     
     expect(component.createChart).toHaveBeenCalled();
     expect(component.makeData).toHaveBeenCalled();
@@ -68,29 +68,4 @@ describe('StatisticsPageComponent', () => {
     component.createChart(3);   
     expect(typeof(component.selection.chart)).toEqual("object");
   });
-  
-  it('should update duration controls', () => {
-    component.userSwitch(0);
-    component.userSwitch(1);
-
-    let ukn: unknown;
-    let expVal:string;
-
-    let newVal:string = (<HTMLInputElement>document.getElementById('i2')).value;
-    let newMin:string = (<HTMLInputElement>document.getElementById('i2')).min;
-    let newMax:string = (<HTMLInputElement>document.getElementById('i2')).max;
-
-    ukn = component.allPercentiles[2];
-    expVal = <string>ukn + "";
-    expect(newVal).toBe(expVal);
-
-    ukn = component.allPercentiles[1];
-    expVal = <string>ukn + "";
-    expect(newMin).toBe(expVal);
-
-    ukn = component.allPercentiles[3];
-    expVal = <string>ukn + "";
-    expect(newMax).toBe(expVal);
-  });
-
 });

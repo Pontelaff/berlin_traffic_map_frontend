@@ -29,6 +29,12 @@
     margin-left: 7%;
 }
 
+#inputWarning{
+    display: none;
+    color: white;
+    background-color: red;
+}
+
 #switchContainer{
     /*padding: 1%;
     margin: 0 auto;
