@@ -47,6 +47,7 @@ describe('HomePageComponent', () => {
       {"id":"5db2181748be6a56292c652a","consequence":{"summary":"Fahrstreifensperrung","description":"Vollsperrung"},"description":"Baustelle, Vollsperrung (bis vorauss. Ende 2022)","section":"in beiden Richtungen zwischen Invalidenstraße und Kapelle-Ufer","name":"Sperrung","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Friedrich-List-Ufer (Moabit)"],"validities":[{"timeFrom":"2012-10-15T08:00:00+02:00","timeTo":"2022-12-31T17:00:00+01:00","visible":false},{"timeFrom":"2012-10-15T08:00:00+02:00","timeTo":"2022-12-31T17:00:00+01:00","visible":true}],"location":{"type":"Point","coordinates":[13.370715076457124,52.52419509477858]},"property":["blockage"],"geometry":{"type":"LineString","coordinates":[[13.370684964343557,52.525853087780796],[13.370715076457124,52.52419509477858]]}},
       {"id":"5db218178c3fa0c1600199a6","consequence":{"summary":"Unfall","description":"keine Sperrung"},"description":"Baustelle, Fahrbahneinschränkungen, Verschwenkungen (Gesamtmaßnahme bis Ende 2020)","section":"in beiden Richtungen Kreuzung Schloßallee / A114 Anschlussstelle","name":"Baustelle","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Pasewalker Straße (Pankow)"],"validities":[{"timeFrom":"2017-04-10T07:00:00+02:00","timeTo":"2020-12-31T23:59:00+01:00","visible":false},{"timeFrom":"2017-04-10T07:00:00+02:00","timeTo":"2020-12-31T23:59:00+01:00","visible":true}],"location":{"type":"Point","coordinates":[13.428590978720482,52.583159710755616]},"property":["roadwork"],"geometry":null},
       {"id":"5db21819a81f60d80d58f133","consequence":{"summary":"Gefahr","description":"keine Sperrung"},"description":"Baustelle, Fahrbahn auf einen Fahrstreifen verengt (bis 2021)","section":"Richtung Axel-Springer-Str. zwischen Am Berlin Museum und Ritterstr.","name":"Baustelle","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Lindenstr. (Kreuzberg)"],"validities":[{"timeFrom":"2017-11-29T10:51:00+01:00","timeTo":"2021-03-31T17:00:00+02:00","visible":false},{"timeFrom":"2017-11-29T10:51:00+01:00","timeTo":"2021-03-31T17:00:00+02:00","visible":true}],"location":{"type":"Point","coordinates":[13.395920680275518,52.5038332789935]},"property":["roadwork"],"geometry":null},
+      {"id":"5db21819a81f60d80d58f133","consequence":{"summary":"Störung","description":"keine Sperrung"},"description":"Baustelle, Fahrbahn auf einen Fahrstreifen verengt (bis 2021)","section":"Richtung Axel-Springer-Str. zwischen Am Berlin Museum und Ritterstr.","name":"Baustelle","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Lindenstr. (Kreuzberg)"],"validities":[{"timeFrom":"2017-11-29T10:51:00+01:00","timeTo":"2021-03-31T17:00:00+02:00","visible":false},{"timeFrom":"2017-11-29T10:51:00+01:00","timeTo":"2021-03-31T17:00:00+02:00","visible":true}],"location":{"type":"Point","coordinates":[13.395920680275518,52.5038332789935]},"property":["roadwork"],"geometry":null},
     ];
     component.markerUpdateRoutine();
     expect(component.entriesPerCategory[0]).toEqual("1");
@@ -68,5 +69,20 @@ describe('HomePageComponent', () => {
     let date = new Date(2000, 0, 1).toISOString();
     let formattedDate = component.formatDate(date);
     expect(formattedDate).toEqual("Samstag, 1. Januar 2000, 00:00");
-  });  
+  });
+
+  // it('should toggle category visibility', () => {
+  //   component.markerUpdateRoutine();
+  //   component.toogleMapOptions({source: null, checked: false}, component.roadClosures);
+  //   component.toogleMapOptions({source: null, checked: false}, component.constructionSites);
+  //   component.toogleMapOptions({source: null, checked: false}, component.laneClosures);
+  //   component.toogleMapOptions({source: null, checked: false}, component.accidents);
+  //   component.toogleMapOptions({source: null, checked: false}, component.dangers);
+  //   component.addMarkers();
+  //   expect(component.options.showRoadClosures).toEqual(false);
+  //   expect(component.options.showConstructionSites).toEqual(false);
+  //   expect(component.options.showLaneClosures).toEqual(false);
+  //   expect(component.options.showAccidents).toEqual(false);
+  //   expect(component.options.showDangers).toEqual(false);
+  // });  
 });

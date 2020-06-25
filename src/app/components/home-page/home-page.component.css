@@ -30,6 +30,10 @@
   width: 200px;
 }
 
+.menu-container h2{
+  margin: 0;
+}
+
 .checkbox-container{
   padding-bottom: 15px;
 }

@@ -99,12 +99,6 @@ export class HomePageComponent implements AfterViewInit {
     this.entriesPerCategory = ["loading", "loading", "loading", "loading", "loading"];
     this.makeData();
   }
-
-  setTestDates() {
-    this.options.dateFrom = this.options.dateMin;
-    this.options.dateTo = this.options.dateMax;
-    this.applyClick();
-  }
   
   initMap(): void {
     this.map = L.map('map', {
@@ -207,8 +201,12 @@ export class HomePageComponent implements AfterViewInit {
   createPopupContent(element) : string
   {
     let popUpContent = "<p>";
-        if(element.consequence.summary != null)
-          popUpContent += `<b>${element.consequence.summary}</b>`;
+        if(element.consequence.summary != null){
+          if (element.consequence.summary == "Störung")
+            popUpContent += `<b>Gefahr</b>`;
+          else
+            popUpContent += `<b>${element.consequence.summary}</b>`;
+        }
         if(element.streets != null)
           popUpContent += `<b> - ${element.streets[0]}</b>`;
         if(element.section != null)

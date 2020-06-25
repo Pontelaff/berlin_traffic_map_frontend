@@ -28,7 +28,6 @@
                     </mat-form-field>
                     
                     <button mat-raised-button class="confirm-btn" color="primary" (click)="applyClick()">Zeitraum anwenden</button>
-                    <button mat-raised-button color="primary" (click)="setTestDates()">Test</button>
                 </div>
             </mat-menu>
                 
@@ -41,7 +40,7 @@
                 <div *ngIf="options.showConstructionSites"> <mat-icon svgIcon="construction_site" aria-hidden="true"></mat-icon> Baustellen: {{entriesPerCategory[1]}} <br></div>
                 <div *ngIf="options.showLaneClosures"> <mat-icon svgIcon="lane_closure" aria-hidden="true"></mat-icon> Fahrstreifensperrungen: {{entriesPerCategory[2]}} <br></div>
                 <div *ngIf="options.showAccidents"> <mat-icon svgIcon="accident" aria-hidden="true"></mat-icon> Unfälle: {{entriesPerCategory[3]}} <br></div>
-                <div *ngIf="options.showDangers"> <mat-icon svgIcon="danger" aria-hidden="true"></mat-icon> Gefahren und Störungen: {{entriesPerCategory[4]}} </div>
+                <div *ngIf="options.showDangers"> <mat-icon svgIcon="danger" aria-hidden="true"></mat-icon> Gefahren: {{entriesPerCategory[4]}} </div>
             </mat-card>
             
             <mat-spinner id="map-spinner" color="accent"  *ngIf="entriesPerCategory[4] == 'loading'"></mat-spinner>
