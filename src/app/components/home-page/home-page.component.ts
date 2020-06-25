@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { AfterViewInit, Component } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
@@ -10,8 +9,6 @@ import 'leaflet.markercluster';
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements AfterViewInit {
-
-  @ViewChild('menuTrigger') menuTrigger: MatMenuTrigger;
 
   constructor(private apiService: ApiService) {  }
 
@@ -118,9 +115,9 @@ export class HomePageComponent implements AfterViewInit {
 
   makeData() : void
   {    
-    /* adjust dates for timezone */
-    this.options.dateFrom.setHours(this.options.dateFrom.getHours() + this.options.dateFrom.getTimezoneOffset() / -60);
-    this.options.dateTo.setHours(this.options.dateTo.getHours() + this.options.dateTo.getTimezoneOffset() / -60);
+    // /* adjust dates for timezone */
+    // this.options.dateFrom.setHours(this.options.dateFrom.getHours() + this.options.dateFrom.getTimezoneOffset() / -60);
+    // this.options.dateTo.setHours(this.options.dateTo.getHours() + this.options.dateTo.getTimezoneOffset() / -60);
 
     let dataFromFormatted = this.options.dateFrom.toISOString().slice(0, 10);
     let dataToFormatted = this.options.dateTo.toISOString().slice(0, 10);
