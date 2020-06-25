@@ -28,7 +28,8 @@ export class StatisticsPageComponent implements OnInit {
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Störung", "Unfall"];
   allTimeSteps: number[] = [0, 2, 4, 8, 16];
   allPercentiles: number[] = [20, 40, 60, 80, 100];
-  customTimeStrides: number[] = [];
+  customTimeStrides: any[] = [];
+  customTimeStridesAmount: number = 5;
 
   switches: any[] = [null, null];
   btnDurColor = "accent";
@@ -96,7 +97,7 @@ export class StatisticsPageComponent implements OnInit {
     this.makeData();
   }
 
-  userSubmit()
+  userSubmitStrides()
   {
     if(!this.checkStrideInput())
       return;
@@ -106,36 +107,85 @@ export class StatisticsPageComponent implements OnInit {
     this.makeData();
   }
 
+  userSubmitAmount()
+  {
+    if(!this.checkAmountInput())
+      return;
+
+
+    if(this.customTimeStrides.length >= this.customTimeStridesAmount)
+    {
+      this.customTimeStrides = this.customTimeStrides.slice(0, this.customTimeStridesAmount);
+      return;
+    }
+
+    let last = this.customTimeStrides[this.customTimeStrides.length - 1];
+
+    for(let idx = this.customTimeStrides.length; idx < this.customTimeStridesAmount; idx++)
+    {
+      this.customTimeStrides[idx] = ++last;
+    }
+  }
+
   /* needed for chart #1 input boxes being able to remain focused after keypress */
   trackByFn(index, item) 
   {
     return index;  
   }
 
+  checkAmountInput()
+  {
+    /* check for number */
+    if(isNaN(<number>this.customTimeStridesAmount))
+    {
+      console.log("letter found");
+      return false;
+    }
+
+    /* check for negatives */
+    if(this.customTimeStridesAmount < 0)
+    {
+      console.log("negative found");
+      return false;
+    }
+
+    /* check for unreasonable values */
+    if(this.customTimeStridesAmount < 2 || this.customTimeStridesAmount > 10)
+    {
+      console.log("desired strides count less than 2 or greater than 10");
+      return false;
+    }
+
+    return true;
+  }
   checkStrideInput()
   {
-    console.log(this.customTimeStrides);
-
-    /* check for all numbers */
     for(let idx = 0; idx < this.customTimeStrides.length; idx++)
     {
+      /* check for all numbers */
       if(isNaN(<number>this.customTimeStrides[idx]))
       {
         console.log("letter found");
         document.getElementById("inputWarning").style.display = "block";
         return false;
       }
-    }
 
-    /* check for negatives */
-    for(let idx = 0; idx < this.customTimeStrides.length; idx++)
-    {
+      /* check for negatives */
       if(this.customTimeStrides[idx] < 0)
       {
         console.log("negative found");
         document.getElementById("inputWarning").style.display = "block";
         return false;
       }
+
+      if(Math.floor(this.customTimeStrides[idx]) != this.customTimeStrides[idx])
+      {
+        console.log("floating point value found");
+        document.getElementById("inputWarning").style.display = "block";
+        return false;
+      }
+
+      this.customTimeStrides[idx] = parseInt(this.customTimeStrides[idx], 10);
     }
 
     /* check for multiple of the same input */
@@ -158,6 +208,8 @@ export class StatisticsPageComponent implements OnInit {
       if(this.customTimeStrides[idx - 1] > this.customTimeStrides[idx])
       {
         console.log("non-ascending order");
+        console.log(<number>this.customTimeStrides[idx - 1] + " greater than " + <number>this.customTimeStrides[idx])
+        console.log(this.customTimeStrides);
         document.getElementById("inputWarning").style.display = "block";
         return false;
       }
@@ -243,7 +295,7 @@ export class StatisticsPageComponent implements OnInit {
     if(this.selectedChartIndex == 0)
     {
       this.selection.chart.setOpMode(this.cachedOpMode);
-      this.selection.chart.setIntervals(this.customTimeStrides);
+      this.selection.chart.setStrides(this.customTimeStrides);
     }
         
     this.selection.chart.isLoading = true;

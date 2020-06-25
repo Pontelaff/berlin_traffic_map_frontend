@@ -34,21 +34,27 @@
     
     <div id="chartConfWrapper">
         <div id="yAxisConf" class= "htw-border-theme" style="display: none">
+            
             <div id="switchContainer">
                 <button mat-raised-button [color]="btnDurColor" id="btnDuration" (click)="userSwitch(0)">Zeitspanne</button>
                 <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
             </div>
 
-        <section *ngFor="let stride of customTimeStrides; let i = index; trackBy: trackByFn">
-            <label> #{{customTimeStrides.length - i}} </label>
-            <input type="text" class="numberInput" [(ngModel)]="customTimeStrides[customTimeStrides.length - 1 - i]"/>
-        </section>
+            <label>Y-No:</label>
+            <input type="text" class="numberInput" style="display: block" [(ngModel)]="customTimeStridesAmount">
 
-        <div id="inputWarning">
-            Incorrect input format!
-        </div>
+            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userSubmitAmount()">Übernehmen</button>
+            
+            <section *ngFor="let stride of customTimeStrides; let i = index; trackBy: trackByFn">
+                <label> #{{customTimeStrides.length - i}} </label>
+                <input type="text" class="numberInput" [(ngModel)]="customTimeStrides[customTimeStrides.length - 1 - i]"/>
+            </section>
 
-            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userSubmit()">Übernehmen</button>
+            <div id="inputWarning">
+                Incorrect input format!
+            </div>
+
+            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userSubmitStrides()">Übernehmen</button>
         </div>
 
         <div id="chart">

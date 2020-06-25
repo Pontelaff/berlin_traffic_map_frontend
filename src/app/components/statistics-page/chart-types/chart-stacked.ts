@@ -22,6 +22,8 @@ export class ChartStacked extends ChartBase {
       let colorList:string[][] = this.createColorStrings(this.chartData);
 
       /*update Chart*/ 
+      this.chart.options.scales.yAxes[0].ticks.max = containerSize;
+      console.log(this.chartData);
       this.updateChart(this.chartData, colorList);
       this.isLoading = false;
     }
@@ -31,7 +33,7 @@ export class ChartStacked extends ChartBase {
       if(this.chartData.length == 0 )
         return;
 
-      let busyColors:string[][] = this.createColorStrings(this.chartData, this.busySaturation);
+      let busyColors:string[][] = this.createColorStrings(this.chartData.slice(0, this.strides.length), this.busySaturation);
       this.updateChart([], busyColors);
     }
 
@@ -119,7 +121,7 @@ export class ChartStacked extends ChartBase {
     updateColors(colorList: any)
     {
       for(let idx = 0; idx < colorList.length; idx++)
-          this.chart.data.datasets[idx].backgroundColor = colorList[idx];
+        this.chart.data.datasets[idx].backgroundColor = colorList[idx];
     }
 
     updateLabels(chartData: any)
@@ -179,11 +181,11 @@ export class ChartStacked extends ChartBase {
         }
     }
 
-    createChart(datasetCount: number)
+    createData(datasetCount: number)
     {
       /*create default hsl value strings*/
       let colorList:string[][] = this.getUniformArray2D(datasetCount, this.allDistricts.length, this.getHSLColorString(0, 0, 50));
-  
+
       /*create uniform data*/
       let uniformData: number[] = [];
       uniformData.length = this.allDistricts.length;
@@ -204,6 +206,13 @@ export class ChartStacked extends ChartBase {
           })
       }
 
+      return allData;
+    }
+
+    createChart(datasetCount: number)
+    {
+
+      let allData = this.createData(datasetCount);
       /*create chart*/
       this.chart = new Chart(this.ctx, {
           plugins: [ChartDataLabels],

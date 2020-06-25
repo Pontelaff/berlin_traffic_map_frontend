@@ -11,7 +11,7 @@ export class ChartStackedDuration extends ChartStacked {
   containerSetup()
   {
     this.opMode = "timesteps";
-    this.data = this.initContainer2D(this.allTimeSteps.length, this.allDistricts.length);
+    this.data = this.initContainer2D(this.strides.length, this.allDistricts.length);
   }
 
   setOpMode(opModeIdx: number)
@@ -22,17 +22,21 @@ export class ChartStackedDuration extends ChartStacked {
       this.opMode = "percentiles";
   }
 
-  setIntervals(data: number[])
+  setStrides(data: number[])
   {
-    if(this.opMode == "timesteps")
-      this.allTimeSteps = data;
-    else
-      this.allPercentiles = data;
+    this.strides = data;
+
+    console.log(this.strides);
+
+    this.data = this.initContainer2D(this.strides.length, this.allDistricts.length);
+
+    if(this.chart.data.datasets.length != this.strides.length)
+      this.chart.data.datasets = this.createData(this.strides.length);
   }
 
   update()
   {
-    this.updateRoutine(this.allTimeSteps.length);
+    this.updateRoutine(this.strides.length);
   }
 
   addData(incomingData: any, districtIdx: number)
@@ -53,15 +57,15 @@ export class ChartStackedDuration extends ChartStacked {
       let dateTo = entry.validities[0].timeTo;
       let diffDays = this.calculateTimespanInDays(new Date(dateFrom), new Date(dateTo));
 
-      for(let timeIdx = 0; timeIdx < this.allTimeSteps.length; timeIdx++)
+      for(let timeIdx = 0; timeIdx < this.strides.length; timeIdx++)
       {
-        if(timeIdx == this.allTimeSteps.length - 1)
+        if(timeIdx == this.strides.length - 1)
         {
           this.data[timeIdx][districtIdx]++;
           break;
         }
 
-        if(diffDays >= this.allTimeSteps[timeIdx] && diffDays < this.allTimeSteps[timeIdx + 1])
+        if(diffDays >= this.strides[timeIdx] && diffDays < this.strides[timeIdx + 1])
         {
           this.data[timeIdx][districtIdx]++;
           break;
@@ -89,21 +93,21 @@ export class ChartStackedDuration extends ChartStacked {
     allTimeSpans.forEach(timeSpan => {
       let percentile = timeSpan / max * 100;
 
-      for(let pctIdx = 0; pctIdx < this.allPercentiles.length; pctIdx++)
+      for(let pctIdx = 0; pctIdx < this.strides.length; pctIdx++)
       {
-        if(percentile < this.allPercentiles[0])
+        if(percentile < this.strides[0])
         {
           this.data[pctIdx][districtIdx]++;
           break;
         }
 
-        if(pctIdx == this.allPercentiles.length - 1)
+        if(pctIdx == this.strides.length - 1)
         {
           this.data[pctIdx][districtIdx]++;
           break;
         }
 
-        if(percentile >= this.allPercentiles[pctIdx] && percentile < this.allPercentiles[pctIdx + 1])
+        if(percentile >= this.strides[pctIdx] && percentile < this.strides[pctIdx + 1])
         {
           this.data[pctIdx][districtIdx]++;
           break;
@@ -114,8 +118,7 @@ export class ChartStackedDuration extends ChartStacked {
 
   reconfigureYAxis()
   {
-    let timesteps = this.allTimeSteps;
-    let percentiles = this.allPercentiles;
+    let strides = this.strides;
     if(this.opMode == "timesteps")
     {
       this.chart.options.scales.yAxes[0].scaleLabel.labelString = this.yLabelDuration;
@@ -127,13 +130,13 @@ export class ChartStackedDuration extends ChartStacked {
         let label = "";
         let idx = Math.round(<number>value) - 1;
 
-        if(idx == timesteps.length - 1)
+        if(idx == strides.length - 1)
         {
-          label = timesteps[idx] + "+"
+          label = strides[idx] + "+"
           return label;
         }
 
-        label += timesteps[idx] + " - " + timesteps[idx + 1];
+        label += strides[idx] + " - " + strides[idx + 1];
 
         return label;
       };
@@ -147,7 +150,7 @@ export class ChartStackedDuration extends ChartStacked {
           return null;
           
         let idx = Math.round(<number>value) - 1;
-        let label = percentiles[idx] + "%";
+        let label = strides[idx] + "%";
         return label;
       };
     }
@@ -161,8 +164,7 @@ export class ChartStackedDuration extends ChartStacked {
     
     /*customize options*/
     let opmode = this.opMode;
-    let percentiles = this.allPercentiles;
-    let timesteps = this.allTimeSteps;
+    let strides = this.strides;
     let yLabel = "";
     if(opmode == "timesteps")
       yLabel = this.yLabelDuration;
@@ -177,7 +179,7 @@ export class ChartStackedDuration extends ChartStacked {
         fontSize: 14
       },
       ticks: {  //set custom label
-        max: timesteps.length,
+        max: strides.length,
         min: 0,
         fontStyle: "bold",
         fontSize: 14,
@@ -192,19 +194,19 @@ export class ChartStackedDuration extends ChartStacked {
 
           if(opmode == "timesteps")
           {
-            if(idx == timesteps.length - 1)
+            if(idx == strides.length - 1)
             {
-              label = timesteps[idx] + "+"
+              label = strides[idx] + "+"
               return label;
             }
   
-            label += timesteps[idx] + " - " + timesteps[idx + 1];
+            label += strides[idx] + " - " + strides[idx + 1];
   
             return label;
           }
           else
           {
-            label = percentiles[idx] + "%";
+            label = strides[idx] + "%";
             return label;
           }
         }

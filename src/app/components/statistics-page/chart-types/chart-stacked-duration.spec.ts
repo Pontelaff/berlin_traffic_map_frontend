@@ -20,11 +20,11 @@ describe('ChartStackedDuration', () => {
 
   it('should make chart', () => {
     subject.create();
-    expect(subject.chart.data.datasets.length).toEqual(allTimeSteps.length);
+    expect(subject.chart.data.datasets.length).toEqual(subject.strides.length);
   });
 
   it('should create container', () => {
-    expect(subject.data.length).toEqual(allTimeSteps.length);
+    expect(subject.data.length).toEqual(subject.strides.length);
   });
 
   it('should show y axis labels', () => {
@@ -38,11 +38,11 @@ describe('ChartStackedDuration', () => {
 
     /* test offset label */
     label = subject.chart.options.scales.yAxes[0].ticks.callback(0.5, 0, 0);
-    expect(label).toEqual(allTimeSteps[0] + " - " + allTimeSteps[1]);
+    expect(label).toEqual(subject.strides[0] + " - " + subject.strides[1]);
 
     /* test max label */
-    label = subject.chart.options.scales.yAxes[0].ticks.callback(allTimeSteps.length - 1 + 0.5, 0, 0);
-    expect(label).toEqual(allTimeSteps[allTimeSteps.length - 1] + "+");
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(subject.strides.length - 1 + 0.5, 0, 0);
+    expect(label).toEqual(subject.strides[subject.strides.length - 1] + "+");
   });
 
   it('should update mode and time intervals', () => {
@@ -51,14 +51,14 @@ describe('ChartStackedDuration', () => {
     let testArr: number[] = [0, 5, 10, 15, 35];
 
     subject.setOpMode(0);
-    subject.setIntervals(testArr);
+    subject.setStrides(testArr);
     expect(subject.opMode).toEqual("timesteps");
-    expect(subject.allTimeSteps).toEqual(testArr);
+    expect(subject.strides).toEqual(testArr);
 
     subject.setOpMode(1);
-    subject.setIntervals(testArr);
+    subject.setStrides(testArr);
     expect(subject.opMode).toEqual("percentiles");
-    expect(subject.allPercentiles).toEqual(testArr);
+    expect(subject.strides).toEqual(testArr);
   });
 
   it('should add percentile data', () => {
@@ -67,7 +67,7 @@ describe('ChartStackedDuration', () => {
     let testArr: number[] = [20, 25, 60, 65, 100];
 
     subject.setOpMode(1);
-    subject.setIntervals(testArr);
+    subject.setStrides(testArr);
 
     let testDateFrom0 = "2020-06-09T05:53:49+02:00";
     let testDateTo0 = "2020-07-09T05:53:49+02:00";
@@ -106,7 +106,7 @@ describe('ChartStackedDuration', () => {
     expect(label).toEqual(testArr[0] + "%");
 
     /* test max label */
-    label = subject.chart.options.scales.yAxes[0].ticks.callback(allTimeSteps.length - 1 + 0.5, 0, 0);
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(subject.strides.length - 1 + 0.5, 0, 0);
     expect(label).toEqual(testArr[testArr.length - 1] + "%");
 
   })
@@ -160,10 +160,10 @@ describe('ChartStackedDuration', () => {
 
     /* test offset label */
     label = subject.chart.options.scales.yAxes[0].ticks.callback(0.5, 0, 0);
-    expect(label).toEqual(allTimeSteps[0] + " - " + allTimeSteps[1]);
+    expect(label).toEqual(subject.strides[0] + " - " + subject.strides[1]);
 
     /* test max label */
-    label = subject.chart.options.scales.yAxes[0].ticks.callback(allTimeSteps.length - 1 + 0.5, 0, 0);
-    expect(label).toEqual(allTimeSteps[allTimeSteps.length - 1] + "+");
+    label = subject.chart.options.scales.yAxes[0].ticks.callback(subject.strides.length - 1 + 0.5, 0, 0);
+    expect(label).toEqual(subject.strides[subject.strides.length - 1] + "+");
   });
 });
