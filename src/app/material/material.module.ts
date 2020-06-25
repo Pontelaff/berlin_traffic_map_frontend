@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { DomSanitizer } from "@angular/platform-browser";
+import { MatIconRegistry } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon'
@@ -36,4 +38,28 @@ const material = [
   imports: [material],
   exports: [material]
 })
-export class MaterialModule { }
+export class MaterialModule {
+    
+  constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer){
+    this.matIconRegistry.addSvgIcon(
+      `road_closure`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("assets/road_closure_icon.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      `construction_site`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("assets/construction_site_icon.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      `lane_closure`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("assets/lane_closure_icon.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      `accident`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("assets/accident_icon.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      `danger`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("assets/danger_icon.svg")
+    );
+  }
+ }
