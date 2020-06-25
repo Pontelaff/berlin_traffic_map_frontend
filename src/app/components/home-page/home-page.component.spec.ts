@@ -41,4 +41,29 @@ describe('HomePageComponent', () => {
     fixture.detectChanges();
     expect(fixture.debugElement.queryAll(By.css('.options-checkbox')).length).toEqual(5);
   });
+
+  it('should update entries per category', () => {
+    expect(component.trafficData).toEqual([]);
+    expect(component.entriesPerCategory[0]).toEqual("loading");
+    //component.initMap();
+    component.trafficData = [
+      {"id":"5db2181748be6a56292c652a","consequence":{"summary":"Sperrung","description":"Vollsperrung"},"description":"Baustelle, Vollsperrung (bis vorauss. Ende 2022)","section":"in beiden Richtungen zwischen Invalidenstraße und Kapelle-Ufer","name":"Sperrung","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Friedrich-List-Ufer (Moabit)"],"validities":[{"timeFrom":"2012-10-15T08:00:00+02:00","timeTo":"2022-12-31T17:00:00+01:00","visible":false},{"timeFrom":"2012-10-15T08:00:00+02:00","timeTo":"2022-12-31T17:00:00+01:00","visible":true}],"location":{"type":"Point","coordinates":[13.370715076457124,52.52419509477858]},"property":["blockage"],"geometry":{"type":"LineString","coordinates":[[13.370684964343557,52.525853087780796],[13.370715076457124,52.52419509477858]]}},
+      {"id":"5db218178c3fa0c1600199a6","consequence":{"summary":"Baustelle","description":"keine Sperrung"},"description":"Baustelle, Fahrbahneinschränkungen, Verschwenkungen (Gesamtmaßnahme bis Ende 2020)","section":"in beiden Richtungen Kreuzung Schloßallee / A114 Anschlussstelle","name":"Baustelle","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Pasewalker Straße (Pankow)"],"validities":[{"timeFrom":"2017-04-10T07:00:00+02:00","timeTo":"2020-12-31T23:59:00+01:00","visible":false},{"timeFrom":"2017-04-10T07:00:00+02:00","timeTo":"2020-12-31T23:59:00+01:00","visible":true}],"location":{"type":"Point","coordinates":[13.428590978720482,52.583159710755616]},"property":["roadwork"],"geometry":null},
+      {"id":"5db21819a81f60d80d58f133","consequence":{"summary":"Baustelle","description":"keine Sperrung"},"description":"Baustelle, Fahrbahn auf einen Fahrstreifen verengt (bis 2021)","section":"Richtung Axel-Springer-Str. zwischen Am Berlin Museum und Ritterstr.","name":"Baustelle","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Lindenstr. (Kreuzberg)"],"validities":[{"timeFrom":"2017-11-29T10:51:00+01:00","timeTo":"2021-03-31T17:00:00+02:00","visible":false},{"timeFrom":"2017-11-29T10:51:00+01:00","timeTo":"2021-03-31T17:00:00+02:00","visible":true}],"location":{"type":"Point","coordinates":[13.395920680275518,52.5038332789935]},"property":["roadwork"],"geometry":null},
+      {"id":"5db21819965620b7cd67d305","consequence":{"summary":"Baustelle","description":"keine Sperrung"},"description":"Baustelle, Fahrbahn auf einen Fahrstreifen je Richtung verengt und verschwenkt (Gesamtmaßnahme bis Ende 2023)","section":"in beiden Richtungen zwischen Uhlandstraße und Pfalzburger Straße","name":"Baustelle","address":{"city":null,"district":null,"state":"Berlin","country":"DE","countryCode":"DE"},"streets":["Lietzenburger Straße (Charlottenburg)"],"validities":[{"timeFrom":"2018-02-01T06:00:00+01:00","timeTo":"2023-12-31T23:59:00+01:00","visible":false},{"timeFrom":"2018-02-01T06:00:00+01:00","timeTo":"2023-12-31T23:59:00+01:00","visible":true}],"location":{"type":"Point","coordinates":[13.323925580510412,52.49995151772612]},"property":["roadwork"],"geometry":null}
+    ];
+    component.markerUpdateRoutine();
+    expect(component.entriesPerCategory[0]).toEqual("1");
+    expect(component.entriesPerCategory[1]).toEqual("3");
+  });
+
+
+
+  // it('should ', () => {
+  //   expect(component.trafficData).toEqual(null);
+  //   component.makeData();
+
+  //   expect(component.entriesPerCategory[0]).toEqual("loading");
+  // });
+
 });

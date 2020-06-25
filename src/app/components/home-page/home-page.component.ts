@@ -106,7 +106,7 @@ export class HomePageComponent implements AfterViewInit {
     this.applyClick();
   }
   
-  private initMap(): void {
+  initMap(): void {
     this.map = L.map('map', {
       center: [ 52.518426, 13.404950 ],
       zoom: 12
@@ -148,19 +148,6 @@ export class HomePageComponent implements AfterViewInit {
         console.log("zoom: " + zoom + " radius: " + radius);
         return radius;
       },
-      //   iconCreateFunction: function(cluster) {
-      // 	var childCount = cluster.getChildCount();    
-      // 	var c = ' marker-cluster-';
-      // 	if (childCount < 10) {
-      // 		c += 'small';
-      // 	} else if (childCount < 100) {
-      // 		c += 'medium';
-      // 	} else {
-      // 		c += 'large';
-      // 	}
-    
-      // 	return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster marker-cluster' + c, iconSize: new L.Point(50, 50) });
-      // }
     };
 
     this.mapLayers = L.markerClusterGroup(clusterGroupOptions);
