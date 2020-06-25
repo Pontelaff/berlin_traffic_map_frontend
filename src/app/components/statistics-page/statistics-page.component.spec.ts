@@ -68,4 +68,82 @@ describe('StatisticsPageComponent', () => {
     component.createChart(3);   
     expect(typeof(component.selection.chart)).toEqual("object");
   });
+
+  it('should switch stacked duration chart opmode', () => {
+    let newOpmode: number;
+
+    newOpmode = 0;
+    component.userSwitch(newOpmode);
+    expect(component.cachedOpMode).toEqual(newOpmode);
+    
+    newOpmode = 1;
+    component.userSwitch(newOpmode);
+    expect(component.cachedOpMode).toEqual(newOpmode);
+  });
+
+  it('should detect incorrectly formatted input for stride amount', () => {
+
+    component.customTimeStridesAmount = 5;
+    expect(component.checkAmountInput()).toBeTrue();
+
+    component.customTimeStridesAmount = 0;
+    expect(component.checkAmountInput()).toBeFalse();
+
+    component.customTimeStridesAmount = 1;
+    expect(component.checkAmountInput()).toBeFalse();
+
+    component.customTimeStridesAmount = -1;
+    expect(component.checkAmountInput()).toBeFalse();
+
+    component.customTimeStridesAmount = 11;
+    expect(component.checkAmountInput()).toBeFalse();
+  });
+
+  it('should detect incorrectly formatted input for value amount', () => {
+
+    component.cachedOpMode = 0;
+
+    component.customTimeStrides = [4, 6, 8, 10, 16];
+    expect(component.checkStrideInput()).toBeTrue();
+
+    component.customTimeStrides = [0, 2, 4, 10, 10000];
+    expect(component.checkStrideInput()).toBeTrue();
+
+    component.customTimeStrides = [0, 4, 2, 10, 10000];
+    expect(component.checkStrideInput()).toBeFalse();
+
+    component.customTimeStrides = [0, 2.5, 4, 10, 10000];
+    expect(component.checkStrideInput()).toBeFalse();
+
+    component.customTimeStrides = [-1, 6, 8, 10, 16];
+    expect(component.checkStrideInput()).toBeFalse();
+
+    component.customTimeStrides = [0, 2, 2, 10, 16];
+    expect(component.checkStrideInput()).toBeFalse();
+
+    component.cachedOpMode = 1;
+
+    component.customTimeStrides = [4, 6, 8, 10, 16];
+    expect(component.checkStrideInput()).toBeTrue();
+
+    component.customTimeStrides = [1, 2, 4, 10, 100];
+    expect(component.checkStrideInput()).toBeTrue();
+
+    component.customTimeStrides = [1, 2, 4, 10, 101];
+    expect(component.checkStrideInput()).toBeFalse();
+    
+    component.customTimeStrides = [0, 4, 2, 10, 10000];
+    expect(component.checkStrideInput()).toBeFalse();
+
+    component.customTimeStrides = [0, 2.5, 4, 10, 10000];
+    expect(component.checkStrideInput()).toBeFalse();
+
+    component.customTimeStrides = [-1, 6, 8, 10, 16];
+    expect(component.checkStrideInput()).toBeFalse();
+
+    component.customTimeStrides = [0, 2, 2, 10, 16];
+    expect(component.checkStrideInput()).toBeFalse();
+
+
+  });
 });

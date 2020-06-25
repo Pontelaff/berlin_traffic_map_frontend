@@ -28,7 +28,7 @@ export class StatisticsPageComponent implements OnInit {
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Störung", "Unfall"];
   allTimeSteps: number[] = [0, 2, 4, 8, 16];
   allPercentiles: number[] = [20, 40, 60, 80, 100];
-  customTimeStrides: any[] = [];
+  customTimeStrides: number[] = [];
   customTimeStridesAmount: number = 5;
 
   switches: any[] = [null, null];
@@ -135,8 +135,8 @@ export class StatisticsPageComponent implements OnInit {
 
   checkAmountInput()
   {
-    /* check for number */
-    if(isNaN(<number>this.customTimeStridesAmount))
+    /* check for non-numerical characters */
+    if(isNaN(this.customTimeStridesAmount))
     {
       console.log("letter found");
       return false;
@@ -162,8 +162,8 @@ export class StatisticsPageComponent implements OnInit {
   {
     for(let idx = 0; idx < this.customTimeStrides.length; idx++)
     {
-      /* check for all numbers */
-      if(isNaN(<number>this.customTimeStrides[idx]))
+      /* check for non-numerical characters */
+      if(isNaN(this.customTimeStrides[idx]))
       {
         console.log("letter found");
         document.getElementById("inputWarning").style.display = "block";
@@ -178,14 +178,13 @@ export class StatisticsPageComponent implements OnInit {
         return false;
       }
 
+      /* check for floats */
       if(Math.floor(this.customTimeStrides[idx]) != this.customTimeStrides[idx])
       {
         console.log("floating point value found");
         document.getElementById("inputWarning").style.display = "block";
         return false;
       }
-
-      this.customTimeStrides[idx] = parseInt(this.customTimeStrides[idx], 10);
     }
 
     /* check for multiple of the same input */
@@ -202,7 +201,7 @@ export class StatisticsPageComponent implements OnInit {
       }
     }
 
-    /* check for ascending order */
+    /* check for non-ascending order */
     for(let idx = 1; idx < this.customTimeStrides.length; idx++)
     {
       if(this.customTimeStrides[idx - 1] > this.customTimeStrides[idx])
