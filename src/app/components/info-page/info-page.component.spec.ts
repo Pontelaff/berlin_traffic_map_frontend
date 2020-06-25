@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InfoPageComponent } from './info-page.component';
+import { MaterialModule } from '../../material/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('InfoPageComponent', () => {
   let component: InfoPageComponent;
@@ -8,7 +10,8 @@ describe('InfoPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoPageComponent ]
+      declarations: [ InfoPageComponent ],      
+      imports: [ MaterialModule, BrowserAnimationsModule ]
     })
     .compileComponents();
   }));
