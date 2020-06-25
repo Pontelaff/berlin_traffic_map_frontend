@@ -33,7 +33,7 @@ export class StatisticsPageComponent implements OnInit {
   allPercentiles: number[] = [20, 40, 60, 80, 100];
 
   switches: any[] = [null, null];
-  btnDurColor = "primary";
+  btnDurColor = "accent";
   btnPctColor = "white";
   cachedOpMode = 0;
   
@@ -53,8 +53,11 @@ export class StatisticsPageComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.currDateStart = new Date(2020, 3, 1);
-    this.currDateEnd = new Date(2020, 6, 1);
+    this.currDateStart = new Date();
+    this.currDateEnd = new Date();
+
+    /* set start date to two weeks ago */
+    this.currDateStart.setHours(this.currDateEnd.getHours() - 24 * 14)
 
     this.queriesCompleted = 0;
 
@@ -110,14 +113,14 @@ export class StatisticsPageComponent implements OnInit {
     /* highlight selected button, adjust values in input boxes */
     if(switchId == 0)
     {
-      this.btnDurColor = "primary";
+      this.btnDurColor = "accent";
       this.btnPctColor = "white";
       reference = this.allTimeSteps;
     }
     else
     {
       this.btnDurColor = "white";
-      this.btnPctColor = "primary";
+      this.btnPctColor = "accent";
       reference = this.allPercentiles;
     }
   
@@ -166,7 +169,11 @@ export class StatisticsPageComponent implements OnInit {
 
   makeData()
   {
-    let startString = this.currDateStart.toISOString().slice(0, 10);
+    /* adjust dates for timezone */
+    this.currDateStart.setHours(this.currDateStart.getHours() + this.currDateStart.getTimezoneOffset() / -60);
+    this.currDateEnd.setHours(this.currDateEnd.getHours() + this.currDateEnd.getTimezoneOffset() / -60);
+
+    let startString = this.currDateStart.toISOString().slice(0, 10);    
     let endString = this.currDateEnd.toISOString().slice(0, 10);
 
     if(this.selectedChartIndex < 0 || this.selectedChartIndex > 3)
