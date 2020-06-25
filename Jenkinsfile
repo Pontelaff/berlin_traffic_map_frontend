@@ -5,7 +5,7 @@ properties ([
     buildDiscarder(logRotator(numToKeepStr: '10')),
     ])
 
-timeout(time: 60, unit: 'MINUTES') {
+timeout(time: 10, unit: 'MINUTES') {
 
 ansiColor('css') {
 

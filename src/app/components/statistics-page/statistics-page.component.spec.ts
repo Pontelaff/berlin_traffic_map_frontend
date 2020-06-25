@@ -2,6 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StatisticsPageComponent } from './statistics-page.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MaterialModule } from '../../material/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 describe('StatisticsPageComponent', () => {
   let component: StatisticsPageComponent;
@@ -10,7 +13,7 @@ describe('StatisticsPageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ StatisticsPageComponent ],
-      imports: [ HttpClientTestingModule ]
+      imports: [ HttpClientTestingModule, MaterialModule, BrowserAnimationsModule, FormsModule ]
     })
     .compileComponents();
   }));

@@ -1,4 +1,5 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ApiService } from 'src/app/api.service';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
@@ -9,6 +10,8 @@ import 'leaflet.markercluster';
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements AfterViewInit {
+
+  @ViewChild('menuTrigger') menuTrigger: MatMenuTrigger;
 
   constructor(private apiService: ApiService) {  }
 

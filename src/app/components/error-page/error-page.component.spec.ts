@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ErrorPageComponent } from './error-page.component';
+import { MaterialModule } from '../../material/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ErrorPageComponent', () => {
   let component: ErrorPageComponent;
@@ -8,7 +10,8 @@ describe('ErrorPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ErrorPageComponent ]
+      declarations: [ ErrorPageComponent ],
+      imports: [ MaterialModule, BrowserAnimationsModule ]
     })
     .compileComponents();
   }));
