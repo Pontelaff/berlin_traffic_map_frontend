@@ -26,8 +26,6 @@ export class ChartStackedDuration extends ChartStacked {
   {
     this.strides = data;
 
-    console.log(this.strides);
-
     this.data = this.initContainer2D(this.strides.length, this.allDistricts.length);
 
     if(this.chart.data.datasets.length != this.strides.length)

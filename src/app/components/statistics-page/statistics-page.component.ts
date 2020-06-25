@@ -56,7 +56,7 @@ export class StatisticsPageComponent implements OnInit {
     this.currDateEnd = new Date();
 
     /* set start date to two weeks ago */
-    this.currDateStart.setHours(this.currDateEnd.getHours() - 24 * 14)
+    this.currDateStart.setHours(this.currDateEnd.getHours() - 24 * 14);
 
     this.queriesCompleted = 0;
 
@@ -207,8 +207,6 @@ export class StatisticsPageComponent implements OnInit {
       if(this.customTimeStrides[idx - 1] > this.customTimeStrides[idx])
       {
         console.log("non-ascending order");
-        console.log(<number>this.customTimeStrides[idx - 1] + " greater than " + <number>this.customTimeStrides[idx])
-        console.log(this.customTimeStrides);
         document.getElementById("inputWarning").style.display = "block";
         return false;
       }
@@ -273,13 +271,17 @@ export class StatisticsPageComponent implements OnInit {
 
   makeData()
   {
+    /* re-initialize date objects */
+    this.currDateStart = new Date(this.currDateStart);
+    this.currDateEnd = new Date(this.currDateEnd);
+    
     /* adjust dates for timezone */
     this.currDateStart.setHours(this.currDateStart.getHours() + this.currDateStart.getTimezoneOffset() / -60);
     this.currDateEnd.setHours(this.currDateEnd.getHours() + this.currDateEnd.getTimezoneOffset() / -60);
-
+    
     let startString = this.currDateStart.toISOString().slice(0, 10);    
     let endString = this.currDateEnd.toISOString().slice(0, 10);
-
+    
     if(this.selectedChartIndex < 0 || this.selectedChartIndex > 3)
     {
       console.log("Selection invalid");

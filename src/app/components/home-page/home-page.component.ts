@@ -117,10 +117,14 @@ export class HomePageComponent implements AfterViewInit {
   }
 
   makeData() : void
-  {    
-    // /* adjust dates for timezone */
-    // this.options.dateFrom.setHours(this.options.dateFrom.getHours() + this.options.dateFrom.getTimezoneOffset() / -60);
-    // this.options.dateTo.setHours(this.options.dateTo.getHours() + this.options.dateTo.getTimezoneOffset() / -60);
+  {
+    /* re-initialize date objects */
+    this.options.dateFrom = new Date(this.options.dateFrom);
+    this.options.dateTo = new Date(this.options.dateTo);
+
+    /* adjust dates for timezone */
+    this.options.dateFrom.setHours(this.options.dateFrom.getHours() + this.options.dateFrom.getTimezoneOffset() / -60);
+    this.options.dateTo.setHours(this.options.dateTo.getHours() + this.options.dateTo.getTimezoneOffset() / -60);
 
     let dataFromFormatted = this.options.dateFrom.toISOString().slice(0, 10);
     let dataToFormatted = this.options.dateTo.toISOString().slice(0, 10);
