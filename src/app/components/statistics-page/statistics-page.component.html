@@ -31,23 +31,25 @@
                                         chartList[selectedChartIndex].chart != null && 
                                         chartList[selectedChartIndex].chart.isLoading == true"></mat-spinner>
     </div>
+    
+    <div id="chartConfWrapper">
+        <div id="yAxisConf" class= "htw-border-theme" style="display: none">
+            <div id="switchContainer">
+                <button mat-raised-button [color]="btnDurColor" id="btnDuration" (click)="userSwitch(0)">Zeitspanne</button>
+                <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
+            </div>
 
-    <div id="yAxisConf" class= "htw-border-theme" style="display: none">
-        <div id="switchContainer">
-            <button mat-raised-button [color]="btnDurColor" id="btnDuration" (click)="userSwitch(0)">Zeitspanne</button>
-            <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
+	    Einteilung 1: <input type="number" class="numberInput" id="i0" min="0" max="{{allTimeSteps[1]}}" value="{{allTimeSteps[0]}}"><br>
+	    Einteilung 2: <input type="number" class="numberInput" id="i1" min="{{allTimeSteps[0]}}" max="{{allTimeSteps[2]}}" value="{{allTimeSteps[1]}}"><br>
+	    Einteilung 3: <input type="number" class="numberInput" id="i2" min="{{allTimeSteps[1]}}" max="{{allTimeSteps[3]}}" value="{{allTimeSteps[2]}}"><br>
+	    Einteilung 4: <input type="number" class="numberInput" id="i3" min="{{allTimeSteps[2]}}" max="{{allTimeSteps[4]}}" value="{{allTimeSteps[3]}}"><br>
+	    Einteilung 5: <input type="number" class="numberInput" id="i4" min="{{allTimeSteps[3]}}" max="100000" value="{{allTimeSteps[4]}}"><br>
+            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userClick()">Übernehmen</button>
         </div>
 
-        <input type="number" class="numberInput" id="i0" min="0" max="{{allTimeSteps[1]}}" value="{{allTimeSteps[0]}}">
-        <input type="number" class="numberInput" id="i1" min="{{allTimeSteps[0]}}" max="{{allTimeSteps[2]}}" value="{{allTimeSteps[1]}}">
-        <input type="number" class="numberInput" id="i2" min="{{allTimeSteps[1]}}" max="{{allTimeSteps[3]}}" value="{{allTimeSteps[2]}}">
-        <input type="number" class="numberInput" id="i3" min="{{allTimeSteps[2]}}" max="{{allTimeSteps[4]}}" value="{{allTimeSteps[3]}}">
-        <input type="number" class="numberInput" id="i4" min="{{allTimeSteps[3]}}" max="100000" value="{{allTimeSteps[4]}}">
+        <div id="chart">
+            <canvas id="canvas"></canvas>
+        </div>
     </div>
-
-    <div id="chart">
-        <canvas id="canvas"></canvas>
-    </div>
-
 </div>
     

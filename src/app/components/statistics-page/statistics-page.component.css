@@ -29,22 +29,26 @@
     margin-left: 7%;
 }
 
-/* #switchContainer{
-    padding: 1%;
+#switchContainer{
+    /*padding: 1%;
     margin: 0 auto;
     margin-top: 2%;
     width: 20%;
     align-content: center;
-    text-align: center;
-} */
+    text-align: center;*/
+    margin-bottom: 10%
+}
 
 #yAxisConf{
     padding: 1%;
+    padding-bottom: 0.5%;
     margin: 0 auto;
-    margin-top: 2%;
-    width: 20%;
+    margin-top: 10%;
+    margin-bottom: 20%;
+    margin-left: 5%;
+    width: auto;
     align-content: center;
-    text-align: center;
+    text-align: center; 
 }
 
 .numberInput{
@@ -63,4 +67,8 @@
     height: 600px;
     align-content: center;
     padding-top: 3%;
+}
+
+#chartConfWrapper{
+    display: flex;
 }
