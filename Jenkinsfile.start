@@ -5,7 +5,7 @@ properties ([
     buildDiscarder(logRotator(numToKeepStr: '10')),
     ])
 
-timeout(time: 30, unit: 'MINUTES') {
+timeout(time: 60, unit: 'MINUTES') {
 
 ansiColor('css') {
 
@@ -19,7 +19,7 @@ stage ('Build') {
         try {
 
             sh 'npm install'
-            //sh 'npm run build'
+            sh 'npm run build'
 
             echo "\u2713 success"
             currentBuild.result = 'SUCCESS'
@@ -42,7 +42,7 @@ stage ('Start') {
 
         try {
 
-            sh 'ng serve --baseHref=/bsb/ --deployUrl /bsb/ --host 0.0.0.0 --disableHostCheck true'
+            sh 'npm run'
 
             echo "\u2713 success"
             currentBuild.result = 'SUCCESS'

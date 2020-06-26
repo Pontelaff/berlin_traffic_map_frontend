@@ -16,6 +16,7 @@ stage ('Stop') {
         checkout scm
 
         try {
+            sh "curl -u admin:bsbpw123456 http://localhost/secure/shutdown"
             echo "\u2713 success"
             currentBuild.result = 'SUCCESS'
 
