@@ -1,64 +1,83 @@
 <div>
     
-    <div id="inputContainer" class="htw-border-theme">
-
-        <mat-form-field matInput id="startPicker" color="accent">
-            <mat-label>Start-Datum</mat-label>
-            <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
-            <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-            <mat-datepicker #pickerStart></mat-datepicker>
-        </mat-form-field>
-        
-        <mat-form-field matInput  id="endPicker" color="accent">
-            <mat-label>End-Datum</mat-label>
-            <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
-            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-            <mat-datepicker #pickerEnd></mat-datepicker>
-        </mat-form-field>
-        
-        <mat-form-field id="chartSelector" color="accent">
-            <mat-label>Diagrammauswahl</mat-label>
-            <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
-                <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
-                    {{chartSelection.viewValue}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        
-        <button mat-raised-button color="primary" id="btnPlot" (click)="userPlot()">Plot</button>
-
-        <mat-spinner id="spinner" diameter="40" *ngIf="chartList[selectedChartIndex] != null && 
-                                        chartList[selectedChartIndex].chart != null && 
-                                        chartList[selectedChartIndex].chart.isLoading == true"></mat-spinner>
-    </div>
+    <div style="display: flex; justify-content: center;">
+        <div id="inputContainer" class="htw-border-theme">
+            <div style="display: flex; align-items: center; flex-wrap: wrap;" class="p-3">
+                <mat-form-field matInput id="startPicker" color="accent" class="p-3" style="flex-grow: 1;">
+                    <mat-label>Start-Datum</mat-label>
+                    <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
+                    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerStart></mat-datepicker>
+                </mat-form-field>
+                
+                <mat-form-field matInput  id="endPicker" color="accent" class="p-3" style="flex-grow: 1;">
+                    <mat-label>End-Datum</mat-label>
+                    <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
+                
+                <mat-form-field id="chartSelector" color="accent" class="p-3" style="flex-grow: 1;">
+                    <mat-label>Diagrammauswahl</mat-label>
+                    <mat-select [(ngModel)]="selectedChartIndex" name="chartSelect">
+                        <mat-option *ngFor="let chartSelection of chartList" [value]="chartSelection.selector">
+                            {{chartSelection.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
     
-    <div id="chartConfWrapper">
-        <div id="yAxisConf" class= "htw-border-theme" style="display: none">
-            
-            <div id="switchContainer">
-                <button mat-raised-button [color]="btnDurColor" id="btnDuration" (click)="userSwitch(0)">Zeitspanne</button>
-                <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
+                <div class="input-btn-group p-3" style="display: flex;">
+                    <button mat-raised-button color="primary" id="btnPlot" (click)="userPlot()">Darstellen</button>
+    
+                    <div class="pl-3" style="width: 35px;">
+                        <div *ngIf="chartList[selectedChartIndex] != null && 
+                            chartList[selectedChartIndex].chart != null && 
+                            chartList[selectedChartIndex].chart.isLoading == true">
+                            <mat-spinner id="spinner" diameter="35" ></mat-spinner>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <label>Y-No:</label>
-            <input type="text" class="numberInput" style="display: block" [(ngModel)]="customTimeStridesAmount">
-
-            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userSubmitAmount()">Übernehmen</button>
-            
-            <section *ngFor="let stride of customTimeStrides; let i = index; trackBy: trackByFn">
-                <label> #{{customTimeStrides.length - i}} </label>
-                <input type="text" class="numberInput" [(ngModel)]="customTimeStrides[customTimeStrides.length - 1 - i]"/>
-            </section>
-
-            <div id="inputWarning">
-                Incorrect input format!
-            </div>
-
-            <button mat-raised-button style="margin-top: 4%;" color="primary" id="btnPlot" (click)="userSubmitStrides()">Übernehmen</button>
         </div>
+    </div>
 
-        <div id="chart">
-            <canvas id="canvas"></canvas>
+    <div class="chart-container">
+        <div class="mr-0 mr-md-5">
+            <div id="yAxisConf" class= "htw-border-theme y-axis-configurator">
+            
+                <div id="switchContainer">
+                    <button mat-raised-button [color]="btnDurColor" id="btnDuration" (click)="userSwitch(0)">Zeitspanne</button>
+                    <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
+                </div>
+    
+                <div style="display: flex; align-items: center;" class="mt-4">
+                    <div>
+                        <label style="margin-bottom: 3px;">Y-No:</label>
+                        <input type="text" class="numberInput" style="display: block;" [(ngModel)]="customTimeStridesAmount">
+                    </div>
+                    <div>
+                        <button mat-raised-button color="primary" class="ml-3" (click)="userSubmitAmount()">Übernehmen</button>
+                    </div>
+                </div>
+                
+                <div class="mt-4" >
+                    <section *ngFor="let stride of customTimeStrides; let i = index; trackBy: trackByFn">
+                        <label> #{{customTimeStrides.length - i}} </label>
+                        <input type="text" class="numberInput" [(ngModel)]="customTimeStrides[customTimeStrides.length - 1 - i]"/>
+                    </section>
+                </div>
+
+                <div id="inputWarning" class="p-2 mt-3">
+                    Incorrect input format!
+                </div>
+    
+                <button mat-raised-button color="primary" class="mt-4 w-100" (click)="userSubmitStrides()">Aktualisieren</button>
+            </div>
+        </div>
+        <div class="mt-5 mt-xl-0 chart-container-chart">
+            <div id="chart" class="pl-4 pr-4">
+                <canvas id="canvas"></canvas>
+            </div>
         </div>
     </div>
 </div>

@@ -1,13 +1,14 @@
 #inputContainer{
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     margin-top: 2%;
     width: 55%;
+    min-width: 400px;
     max-width: 1100px;
     align-content: center;
     text-align: center;
 }
 
-#startPicker{
+/*#startPicker{
     margin: auto;
     padding: 2%;
     width: 100px;
@@ -23,29 +24,26 @@
     margin: auto;
     padding: 2%;
     width: 225px;
-}
+}*/
 
-#btnPlot{
+/*#btnPlot{
     margin-left: 7%;
+}*/
+
+@media (max-width: 992px) {
+    .input-btn-group {
+        width: 100%;
+    }
 }
 
 #inputWarning{
     display: none;
     color: white;
     background-color: red;
+    text-align: center;
 }
 
-#switchContainer{
-    /*padding: 1%;
-    margin: 0 auto;
-    margin-top: 2%;
-    width: 20%;
-    align-content: center;
-    text-align: center;*/
-    margin-bottom: 10%
-}
-
-#yAxisConf{
+/*#yAxisConf{
     padding: 1%;
     padding-bottom: 0.5%;
     margin: 0 auto;
@@ -55,24 +53,42 @@
     width: auto;
     align-content: center;
     text-align: center; 
-}
+}*/
 
 .numberInput{
     width: 50px;
     margin: 5px;
 }
 
-#spinner{  
-    
-}
-  
-
-#chart{
+/*#chart{
     margin: 0 auto;
     width: 75%;
-    height: 600px;
+    height: 70vh;
     align-content: center;
     padding-top: 3%;
+}*/
+
+.y-axis-configurator {
+    display: none;
+    padding: 20px;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+    flex-wrap: wrap;
+}
+
+.chart-container-chart {
+    overflow-x: auto;
+}
+
+#chart {
+    height: 70vh;
+    width: 70vw;
+    min-width: 800px;
 }
 
 #chartConfWrapper{
