@@ -17,8 +17,23 @@
 
 mat-card-content{
     font-size: 18px;
+    text-align: justify;
+    hyphens: maunual;
 }
 
 .indent{
     margin-left: 20px;
+}
+
+@media(max-width: 500px){
+    mat-card{
+        width: 100%;
+    }
+    mat-card-content{
+        font-size: 14px;
+    }
+    .info-container{
+        width: 80%;
+        margin: 5%;
+    }
 }
