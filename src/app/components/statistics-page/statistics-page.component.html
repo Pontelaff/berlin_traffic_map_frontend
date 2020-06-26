@@ -4,14 +4,14 @@
         <div id="inputContainer" class="htw-border-theme">
             <div style="display: flex; align-items: center; flex-wrap: wrap;" class="p-3">
                 <mat-form-field matInput id="startPicker" color="accent" class="p-3" style="flex-grow: 1;">
-                    <mat-label>Start-Datum</mat-label>
+                    <mat-label>Von</mat-label>
                     <input [(ngModel)]="currDateStart" matInput [matDatepicker]="pickerStart" [min]="minDate" [max]="currDateEnd">
                     <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
                     <mat-datepicker #pickerStart></mat-datepicker>
                 </mat-form-field>
                 
                 <mat-form-field matInput  id="endPicker" color="accent" class="p-3" style="flex-grow: 1;">
-                    <mat-label>End-Datum</mat-label>
+                    <mat-label>Bis</mat-label>
                     <input [(ngModel)]="currDateEnd" matInput [matDatepicker]="pickerEnd" [min]="currDateStart" [max]="maxDate">
                     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                     <mat-datepicker #pickerEnd></mat-datepicker>
@@ -52,7 +52,7 @@
     
                 <div style="display: flex; align-items: center;" class="mt-4">
                     <div>
-                        <label style="margin-bottom: 3px;">Y-No:</label>
+                        <label style="margin-bottom: 3px;">Anzahl:</label>
                         <input type="text" class="numberInput" style="display: block;" [(ngModel)]="customTimeStridesAmount">
                     </div>
                     <div>

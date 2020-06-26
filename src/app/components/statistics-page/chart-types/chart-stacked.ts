@@ -23,7 +23,6 @@ export class ChartStacked extends ChartBase {
 
       /*update Chart*/ 
       this.chart.options.scales.yAxes[0].ticks.max = containerSize;
-      console.log(this.chartData);
       this.updateChart(this.chartData, colorList);
       this.isLoading = false;
     }
@@ -34,6 +33,8 @@ export class ChartStacked extends ChartBase {
         return;
 
       let busyColors:string[][] = this.createColorStrings(this.chartData.slice(0, this.strides.length), this.busySaturation);
+      /*update Chart*/ 
+      this.chart.options.scales.yAxes[0].ticks.max = this.strides.length;
       this.updateChart([], busyColors);
     }
 

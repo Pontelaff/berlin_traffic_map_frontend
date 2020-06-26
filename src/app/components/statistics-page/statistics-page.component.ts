@@ -298,6 +298,11 @@ export class StatisticsPageComponent implements OnInit {
       this.selection.chart.setOpMode(this.cachedOpMode);
       this.selection.chart.setStrides(this.customTimeStrides);
     }
+    else
+    {
+      this.customTimeStridesAmount = 5;
+      this.customTimeStrides = this.allTimeSteps;
+    }
         
     this.selection.chart.isLoading = true;
     this.selection.chart.indicateBusy();
