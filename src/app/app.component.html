@@ -7,11 +7,11 @@
   </mat-toolbar>
 
   <mat-sidenav-container>
-    <mat-sidenav id="navbar" class="htw-theme-d3" #sidenav mode="over" (click) = "sidenav.close()">
+    <mat-sidenav id="navbar" class="htw-theme-d3" #sidenav mode="over" (click)="sidenav.close()">
       <!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->      
       <mat-nav-list class="p-15">
         <a mat-list-item routerLink="/home" routerLinkActive="active">Home</a>
-        <a mat-list-item routerLink="/statistics" routerLinkActive="active">Statistics</a>
+        <a mat-list-item routerLink="/statistics" routerLinkActive="active">Statistiken</a>
         <a mat-list-item routerLink="/info" routerLinkActive="active">Info</a>
       </mat-nav-list>
     </mat-sidenav>
@@ -19,8 +19,8 @@
     <mat-sidenav-content id="main-container">
       <!-- The routed views render in the <router-outlet>
         It displays the main content of the app-->
-      <router-outlet></router-outlet>
-    
+      <router-outlet></router-outlet>    
     </mat-sidenav-content>
+
   </mat-sidenav-container>
 </div>

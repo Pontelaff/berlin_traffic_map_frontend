@@ -10,3 +10,14 @@
 .h-100{
     padding-top: 100px;
 }
+
+
+@media(max-width: 500px){
+    .h-100{
+        padding-top: 50px;
+    }
+    #errorBox {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
