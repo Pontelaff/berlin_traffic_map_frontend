@@ -102,7 +102,7 @@ export class HomePageComponent implements AfterViewInit {
   
   initMap(): void {
     this.map = L.map('map', {
-      center: [ 52.518426, 13.404950 ],
+      center: [ 52.517001, 13.388827 ],
       zoom: 12
     });
 
