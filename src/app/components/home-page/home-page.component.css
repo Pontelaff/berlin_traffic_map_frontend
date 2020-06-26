@@ -58,13 +58,14 @@ mat-icon{
   vertical-align: middle;
 }
 
-#map-spinner{  
+
+.spinner-container {
   position: absolute;
-  left: 45%;
-  right: 55%;
-  top: 45%;
-  bottom: 55%;
-  text-align: center;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
   z-index: 500;
 }
 
