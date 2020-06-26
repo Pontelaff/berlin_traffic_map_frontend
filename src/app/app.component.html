@@ -10,9 +10,9 @@
     <mat-sidenav id="navbar" class="htw-theme-d3" #sidenav mode="over" (click) = "sidenav.close()">
       <!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->      
       <mat-nav-list class="p-15">
-        <mat-list-item><a routerLink="/home" routerLinkActive="active">Home</a></mat-list-item>
-        <mat-list-item><a routerLink="/statistics" routerLinkActive="active">Statistics</a></mat-list-item>
-        <mat-list-item><a routerLink="/info" routerLinkActive="active">Info</a></mat-list-item>
+        <a mat-list-item routerLink="/home" routerLinkActive="active">Home</a>
+        <a mat-list-item routerLink="/statistics" routerLinkActive="active">Statistics</a>
+        <a mat-list-item routerLink="/info" routerLinkActive="active">Info</a>
       </mat-nav-list>
     </mat-sidenav>
       
