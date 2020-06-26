@@ -42,7 +42,7 @@ stage ('Start') {
 
         try {
 
-            sh 'npm run'
+            sh 'npm start'
 
             echo "\u2713 success"
             currentBuild.result = 'SUCCESS'
