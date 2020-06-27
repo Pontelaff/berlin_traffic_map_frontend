@@ -41,6 +41,7 @@
     color: white;
     background-color: red;
     text-align: center;
+    border-radius: 8px;
 }
 
 /*#yAxisConf{
@@ -58,6 +59,14 @@
 .numberInput{
     width: 50px;
     margin: 5px;
+}
+
+.warning {
+    width: 5px;
+    margin: 5px;
+    color: red;
+    opacity: 0.0;
+    font-weight: bold;
 }
 
 /*#chart{

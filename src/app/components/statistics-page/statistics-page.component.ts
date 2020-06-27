@@ -4,11 +4,19 @@ import { ChartStackedEvents } from './chart-types/chart-stacked-events';
 import { ChartStackedDuration } from './chart-types/chart-stacked-duration';
 import { ChartRadarEvents } from './chart-types/chart-radar-events';
 import { ChartBubbleEvents } from './chart-types/chart-bubble-events';
+import { InputChecker } from './inputChecker'
+import { cloneDeep } from 'lodash';
 
 interface chartSelect {
   selector: number;
   viewValue: string;
   chart: any;
+}
+
+interface errorMsg {
+  identifier: string;
+  didOccur: boolean;
+  message: string;
 }
 
 @Component({
@@ -29,7 +37,10 @@ export class StatisticsPageComponent implements OnInit {
   allTimeSteps: number[] = [0, 2, 4, 8, 16];
   allPercentiles: number[] = [20, 40, 60, 80, 100];
   customTimeStrides: any[] = [];
+  isStrideFaulty: boolean[] = [];
   customTimeStridesAmount: number = 5;
+  errorMessages: errorMsg[];
+  inputChecker: InputChecker = new InputChecker();
 
   switches: any[] = [null, null];
   btnDurColor = "accent";
@@ -72,6 +83,7 @@ export class StatisticsPageComponent implements OnInit {
     this.switches[0] = document.getElementById("btnDuration");
     this.switches[1] = document.getElementById("btnPercentile");
 
+    this.errorMessages = this.inputChecker.errorMessages;
     this.customTimeStrides = this.allTimeSteps;
   }
 
@@ -89,6 +101,14 @@ export class StatisticsPageComponent implements OnInit {
       if(this.selection != undefined)         //destroy chart if doesn't exist
         this.selection.chart.destroy();
       this.createChart(this.selectedChartIndex);
+      if(this.selectedChartIndex == 0)
+      {
+        this.userSwitch(0);
+        this.customTimeStrides = this.allTimeSteps;
+        this.inputChecker.resetStrideFaultyArr(this.customTimeStrides.length);
+        this.inputChecker.clearErrorOccurences();
+        this.isStrideFaulty = this.inputChecker.isStrideFaulty;
+      }
     }
     else
       this.selection.chart.clearData();
@@ -96,133 +116,114 @@ export class StatisticsPageComponent implements OnInit {
     this.toggleContainer("yAxisConf");
     this.makeData();
   }
-
-  userSubmitStrides()
-  {
-    if(!this.checkStrideInput())
-      return;
-
-    this.toggleContainer("yAxisConf");
-      
-    this.makeData();
-  }
-
-  userSubmitAmount()
-  {
-    if(!this.checkAmountInput())
-      return;
-
-
-    if(this.customTimeStrides.length >= this.customTimeStridesAmount)
-    {
-      this.customTimeStrides = this.customTimeStrides.slice(0, this.customTimeStridesAmount);
-      return;
-    }
-
-    let last = this.customTimeStrides[this.customTimeStrides.length - 1];
-
-    for(let idx = this.customTimeStrides.length; idx < this.customTimeStridesAmount; idx++)
-    {
-      this.customTimeStrides[idx] = ++last;
-    }
-  }
-
+  
   /* needed for chart #1 input boxes being able to remain focused after keypress */
   trackByFn(index, item) 
   {
     return index;  
   }
 
+  showWarning(ctx: string)
+  {
+    let element = document.getElementById(ctx);
+    if(element != null)
+    {
+      element.style.opacity = "1.0";
+    }
+  }
+
+  hideWarning(ctx: string)
+  {
+    let element = document.getElementById(ctx);
+    if(element != null)
+    {
+      element.style.opacity = "0.0";
+    }
+  }
+
+  userSubmitAmount()
+  {
+    if(!this.checkAmountInput())
+    {
+      document.getElementById("inputWarning").style.display = "block";
+      this.showWarning("warnAmount");
+      return;
+    }
+
+    this.hideWarning("warnAmount");
+
+    this.customTimeStrides.length = this.customTimeStridesAmount;
+
+    if(this.cachedOpMode == 0)
+    {
+      this.customTimeStrides[0] = 0;
+
+      for(let idx = 1; idx < this.customTimeStridesAmount; idx++)
+      {
+        this.customTimeStrides[idx] = Math.pow(2, idx);
+      }
+    }
+    else
+    {
+      for(let idx = 0; idx < this.customTimeStridesAmount; idx++)
+      {
+        this.customTimeStrides[idx] = Math.round((idx / (this.customTimeStridesAmount - 1)) * 100);
+      }
+    }
+
+    if(!this.checkStrides())
+      console.log("unexpected behavior");
+  }
+
   checkAmountInput()
   {
     /* check for non-numerical characters */
-    if(isNaN(this.customTimeStridesAmount))
-    {
-      console.log("letter found");
-      return false;
-    }
-
-    /* check for negatives */
-    if(this.customTimeStridesAmount < 0)
-    {
-      console.log("negative found");
-      return false;
-    }
-
-    /* check for unreasonable values */
-    if(this.customTimeStridesAmount < 2 || this.customTimeStridesAmount > 10)
-    {
-      console.log("desired strides count less than 2 or greater than 10");
-      return false;
-    }
+    if(!this.inputChecker.checkNumerical(this.customTimeStridesAmount)) {return false;}
+    if(!this.inputChecker.checkPositive(this.customTimeStridesAmount)) {return false;}
+    if(!this.inputChecker.checkWhole(this.customTimeStridesAmount)) {return false;}
+    if(!this.inputChecker.checkRange(this.customTimeStridesAmount, 2, 10)) {return false;}
 
     return true;
   }
-  checkStrideInput()
+
+  refreshStrideWarnings()
   {
-    for(let idx = 0; idx < this.customTimeStrides.length; idx++)
+    for(let idx = 0; idx < this.isStrideFaulty.length; idx++)
     {
-      this.customTimeStrides[idx] = Number(this.customTimeStrides[idx]);
-      /* check for non-numerical characters */
-      if(isNaN(this.customTimeStrides[idx]))
+      if(this.isStrideFaulty[idx])
       {
-        console.log("letter found");
-        document.getElementById("inputWarning").style.display = "block";
-        return false;
+        this.showWarning("warnStride_" + idx);
       }
-
-      /* check for negatives */
-      if(this.customTimeStrides[idx] < 0)
-      {
-        console.log("negative found");
-        document.getElementById("inputWarning").style.display = "block";
-        return false;
-      }
-
-      /* check for floats */
-      if(Math.floor(this.customTimeStrides[idx]) != this.customTimeStrides[idx])
-      {
-        console.log("floating point value found");
-        document.getElementById("inputWarning").style.display = "block";
-        return false;
-      }
+      else
+        this.hideWarning("warnStride_" + idx);
     }
+  }
 
-    /* check for multiple of the same input */
-    for(let toTestIdx = 0; toTestIdx < this.customTimeStrides.length; toTestIdx++)
-    {
-      for(let idx = 0; idx < this.customTimeStrides.length; idx++)
-      {
-        if(this.customTimeStrides[toTestIdx] == this.customTimeStrides[idx] &&toTestIdx != idx)
-        {
-          console.log("value found multiple times");
-          document.getElementById("inputWarning").style.display = "block";
-          return false;
-        }
-      }
-    }
+  checkStrides()
+  {
+    this.inputChecker.resetStrideFaultyArr(this.customTimeStrides.length);
+    this.inputChecker.clearErrorOccurences();
 
-    /* check for non-ascending order */
-    for(let idx = 1; idx < this.customTimeStrides.length; idx++)
+    let stridesGood: boolean = this.inputChecker.checkStrideInput(this.customTimeStrides, this.cachedOpMode);
+    if(!stridesGood)
     {
-      if(this.customTimeStrides[idx - 1] > this.customTimeStrides[idx])
-      {
-        console.log("non-ascending order");
-        document.getElementById("inputWarning").style.display = "block";
-        return false;
-      }
-    }
+      this.isStrideFaulty = this.inputChecker.isStrideFaulty;
 
-    /* check for > 100% */
-    if(this.cachedOpMode == 1 && this.customTimeStrides[this.customTimeStrides.length - 1] > 100)
-    {
-      console.log("more than 100% found");
       document.getElementById("inputWarning").style.display = "block";
+      this.refreshStrideWarnings();
       return false;
     }
-
+    
     document.getElementById("inputWarning").style.display = "none";
+    this.refreshStrideWarnings();
+
     return true;
+  }
+
+  userSubmitStrides()
+  {
+    if(this.checkStrides())
+      this.makeData();
   }
 
   toggleContainer(ctx: string)

@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MaterialModule } from '../../material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { InputChecker } from './inputChecker';
 
 describe('StatisticsPageComponent', () => {
   let component: StatisticsPageComponent;
@@ -81,9 +82,37 @@ describe('StatisticsPageComponent', () => {
     expect(component.cachedOpMode).toEqual(newOpmode);
   });
 
+  it('should correctly refill stride boxes on count change', () => {
+    let stridesLength: number = 0;
+    component.customTimeStridesAmount = 7;
+    component.cachedOpMode = 0;
+    
+    component.userSubmitAmount();
+    stridesLength = component.customTimeStrides.length;
+    expect(stridesLength).toEqual(7);
+    expect(component.customTimeStrides[stridesLength - 1]).toEqual(Math.pow(2, 6));
+    
+
+    component.customTimeStridesAmount = 9;
+    component.cachedOpMode = 1;
+
+    component.userSubmitAmount();
+    stridesLength = component.customTimeStrides.length;
+    expect(stridesLength).toEqual(9);
+    expect(component.customTimeStrides[stridesLength - 1]).toEqual(100);
+    expect(component.customTimeStrides[stridesLength - 2]).toEqual(Math.round(100 * (7 / 8)));
+
+  });
+  
   it('should detect incorrectly formatted input for stride amount', () => {
 
     component.customTimeStridesAmount = 5;
+    expect(component.checkAmountInput()).toBeTrue();
+
+    component.customTimeStridesAmount = 2;
+    expect(component.checkAmountInput()).toBeTrue();
+
+    component.customTimeStridesAmount = 10;
     expect(component.checkAmountInput()).toBeTrue();
 
     component.customTimeStridesAmount = 0;
@@ -97,56 +126,5 @@ describe('StatisticsPageComponent', () => {
 
     component.customTimeStridesAmount = 11;
     expect(component.checkAmountInput()).toBeFalse();
-  });
-
-  it('should detect incorrectly formatted input for value amount', () => {
-
-    component.cachedOpMode = 0;
-
-    component.customTimeStrides = [4, 6, 8, 10, 16];
-    expect(component.checkStrideInput()).toBeTrue();
-
-    component.customTimeStrides = [0, 2, 4, 10, 10000];
-    expect(component.checkStrideInput()).toBeTrue();
-
-    component.customTimeStrides = [0, 2, 4, "70", "150"];
-    expect(component.checkStrideInput()).toBeTrue();
-
-    component.customTimeStrides = [0, 4, 2, 10, 10000];
-    expect(component.checkStrideInput()).toBeFalse();
-
-    component.customTimeStrides = [0, 2.5, 4, 10, 10000];
-    expect(component.checkStrideInput()).toBeFalse();
-
-    component.customTimeStrides = [-1, 6, 8, 10, 16];
-    expect(component.checkStrideInput()).toBeFalse();
-
-    component.customTimeStrides = [0, 2, 2, 10, 16];
-    expect(component.checkStrideInput()).toBeFalse();
-
-    component.cachedOpMode = 1;
-
-    component.customTimeStrides = [4, 6, 8, 10, 16];
-    expect(component.checkStrideInput()).toBeTrue();
-
-    component.customTimeStrides = [1, 2, 4, 10, 100];
-    expect(component.checkStrideInput()).toBeTrue();
-
-    component.customTimeStrides = [1, 2, 4, 10, 101];
-    expect(component.checkStrideInput()).toBeFalse();
-    
-    component.customTimeStrides = [0, 4, 2, 10, 10000];
-    expect(component.checkStrideInput()).toBeFalse();
-
-    component.customTimeStrides = [0, 2.5, 4, 10, 10000];
-    expect(component.checkStrideInput()).toBeFalse();
-
-    component.customTimeStrides = [-1, 6, 8, 10, 16];
-    expect(component.checkStrideInput()).toBeFalse();
-
-    component.customTimeStrides = [0, 2, 2, 10, 16];
-    expect(component.checkStrideInput()).toBeFalse();
-
-
   });
 });
