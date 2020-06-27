@@ -109,6 +109,9 @@ describe('StatisticsPageComponent', () => {
     component.customTimeStrides = [0, 2, 4, 10, 10000];
     expect(component.checkStrideInput()).toBeTrue();
 
+    component.customTimeStrides = [0, 2, 4, "70", "150"];
+    expect(component.checkStrideInput()).toBeTrue();
+
     component.customTimeStrides = [0, 4, 2, 10, 10000];
     expect(component.checkStrideInput()).toBeFalse();
 

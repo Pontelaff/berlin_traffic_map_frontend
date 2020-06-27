@@ -28,7 +28,7 @@ export class StatisticsPageComponent implements OnInit {
   allEvents: string[] = ["Bauarbeiten", "Baustelle", "Fahrstreifensperrung","Gefahr", "Sperrung", "Störung", "Unfall"];
   allTimeSteps: number[] = [0, 2, 4, 8, 16];
   allPercentiles: number[] = [20, 40, 60, 80, 100];
-  customTimeStrides: number[] = [];
+  customTimeStrides: any[] = [];
   customTimeStridesAmount: number = 5;
 
   switches: any[] = [null, null];
@@ -162,6 +162,7 @@ export class StatisticsPageComponent implements OnInit {
   {
     for(let idx = 0; idx < this.customTimeStrides.length; idx++)
     {
+      this.customTimeStrides[idx] = Number(this.customTimeStrides[idx]);
       /* check for non-numerical characters */
       if(isNaN(this.customTimeStrides[idx]))
       {
