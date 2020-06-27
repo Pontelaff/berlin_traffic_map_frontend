@@ -166,7 +166,7 @@ export class InputChecker {
     {
         for(let idx = 0; idx < this.errorMessages.length; idx++)
         {
-            if(this.errorMessages[idx].didOccur == true)
+            if(this.errorMessages[idx].didOccur)
                 return true;
         }
 

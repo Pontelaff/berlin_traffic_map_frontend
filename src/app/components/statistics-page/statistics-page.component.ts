@@ -123,22 +123,23 @@ export class StatisticsPageComponent implements OnInit {
     return index;  
   }
 
-  showWarning(ctx: string)
+  setElementOpacity(ctx: string, opacity: string)
   {
     let element = document.getElementById(ctx);
     if(element != null)
     {
-      element.style.opacity = "1.0";
+      element.style.opacity = opacity;
     }
+  }
+
+  showWarning(ctx: string)
+  {
+    this.setElementOpacity(ctx, "1.0");
   }
 
   hideWarning(ctx: string)
   {
-    let element = document.getElementById(ctx);
-    if(element != null)
-    {
-      element.style.opacity = "0.0";
-    }
+    this.setElementOpacity(ctx, "0.0");
   }
 
   userSubmitAmount()
@@ -213,7 +214,7 @@ export class StatisticsPageComponent implements OnInit {
       this.refreshStrideWarnings();
       return false;
     }
-    
+
     document.getElementById("inputWarning").style.display = "none";
     this.refreshStrideWarnings();
 
