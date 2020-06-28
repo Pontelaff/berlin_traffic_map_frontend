@@ -101,7 +101,8 @@ export class ChartRadarEvents extends ChartBase {
               display: true,
               labels: {
                 fontStyle: "bold",
-                fontSize: 14
+                fontSize: 14,
+                fontColor: "#101010"
               }
             },
             tooltips: {
@@ -131,6 +132,7 @@ export class ChartRadarEvents extends ChartBase {
               pointLabels: {
                 fontStyle: "bold",
                 fontSize: 14,
+                fontColor: "#101010",
               },
               ticks: {
                   suggestedMin: 0

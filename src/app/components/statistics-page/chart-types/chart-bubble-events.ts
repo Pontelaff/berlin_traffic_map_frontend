@@ -232,13 +232,15 @@ export class ChartBubbleEvents extends ChartBase {
                             labelString: "Bezirke",
                             display: true,
                             fontStyle: "bold",
-                            fontSize: 14
+                            fontSize: 18,
+                            fontColor: "#101010",
                         },
                         ticks:{     //set custom label
                             max: 12,
                             min: 0,
                             fontStyle: "bold",
                             fontSize: 14,
+                            fontColor: "#101010",
                             stepSize: 0.5,
                             callback: function(value, index, values) {
                                 if(<number>value - Math.round(<number>value) == 0)
@@ -253,13 +255,15 @@ export class ChartBubbleEvents extends ChartBase {
                         labelString: "Störungsarten",
                         display: true,
                         fontStyle: "bold",
-                        fontSize: 14
+                        fontColor: "#101010",
+                        fontSize: 18
                     },
                     ticks: {  //set custom label
                       max: 5,
                       min: 0,
                       fontStyle: "bold",
                       fontSize: 14,
+                      fontColor: "#101010",
                       stepSize: 0.5,
                       callback: function(value, index, values) {
                         if(<number>value - Math.round(<number>value) == 0)

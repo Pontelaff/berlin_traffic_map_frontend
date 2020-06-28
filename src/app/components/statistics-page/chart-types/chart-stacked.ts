@@ -168,13 +168,15 @@ export class ChartStacked extends ChartBase {
                 labelString: "Bezirke",
                 display: true,
                 fontStyle: "bold",
-                fontSize: 14
+                fontSize: 18,
+                fontColor: "#101010",
             },
               stacked: true,
               display: true,
               ticks: {
                 fontStyle: "bold",
                 fontSize: 14,
+                fontColor: "#101010",
               }
             }],
             yAxes: [],
