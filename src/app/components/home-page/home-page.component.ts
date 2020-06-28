@@ -31,9 +31,9 @@ export class HomePageComponent implements AfterViewInit {
   showDangers: true,
   };
 
-  mapLayers:L.MarkerClusterGroup;
+  mapLayers:L.MarkerClusterGroup;       //All markers added to this group (or to layers added to this group) will be clustered
 
-  roadClosures = L.layerGroup();
+  roadClosures = L.layerGroup();        //each group can be added to 'mapLayers' individualy, conseqquently adding or removing all of it's markers
   constructionSites = L.layerGroup();
   laneClosures = L.layerGroup();
   accidents = L.layerGroup();
@@ -74,8 +74,10 @@ export class HomePageComponent implements AfterViewInit {
     popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
   });
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() : void {
+    /*selecting the last two weeks by default*/
     this.options.dateFrom.setDate(this.options.dateFrom.getDate()-14);
+    /*getting the first and last relevent date from the database to serve as min and max for the datepicker*/
     this.apiService.fetchFirstRelevantDate().subscribe((data:string)=>{
       this.options.dateMin = new Date(data);
     });
@@ -85,11 +87,15 @@ export class HomePageComponent implements AfterViewInit {
     this.initMap();
   }
 
-  toogleMapOptions(event, layer){
+  /*adds/removes layer when options box is checked/unchecked*/
+  toogleMapOptions(event, layer): void
+  {
     event.checked ? this.mapLayers.addLayer(layer) : this.mapLayers.removeLayer(layer);
   }
 
-  applyClick() {
+  /*when apply button is clicked, the function removes all markers and fetches new data*/
+  applyClick(): void
+  {
     this.roadClosures.clearLayers();
     this.constructionSites.clearLayers();
     this.laneClosures.clearLayers();
@@ -102,7 +108,7 @@ export class HomePageComponent implements AfterViewInit {
   
   initMap(): void {
     this.map = L.map('map', {
-      center: [ 52.517001, 13.388827 ],
+      center: [ 52.517001, 13.388827 ], //Intersection Friedrichstr./Unter den Linden
       zoom: 12
     });
 
@@ -116,7 +122,7 @@ export class HomePageComponent implements AfterViewInit {
     this.makeData();
   }
 
-  makeData() : void
+  makeData(): void
   {
     /* re-initialize date objects */
     this.options.dateFrom = new Date(this.options.dateFrom);
@@ -135,19 +141,17 @@ export class HomePageComponent implements AfterViewInit {
        });
   }
 
-  markerUpdateRoutine() : void
+  markerUpdateRoutine(): void
   {
-    let dataLength = this.trafficData.length;    
-    console.log("data lenght: " + dataLength);
+    let dataLength = this.trafficData.length;
     let clusterGroupOptions = {
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
       maxClusterRadius: function(zoom) {
-        let radius = (dataLength) / (zoom * 7);    //calculating the maxClustering radius on every zoom level indepentently
+        let radius = (dataLength) / (zoom * 7);    //calculating the maxClustering radius on every zoom level indepentently depending on amount of markers
         if (radius < 32)                           //min radius of 32 to reduce overlapping
           radius = 32;
-        console.log("zoom: " + zoom + " radius: " + radius);
         return radius;
       },
     };
@@ -156,7 +160,7 @@ export class HomePageComponent implements AfterViewInit {
     this.addMarkers();
   }
 
-  addMarkers() : void
+  addMarkers(): void
   {
     this.trafficData.forEach(element => {
       if (element != null && element.location != null){
@@ -164,6 +168,7 @@ export class HomePageComponent implements AfterViewInit {
         let cause = element.consequence.summary;
         marker.bindPopup(this.createPopupContent(element), {className: "popup"});
 
+        /* adding markers to layers depening on cause of entry */
         if(cause == "Sperrung") {
           marker.setIcon(this.roadClosureIcon);
           this.roadClosures.addLayer(marker);
@@ -183,12 +188,14 @@ export class HomePageComponent implements AfterViewInit {
       }
     });
 
+    /* counting length for infobox */
     this.entriesPerCategory[0] = this.roadClosures.getLayers().length.toString();
     this.entriesPerCategory[1] = this.constructionSites.getLayers().length.toString();
     this.entriesPerCategory[2] = this.laneClosures.getLayers().length.toString();
     this.entriesPerCategory[3] = this.accidents.getLayers().length.toString();
     this.entriesPerCategory[4] = this.dangers.getLayers().length.toString();
 
+    /* adding layers depending on status of checkbox */
     if(this.options.showRoadClosures)
       this.mapLayers.addLayer(this.roadClosures);
     if(this.options.showConstructionSites)
@@ -202,7 +209,8 @@ export class HomePageComponent implements AfterViewInit {
     this.map.addLayer(this.mapLayers);
   }
 
-  createPopupContent(element) : string
+  /* extracting marker popup content from entries */
+  createPopupContent(element): string
   {
     let popUpContent = "<p>";
         if(element.consequence.summary != null){
@@ -224,7 +232,8 @@ export class HomePageComponent implements AfterViewInit {
         return popUpContent;
   }
 
-  formatDate(dateStr : string) : string
+  /* formating date in german for displaying in marker popup */
+  formatDate(dateStr : string): string
   {
     let date = new Date(dateStr);
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
