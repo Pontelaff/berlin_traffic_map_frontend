@@ -72,3 +72,10 @@ mat-icon{
 #map {
   height: 100%;
 }
+
+
+@media(max-width: 500px){
+  mat-card div{
+      font-size: 14px;
+  }
+}
