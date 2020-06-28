@@ -251,6 +251,8 @@ export class StatisticsPageComponent implements OnInit {
       this.btnPctColor = "accent";
       this.customTimeStrides = this.allPercentiles;
     }
+
+    this.checkStrides();
   
     this.cachedOpMode = switchId;
   }
