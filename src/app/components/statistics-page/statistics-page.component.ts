@@ -168,7 +168,7 @@ export class StatisticsPageComponent implements OnInit {
     {
       for(let idx = 0; idx < this.customTimeStridesAmount; idx++)
       {
-        this.customTimeStrides[idx] = Math.round((idx / (this.customTimeStridesAmount - 1)) * 100);
+        this.customTimeStrides[idx] = Math.round(((idx + 1) / this.customTimeStridesAmount) * 100);
       }
     }
 

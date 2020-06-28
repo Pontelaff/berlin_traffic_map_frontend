@@ -147,8 +147,16 @@ export class ChartStackedDuration extends ChartStacked {
         if(<number>value - Math.round(<number>value) == 0)
           return null;
           
+        let label = "";
         let idx = Math.round(<number>value) - 1;
-        let label = strides[idx] + "%";
+
+        if(idx == 0)
+        {
+          label = "0% - " + strides[idx] + "%";
+          return label;
+        }
+
+        label = strides[idx - 1] + "% - " + strides[idx] + "%";
         return label;
       };
     }
@@ -206,7 +214,13 @@ export class ChartStackedDuration extends ChartStacked {
           }
           else
           {
-            label = strides[idx] + "%";
+            if(idx == 0)
+            {
+              label = "0% - " + strides[idx] + "%";
+              return label;
+            }
+
+            label = strides[idx - 1] + "% - " + strides[idx] + "%";
             return label;
           }
         }

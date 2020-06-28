@@ -103,11 +103,11 @@ describe('ChartStackedDuration', () => {
 
     /* test offset label */
     label = subject.chart.options.scales.yAxes[0].ticks.callback(0.5, 0, 0);
-    expect(label).toEqual(testArr[0] + "%");
+    expect(label).toEqual("0% - " + testArr[0] + "%");
 
     /* test max label */
     label = subject.chart.options.scales.yAxes[0].ticks.callback(subject.strides.length - 1 + 0.5, 0, 0);
-    expect(label).toEqual(testArr[testArr.length - 1] + "%");
+    expect(label).toEqual(testArr[testArr.length - 2] + "% - " + testArr[testArr.length - 1] + "%");
 
   })
 

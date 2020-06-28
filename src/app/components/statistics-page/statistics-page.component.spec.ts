@@ -100,7 +100,7 @@ describe('StatisticsPageComponent', () => {
     stridesLength = component.customTimeStrides.length;
     expect(stridesLength).toEqual(9);
     expect(component.customTimeStrides[stridesLength - 1]).toEqual(100);
-    expect(component.customTimeStrides[stridesLength - 2]).toEqual(Math.round(100 * (7 / 8)));
+    expect(component.customTimeStrides[stridesLength - 2]).toEqual(Math.round(100 * (8 / 9)));
 
   });
   
