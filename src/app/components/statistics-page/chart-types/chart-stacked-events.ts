@@ -15,6 +15,16 @@ export class ChartStackedEvents extends ChartStacked {
     this.updateRoutine(this.relevantEvents.length);
   }
 
+  indicateBusy()
+  {
+    if(this.chartData.length == 0 )
+      return;
+
+    let busyColors:string[][] = this.createColorStrings(this.chartData, this.busySaturation);
+    /*update Chart*/ 
+    this.updateChart([], busyColors);
+  }
+
   addData(incomingData: any, districtIdx: number)
   {
     incomingData.forEach(entry => {

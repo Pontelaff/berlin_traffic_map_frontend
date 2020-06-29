@@ -5,7 +5,7 @@ import { ChartStackedDuration } from './chart-types/chart-stacked-duration';
 import { ChartRadarEvents } from './chart-types/chart-radar-events';
 import { ChartBubbleEvents } from './chart-types/chart-bubble-events';
 import { InputChecker } from './inputChecker'
-import { cloneDeep } from 'lodash';
+
 
 interface chartSelect {
   selector: number;
@@ -57,7 +57,7 @@ export class StatisticsPageComponent implements OnInit {
   
   selectedChartIndex: number;
   cachedChartIndex: number;
-  queriesCompleted: number;
+  queriesCompleted: number = 0;
 
   constructor(private apiService: ApiService) { }
 
@@ -68,8 +68,6 @@ export class StatisticsPageComponent implements OnInit {
 
     /* set start date to two weeks ago */
     this.currDateStart.setHours(this.currDateEnd.getHours() - 24 * 14);
-
-    this.queriesCompleted = 0;
 
     /* determine min and max dates from database for date pickers */
     this.apiService.fetchFirstRelevantDate().subscribe((data:string)=>{
@@ -87,6 +85,7 @@ export class StatisticsPageComponent implements OnInit {
     this.customTimeStrides = this.allTimeSteps;
   }
 
+  /* main button chart update routine */
   userPlot() 
   {
     if(this.selectedChartIndex == undefined)
@@ -113,11 +112,20 @@ export class StatisticsPageComponent implements OnInit {
     else
       this.selection.chart.clearData();
 
-    this.toggleContainer("yAxisConf");
+    this.toggleYAxisConfig();
     this.makeData();
   }
+
+  toggleYAxisConfig()
+  {
+    let container = document.getElementById("yAxisConf");
+    if(this.selectedChartIndex == 0)
+      container.style.display = "block";
+    else
+      container.style.display = "none";
+  }
   
-  /* needed for chart #1 input boxes being able to remain focused after keypress */
+  /* needed for chart #1 input boxes to be able to remain focused after keypress */
   trackByFn(index, item) 
   {
     return index;  
@@ -142,11 +150,12 @@ export class StatisticsPageComponent implements OnInit {
     this.setElementOpacity(ctx, "0.0");
   }
 
+  /* stride amount update routine */
   userSubmitAmount()
   {
     if(!this.checkAmountInput())
     {
-      document.getElementById("inputWarning").style.display = "block";
+      document.getElementById("warningText").style.display = "block";
       this.showWarning("warnAmount");
       return;
     }
@@ -187,6 +196,34 @@ export class StatisticsPageComponent implements OnInit {
     return true;
   }
 
+  /* stride values update routine */
+  userSubmitStrides()
+  {
+    if(this.checkStrides())
+      this.makeData();
+  }
+
+  checkStrides()
+  {
+    this.inputChecker.resetStrideFaultyArr(this.customTimeStrides.length);
+    this.inputChecker.clearErrorOccurences();
+
+    let stridesGood: boolean = this.inputChecker.checkStrideInput(this.customTimeStrides, this.cachedOpMode);
+    if(!stridesGood)
+    {
+      this.isStrideFaulty = this.inputChecker.isStrideFaulty;
+
+      document.getElementById("warningText").style.display = "block";
+      this.refreshStrideWarnings();
+      return false;
+    }
+
+    document.getElementById("warningText").style.display = "none";
+    this.refreshStrideWarnings();
+
+    return true;
+  }
+
   refreshStrideWarnings()
   {
     for(let idx = 0; idx < this.isStrideFaulty.length; idx++)
@@ -200,45 +237,9 @@ export class StatisticsPageComponent implements OnInit {
     }
   }
 
-  checkStrides()
-  {
-    this.inputChecker.resetStrideFaultyArr(this.customTimeStrides.length);
-    this.inputChecker.clearErrorOccurences();
-
-    let stridesGood: boolean = this.inputChecker.checkStrideInput(this.customTimeStrides, this.cachedOpMode);
-    if(!stridesGood)
-    {
-      this.isStrideFaulty = this.inputChecker.isStrideFaulty;
-
-      document.getElementById("inputWarning").style.display = "block";
-      this.refreshStrideWarnings();
-      return false;
-    }
-
-    document.getElementById("inputWarning").style.display = "none";
-    this.refreshStrideWarnings();
-
-    return true;
-  }
-
-  userSubmitStrides()
-  {
-    if(this.checkStrides())
-      this.makeData();
-  }
-
-  toggleContainer(ctx: string)
-  {
-    let container = document.getElementById(ctx);
-    if(this.selectedChartIndex == 0)
-      container.style.display = "block";
-    else
-      container.style.display = "none";
-  }
-
+  /* chart #1 y Axis mode switch update routine */
   userSwitch(switchId: number)
   {
-    /* highlight selected button, adjust values in input boxes */
     if(switchId == 0)
     {
       this.btnDurColor = "accent";
@@ -251,10 +252,10 @@ export class StatisticsPageComponent implements OnInit {
       this.btnPctColor = "accent";
       this.customTimeStrides = this.allPercentiles;
     }
-
-    this.checkStrides();
-  
+    
     this.cachedOpMode = switchId;
+    
+    this.userSubmitAmount();
   }
 
   createChart(chartIndex: number)
@@ -268,7 +269,7 @@ export class StatisticsPageComponent implements OnInit {
       case 1: { this.selection.chart = new ChartStackedEvents(ctx, this.allDistricts, this.allEvents); break; }
       case 2: { this.selection.chart = new ChartRadarEvents(ctx, this.allDistricts, this.allEvents); break; }
       case 3: { this.selection.chart = new ChartBubbleEvents(ctx, this.allDistricts, this.allEvents); break; }
-      default: { console.log("Chart creation not available"); break; }
+      default: { console.log("unexpected behavior"); break; }
     }
 
     this.selection.chart.create();
@@ -286,12 +287,6 @@ export class StatisticsPageComponent implements OnInit {
     
     let startString = this.currDateStart.toISOString().slice(0, 10);    
     let endString = this.currDateEnd.toISOString().slice(0, 10);
-    
-    if(this.selectedChartIndex < 0 || this.selectedChartIndex > 3)
-    {
-      console.log("Selection invalid");
-      return;
-    }
 
     this.generalUpdateRoutine(startString, endString, this.selectedChartIndex); 
   }

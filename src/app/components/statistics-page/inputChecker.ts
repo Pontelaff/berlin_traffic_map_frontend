@@ -75,7 +75,6 @@ export class InputChecker {
     {
         if(isNaN(val))
         {
-            console.log("letter found");
             this.setErrorOccurence("letter");
             return false;
         }
@@ -87,7 +86,6 @@ export class InputChecker {
     {
         if(val < 0)
         {
-            console.log("negative found");
             this.setErrorOccurence("negative");
             return false;
         }
@@ -99,7 +97,6 @@ export class InputChecker {
     {
         if(Math.floor(val) != val)
         {
-            console.log("floating point value found");
             this.setErrorOccurence("float");
             return false;
         }
@@ -111,7 +108,6 @@ export class InputChecker {
     {
         if(opMode == 1 && val > 100)
         {
-            console.log("more than 100% found");
             this.setErrorOccurence("morethan100%");
             return false;
         }
@@ -125,7 +121,6 @@ export class InputChecker {
         {
           if(valArr[idx - 1] >= valArr[idx])
           {
-                console.log("non-ascending order");
                 this.setErrorOccurence("order");
                 this.isStrideFaulty[idx] = true;
           }
@@ -136,7 +131,6 @@ export class InputChecker {
     {
         if(val < min || val > max)
         {
-          console.log("desired strides count less than " + min + " or greater than " + max);
           this.setErrorOccurence("countRange");
           return false;
         }
@@ -145,7 +139,7 @@ export class InputChecker {
     }
 
 
-    private setErrorOccurence(ident: string)
+    setErrorOccurence(ident: string)
     {
         for(let idx = 0; idx < this.errorMessages.length; idx++)
         {

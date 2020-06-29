@@ -87,6 +87,7 @@ export class ChartRadarEvents extends ChartBase {
       })
     }
 
+    /* create Chart */
     this.chart = new Chart(this.ctx, {
         plugins: [ChartDataLabels],
         type: 'radar',
@@ -108,19 +109,22 @@ export class ChartRadarEvents extends ChartBase {
             tooltips: {
                 enabled: true,
                 callbacks: {
-                    label: function(tooltipItem, data) {
+                  title: function(tooltipItem, data) {
+                    return <string>data.labels[tooltipItem[0].index];   //return district
+                  },
+                  label: function(tooltipItem, data) {
 
-                        let string = data.datasets[tooltipItem.datasetIndex].label + ": ";
+                      let string = data.datasets[tooltipItem.datasetIndex].label + ": ";
 
-                        let val = <number>data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                      let val = <number>data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
-                        if(tooltipItem.datasetIndex > 0)
-                            val = val - <number>data.datasets[tooltipItem.datasetIndex - 1].data[tooltipItem.index]
+                      if(tooltipItem.datasetIndex > 0)
+                          val = val - <number>data.datasets[tooltipItem.datasetIndex - 1].data[tooltipItem.index]
 
-                        string += val;
+                      string += val;
 
-                        return string;
-                    }
+                      return string;
+                  }
                 }
             },
             plugins: {

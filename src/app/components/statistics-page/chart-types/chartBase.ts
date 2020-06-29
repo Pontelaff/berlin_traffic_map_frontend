@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 
+
 export class ChartBase {
     public chart:any;
 
@@ -24,9 +25,10 @@ export class ChartBase {
         this.allDistricts = allDistricts;
         this.allEvents = allEvents;
 
-        this.containerSetup();  //calls each subclass' container setup function
+        this.containerSetup();
     }
 
+    /* overwritten by child's container setups */
     containerSetup()
     {
         console.log("Function override not successful");
@@ -103,6 +105,7 @@ export class ChartBase {
       return Math.abs(end.getTime() - start.getTime());
     }
 
+    /* determine maximum value in 2D array */
     determineMaximum2D(data: any)
     {
         let max = 0;
@@ -113,6 +116,7 @@ export class ChartBase {
         return max;
     }
 
+    /* determine maximum value in 1D array */
     determineMaximum1D(data: any, currentMax: number)
     {
         let max = currentMax;

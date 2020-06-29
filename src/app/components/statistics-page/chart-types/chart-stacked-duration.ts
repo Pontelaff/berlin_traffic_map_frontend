@@ -1,25 +1,28 @@
 import * as Chart from 'chart.js';
 import { ChartStacked } from './chart-stacked'
 
+const timeStepMode = 0;
+const percentileMode = 1;
 
 export class ChartStackedDuration extends ChartStacked {
 
-  opMode: string = "timesteps";
+  opMode: number = timeStepMode;
   yLabelDuration: string = "Störungsdauer in Tagen";
   yLabelPercentiles: string = "Störungsdauer in Perzentilen";
 
+
   containerSetup()
   {
-    this.opMode = "timesteps";
+    this.opMode = timeStepMode;
     this.data = this.initContainer2D(this.strides.length, this.allDistricts.length);
   }
 
   setOpMode(opModeIdx: number)
   {
     if(opModeIdx == 0)
-      this.opMode = "timesteps";
+      this.opMode = timeStepMode;
     else 
-      this.opMode = "percentiles";
+      this.opMode = percentileMode;
   }
 
   setStrides(data: number[])
@@ -32,6 +35,18 @@ export class ChartStackedDuration extends ChartStacked {
       this.chart.data.datasets = this.createData(this.strides.length);
   }
 
+  indicateBusy()
+  {
+    if(this.chartData.length == 0 )
+      return;
+
+    let busyColors:string[][] = this.createColorStrings(this.chartData.slice(0, this.strides.length), this.busySaturation);
+    /*update Chart*/ 
+    this.chart.options.scales.yAxes[0].ticks.max = this.strides.length;
+    this.reconfigureYAxis();
+    this.updateChart([], busyColors);
+  }
+
   update()
   {
     this.updateRoutine(this.strides.length);
@@ -39,7 +54,7 @@ export class ChartStackedDuration extends ChartStacked {
 
   addData(incomingData: any, districtIdx: number)
   {
-    if(this.opMode == "timesteps")
+    if(this.opMode == timeStepMode)
       this.addTimeStepData(incomingData, districtIdx);
     else
       this.addPercentileData(incomingData, districtIdx);
@@ -114,10 +129,11 @@ export class ChartStackedDuration extends ChartStacked {
     });
   }
 
+  /* update y axis labeling methodology depending on opmode */
   reconfigureYAxis()
   {
     let strides = this.strides;
-    if(this.opMode == "timesteps")
+    if(this.opMode == timeStepMode)
     {
       this.chart.options.scales.yAxes[0].scaleLabel.labelString = this.yLabelDuration;
       this.chart.options.scales.yAxes[0].ticks.callback = function(value, index, values) {
@@ -135,7 +151,6 @@ export class ChartStackedDuration extends ChartStacked {
         }
 
         label += strides[idx] + " - " + strides[idx + 1];
-
         return label;
       };
     }
@@ -172,7 +187,7 @@ export class ChartStackedDuration extends ChartStacked {
     let opmode = this.opMode;
     let strides = this.strides;
     let yLabel = "";
-    if(opmode == "timesteps")
+    if(opmode == timeStepMode)
       yLabel = this.yLabelDuration;
     else 
       yLabel = this.yLabelPercentiles;
@@ -200,7 +215,7 @@ export class ChartStackedDuration extends ChartStacked {
           let label = "";
           let idx = Math.round(<number>value) - 1;
 
-          if(opmode == "timesteps")
+          if(opmode == 0)
           {
             if(idx == strides.length - 1)
             {

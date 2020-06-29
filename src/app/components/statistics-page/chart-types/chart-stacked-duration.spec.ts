@@ -52,12 +52,12 @@ describe('ChartStackedDuration', () => {
 
     subject.setOpMode(0);
     subject.setStrides(testArr);
-    expect(subject.opMode).toEqual("timesteps");
+    expect(subject.opMode).toEqual(0);
     expect(subject.strides).toEqual(testArr);
 
     subject.setOpMode(1);
     subject.setStrides(testArr);
-    expect(subject.opMode).toEqual("percentiles");
+    expect(subject.opMode).toEqual(1);
     expect(subject.strides).toEqual(testArr);
   });
 

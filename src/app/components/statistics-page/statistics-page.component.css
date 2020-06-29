@@ -1,5 +1,4 @@
 #inputContainer{
-    /*margin: 0 auto;*/
     margin-top: 2%;
     width: 55%;
     min-width: 400px;
@@ -8,53 +7,19 @@
     text-align: center;
 }
 
-/*#startPicker{
-    margin: auto;
-    padding: 2%;
-    width: 100px;
-}
-
-#endPicker{
-    margin: auto;
-    padding: 2%;
-    width: 100px;
-}
-
-#chartSelector{
-    margin: auto;
-    padding: 2%;
-    width: 225px;
-}*/
-
-/*#btnPlot{
-    margin-left: 7%;
-}*/
-
 @media (max-width: 992px) {
     .input-btn-group {
         width: 100%;
     }
 }
 
-#inputWarning{
+#warningText{
     display: none;
     color: white;
     background-color: red;
     text-align: center;
     border-radius: 8px;
 }
-
-/*#yAxisConf{
-    padding: 1%;
-    padding-bottom: 0.5%;
-    margin: 0 auto;
-    margin-top: 10%;
-    margin-bottom: 20%;
-    margin-left: 5%;
-    width: auto;
-    align-content: center;
-    text-align: center; 
-}*/
 
 .numberInput{
     width: 50px;
@@ -68,14 +33,6 @@
     opacity: 0.0;
     font-weight: bold;
 }
-
-/*#chart{
-    margin: 0 auto;
-    width: 75%;
-    height: 70vh;
-    align-content: center;
-    padding-top: 3%;
-}*/
 
 .y-axis-configurator {
     display: none;
@@ -95,7 +52,7 @@
 }
 
 #chart {
-    height: 70vh;
+    height: 65vh;
     width: 70vw;
     min-width: 800px;
 }

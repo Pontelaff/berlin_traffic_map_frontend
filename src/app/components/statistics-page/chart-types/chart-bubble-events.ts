@@ -4,12 +4,6 @@ import { ChartBase } from './chartBase'
 import { cloneDeep } from 'lodash';
 
 
-interface Bubble {
-    x: number,
-    y: number,
-    r: number
-}
-
 export class ChartBubbleEvents extends ChartBase {
 
     maxBubbleRadius: number = 50;
