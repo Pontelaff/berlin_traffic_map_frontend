@@ -19,6 +19,9 @@ interface errorMsg {
   message: string;
 }
 
+const timeSpanPrompt = "Angaben in Tagen";
+const percentilePrompt = "Angaben in Prozent (≤ 100)";
+
 @Component({
   selector: 'app-statistics-page',
   templateUrl: './statistics-page.component.html',
@@ -46,6 +49,7 @@ export class StatisticsPageComponent implements OnInit {
   btnDurColor = "accent";
   btnPctColor = "white";
   cachedOpMode = 0;
+  unitPrompt = timeSpanPrompt;
   
   chartList: chartSelect[] = [
     {selector: 0, viewValue: 'Störungsdauer (Farbe)', chart: null},
@@ -245,12 +249,14 @@ export class StatisticsPageComponent implements OnInit {
       this.btnDurColor = "accent";
       this.btnPctColor = "white";
       this.customTimeStrides = this.allTimeSteps;
+      this.unitPrompt = timeSpanPrompt;
     }
     else
     {
       this.btnDurColor = "white";
       this.btnPctColor = "accent";
       this.customTimeStrides = this.allPercentiles;
+      this.unitPrompt = percentilePrompt;
     }
     
     this.cachedOpMode = switchId;

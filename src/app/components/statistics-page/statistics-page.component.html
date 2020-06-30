@@ -49,8 +49,10 @@
                     <button mat-raised-button [color]="btnDurColor" id="btnDuration" (click)="userSwitch(0)">Zeitspanne</button>
                     <button mat-raised-button [color]="btnPctColor" id="btnPercentile" (click)="userSwitch(1)">Perzentile</button>
                 </div>
+
+                <label class="mt-2" style="display: block; text-align: center;">{{unitPrompt}}</label>
     
-                <div style="display: flex; align-items: center;" class="mt-4">
+                <div style="display: flex; align-items: center;" class="mt-3">
                     <div>
                         <label style="margin-bottom: 3px;">Anzahl:</label>
                         <div style="display: flex; justify-content: center;">
@@ -65,7 +67,7 @@
                 
                 <div class="mt-4" >
                     <section *ngFor="let stride of customTimeStrides; let i = index; trackBy: trackByFn">
-                        <label> #{{customTimeStrides.length - i}} </label>
+                        <label> Abschnitt #{{customTimeStrides.length - i}}: </label>
                         <input type="text" style="width: 40px" class="numberInput" [(ngModel)]="customTimeStrides[customTimeStrides.length - 1 - i]"/>
                         <label id="warnStride_{{customTimeStrides.length - 1 - i}}" class="warning">!</label>
                     </section>
