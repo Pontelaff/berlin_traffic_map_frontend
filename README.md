@@ -2,7 +2,7 @@
 
 Traffic Map Berlin is an application for visualizing and analyzing traffic disruptions within Berlin. This includes construction sites, road closures, accidents, and other disturbances. The corresponding data is provided by the [traffic information center VMZ](https://daten.berlin.de/datensaetze/baustellen-sperrungen-und-sonstige-storungen-von-besonderem-verkehrlichem-interesse) and can be filtered by time period and cause.
 
-![Map Demo](/img/TrafficMapDemo.mp4)
+https://github.com/user-attachments/assets/85249119-5801-4e3a-95f1-f05156ae8491
 
 This project was created during the summer semester 2020 as part of the "C72 Software Development Project" course at the University of Applied Sciences Berlin. It was developed by a student team consisting of one backend developer and two frontend developers without significant prior experience in web development. As one of the frontend developers, I designed the home-page including the map visualization using OpenStreetMaps and Leaflet and implemented the filtering logic, while collaborating with the backend team to integrate the REST API.
 Appart from the frontend and backend components, the project also included continuous integration with Jenkins and testing with Sonar. The database containing the traffic disruption data was provided by the supervising professors.
