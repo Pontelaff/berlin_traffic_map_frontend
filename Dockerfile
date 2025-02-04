@@ -9,7 +9,7 @@ ENV NODE_OPTIONS="--openssl-legacy-provider"
 RUN apk add --no-cache git
 
 # Clone the repository
-RUN git clone https://github.com/Pontelaff/traffic_map_berlin_frontend.git traffic_map_berlin
+ADD . /traffic_map_berlin
 
 # Set working directory inside the cloned repo
 WORKDIR /traffic_map_berlin
