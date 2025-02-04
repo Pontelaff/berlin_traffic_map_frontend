@@ -2,7 +2,8 @@
 
 Traffic Map Berlin is an application for visualizing and analyzing traffic disruptions within Berlin. This includes construction sites, road closures, accidents, and other disturbances. The corresponding data is provided by the [traffic information center VMZ](https://daten.berlin.de/datensaetze/baustellen-sperrungen-und-sonstige-storungen-von-besonderem-verkehrlichem-interesse) and can be filtered by time period and cause.
 
-https://github.com/user-attachments/assets/85249119-5801-4e3a-95f1-f05156ae8491
+![image](https://github.com/user-attachments/assets/7a224432-52c9-4222-a889-ad559fcf2bcb)
+
 
 This project was created during the summer semester 2020 as part of the "C72 Software Development Project" course at the University of Applied Sciences Berlin. It was developed by a student team consisting of one backend developer and two frontend developers without significant prior experience in web development. As one of the frontend developers, I designed the home-page including the map visualization using OpenStreetMaps and Leaflet and implemented the filtering logic, while collaborating with the backend team to integrate the REST API.
 Appart from the frontend and backend components, the project also included continuous integration with Jenkins and testing with Sonar. The database containing the traffic disruption data was provided by the supervising professors.
@@ -23,11 +24,19 @@ Use this codebase as a reference for:
 
 ## Components
 
+![Frontend Components](/img/frontend_architecture.png)
+
+### Home-Page
+
 The landing page consist of a home-page displaying a map with traffic disruptions overlayed as Leaflet markers. There is an additional option menu, which allows the user to filter the displayed events by category and timeframe.
+
+https://github.com/user-attachments/assets/ffde6fbc-06e1-4ecc-991e-b4eadb77ce48
+
+### Statistics-Page
 
 The statistics page includes three different types of diagrams displaying the traffic disruptions by category for each of Berlins districts. A forth diagram displays the durations of traffic disruptions by district with the time axis being fully customizable in the amount and size of bins.
 
-![Frontend Components](/img/frontend_architecture.png)
+https://github.com/user-attachments/assets/715cf5b3-46d7-4e32-a80c-e8e1e703903c
 
 ## Lessons Learned
 
